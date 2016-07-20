@@ -1,0 +1,411 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Header Files\mini">
+      <UniqueIdentifier>{f6027c72-99b4-4354-a347-63a8a7e8d340}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\mini">
+      <UniqueIdentifier>{cca51960-fc93-43aa-ad54-e2eadf6e8eea}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\mini\net">
+      <UniqueIdentifier>{be9c4a33-3f0f-423a-8a4a-a2927292adf9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\mini\net">
+      <UniqueIdentifier>{2d198af4-32f1-4c55-8c84-88fe3ac4e38c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\mini\crypto">
+      <UniqueIdentifier>{8f5b4f02-0a25-4725-ac4f-282c37bca0ed}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\mini\crypto">
+      <UniqueIdentifier>{d09dd70a-52f9-4832-b7aa-1a76251b4c39}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\mini\crypto\impl">
+      <UniqueIdentifier>{c9e7c7ab-4ea8-4d5e-80d6-6360c7172a3f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\mini\crypto\impl">
+      <UniqueIdentifier>{d2626f7e-8946-4c15-9183-c40ab2501413}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\mini\io">
+      <UniqueIdentifier>{6ee5f187-2203-4bd3-ae99-4129cb4f6b8b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\mini\collections">
+      <UniqueIdentifier>{244f3f93-2822-4ee4-a8d6-441e3a033ef2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\mini\collections">
+      <UniqueIdentifier>{6d4e87a0-4d0c-4924-a3d7-09fbe8883dfe}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\mini\crt">
+      <UniqueIdentifier>{b1a4e3ff-ebf9-4323-b2fc-cdfb03e987aa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\mini\crt">
+      <UniqueIdentifier>{c1c9d70b-a16e-4cd2-8360-d7b30d5c51cf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\mini\threading">
+      <UniqueIdentifier>{c9410db9-1606-490f-9a20-94d468c516fb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\mini\threading">
+      <UniqueIdentifier>{91929682-d2e3-45df-8f6e-f84502a52442}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\mini\io">
+      <UniqueIdentifier>{ffadad2f-39e1-4d3f-b801-30860f144a24}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\mini\tor">
+      <UniqueIdentifier>{05188d53-d1d6-48ca-8db2-a7c7fa1a0f71}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\mini\tor">
+      <UniqueIdentifier>{6d53a253-9943-4de2-8b39-8770e34ecc2a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\mini\tor\crypto">
+      <UniqueIdentifier>{5de2c189-df9d-4603-8d0a-2892418989df}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\mini\tor\crypto">
+      <UniqueIdentifier>{89cb999f-7b94-4513-a24f-57a7b5d6ea0c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\mini\tor\parsers">
+      <UniqueIdentifier>{92d3e4ec-5970-4108-a779-3228ca2ec400}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="mini\time.cpp">
+      <Filter>Source Files\mini</Filter>
+    </ClCompile>
+    <ClCompile Include="mini\net\http.cpp">
+      <Filter>Source Files\mini\net</Filter>
+    </ClCompile>
+    <ClCompile Include="mini\net\ssl_socket.cpp">
+      <Filter>Source Files\mini\net</Filter>
+    </ClCompile>
+    <ClCompile Include="mini\net\tcp_socket.cpp">
+      <Filter>Source Files\mini\net</Filter>
+    </ClCompile>
+    <ClCompile Include="mini\crypto\aes.cpp">
+      <Filter>Source Files\mini\crypto</Filter>
+    </ClCompile>
+    <ClCompile Include="mini\crypto\provider.cpp">
+      <Filter>Source Files\mini\crypto</Filter>
+    </ClCompile>
+    <ClCompile Include="mini\crypto\sha1.cpp">
+      <Filter>Source Files\mini\crypto</Filter>
+    </ClCompile>
+    <ClCompile Include="mini\crypto\rsa.cpp">
+      <Filter>Source Files\mini\crypto</Filter>
+    </ClCompile>
+    <ClCompile Include="mini\crypto\base64.cpp">
+      <Filter>Source Files\mini\crypto</Filter>
+    </ClCompile>
+    <ClCompile Include="mini\crypto\impl\bigint_impl.c">
+      <Filter>Source Files\mini\crypto\impl</Filter>
+    </ClCompile>
+    <ClCompile Include="mini\string.cpp">
+      <Filter>Source Files\mini</Filter>
+    </ClCompile>
+    <ClCompile Include="mini\common.cpp">
+      <Filter>Source Files\mini</Filter>
+    </ClCompile>
+    <ClCompile Include="mini\crt\crt0.cpp">
+      <Filter>Source Files\mini\crt</Filter>
+    </ClCompile>
+    <ClCompile Include="mini\crypto\base16.cpp">
+      <Filter>Source Files\mini\crypto</Filter>
+    </ClCompile>
+    <ClCompile Include="mini\crypto\big_integer.cpp">
+      <Filter>Source Files\mini\crypto</Filter>
+    </ClCompile>
+    <ClCompile Include="mini\threading\mutex.cpp">
+      <Filter>Source Files\mini\threading</Filter>
+    </ClCompile>
+    <ClCompile Include="mini\crt\thread_safe_statics.cpp">
+      <Filter>Source Files\mini\crt</Filter>
+    </ClCompile>
+    <ClCompile Include="mini\tor\cell.cpp">
+      <Filter>Source Files\mini\tor</Filter>
+    </ClCompile>
+    <ClCompile Include="mini\tor\circuit.cpp">
+      <Filter>Source Files\mini\tor</Filter>
+    </ClCompile>
+    <ClCompile Include="mini\tor\consensus.cpp">
+      <Filter>Source Files\mini\tor</Filter>
+    </ClCompile>
+    <ClCompile Include="mini\tor\onion_router.cpp">
+      <Filter>Source Files\mini\tor</Filter>
+    </ClCompile>
+    <ClCompile Include="mini\tor\tor_stream.cpp">
+      <Filter>Source Files\mini\tor</Filter>
+    </ClCompile>
+    <ClCompile Include="mini\threading\thread.cpp">
+      <Filter>Source Files\mini\threading</Filter>
+    </ClCompile>
+    <ClCompile Include="mini\crypto\base32.cpp">
+      <Filter>Source Files\mini\crypto</Filter>
+    </ClCompile>
+    <ClCompile Include="mini\tor\crypto\key_agreement.cpp">
+      <Filter>Source Files\mini\tor\crypto</Filter>
+    </ClCompile>
+    <ClCompile Include="mini\tor\circuit_node.cpp">
+      <Filter>Source Files\mini\tor</Filter>
+    </ClCompile>
+    <ClCompile Include="mini\tor\circuit_node_crypto_state.cpp">
+      <Filter>Source Files\mini\tor</Filter>
+    </ClCompile>
+    <ClCompile Include="mini\tor\relay_cell.cpp">
+      <Filter>Source Files\mini\tor</Filter>
+    </ClCompile>
+    <ClCompile Include="mini\tor\tor_socket.cpp">
+      <Filter>Source Files\mini\tor</Filter>
+    </ClCompile>
+    <ClCompile Include="mini\logger.cpp">
+      <Filter>Source Files\mini</Filter>
+    </ClCompile>
+    <ClCompile Include="mini\console.cpp">
+      <Filter>Source Files\mini</Filter>
+    </ClCompile>
+    <ClCompile Include="mini\tor\hidden_service.cpp">
+      <Filter>Source Files\mini\tor</Filter>
+    </ClCompile>
+    <ClCompile Include="mini\threading\event.cpp">
+      <Filter>Source Files\mini\threading</Filter>
+    </ClCompile>
+    <ClCompile Include="mini\tor\crypto\hybrid_encryption.cpp">
+      <Filter>Source Files\mini\tor\crypto</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="mini\error.h">
+      <Filter>Header Files\mini</Filter>
+    </ClInclude>
+    <ClInclude Include="mini\flags.h">
+      <Filter>Header Files\mini</Filter>
+    </ClInclude>
+    <ClInclude Include="mini\time.h">
+      <Filter>Header Files\mini</Filter>
+    </ClInclude>
+    <ClInclude Include="mini\net\http.h">
+      <Filter>Header Files\mini\net</Filter>
+    </ClInclude>
+    <ClInclude Include="mini\net\ssl_socket.h">
+      <Filter>Header Files\mini\net</Filter>
+    </ClInclude>
+    <ClInclude Include="mini\net\tcp_socket.h">
+      <Filter>Header Files\mini\net</Filter>
+    </ClInclude>
+    <ClInclude Include="mini\crypto\rsa.h">
+      <Filter>Header Files\mini\crypto</Filter>
+    </ClInclude>
+    <ClInclude Include="mini\crypto\sha1.h">
+      <Filter>Header Files\mini\crypto</Filter>
+    </ClInclude>
+    <ClInclude Include="mini\crypto\aes.h">
+      <Filter>Header Files\mini\crypto</Filter>
+    </ClInclude>
+    <ClInclude Include="mini\crypto\provider.h">
+      <Filter>Header Files\mini\crypto</Filter>
+    </ClInclude>
+    <ClInclude Include="mini\crypto\base64.h">
+      <Filter>Header Files\mini\crypto</Filter>
+    </ClInclude>
+    <ClInclude Include="mini\memory.h">
+      <Filter>Header Files\mini</Filter>
+    </ClInclude>
+    <ClInclude Include="mini\crypto\impl\bigint_impl.h">
+      <Filter>Header Files\mini\crypto\impl</Filter>
+    </ClInclude>
+    <ClInclude Include="mini\string.h">
+      <Filter>Header Files\mini</Filter>
+    </ClInclude>
+    <ClInclude Include="mini\crypto\random.h">
+      <Filter>Header Files\mini\crypto</Filter>
+    </ClInclude>
+    <ClInclude Include="mini\allocator.h">
+      <Filter>Header Files\mini</Filter>
+    </ClInclude>
+    <ClInclude Include="mini\common.h">
+      <Filter>Header Files\mini</Filter>
+    </ClInclude>
+    <ClInclude Include="mini\io\stream.h">
+      <Filter>Header Files\mini\io</Filter>
+    </ClInclude>
+    <ClInclude Include="mini\io\memory_stream.h">
+      <Filter>Header Files\mini\io</Filter>
+    </ClInclude>
+    <ClInclude Include="mini\io\stream_wrapper.h">
+      <Filter>Header Files\mini\io</Filter>
+    </ClInclude>
+    <ClInclude Include="mini\collections\list.h">
+      <Filter>Header Files\mini\collections</Filter>
+    </ClInclude>
+    <ClInclude Include="mini\pair.h">
+      <Filter>Header Files\mini</Filter>
+    </ClInclude>
+    <ClInclude Include="mini\io\file_stream.h">
+      <Filter>Header Files\mini\io</Filter>
+    </ClInclude>
+    <ClInclude Include="mini\io\file.h">
+      <Filter>Header Files\mini\io</Filter>
+    </ClInclude>
+    <ClInclude Include="mini\crt\crt0.h">
+      <Filter>Header Files\mini\crt</Filter>
+    </ClInclude>
+    <ClInclude Include="mini\ptr.h">
+      <Filter>Header Files\mini</Filter>
+    </ClInclude>
+    <ClInclude Include="mini\crypto\base16.h">
+      <Filter>Header Files\mini\crypto</Filter>
+    </ClInclude>
+    <ClInclude Include="mini\crypto\big_integer.h">
+      <Filter>Header Files\mini\crypto</Filter>
+    </ClInclude>
+    <ClInclude Include="mini\string_ref.h">
+      <Filter>Header Files\mini</Filter>
+    </ClInclude>
+    <ClInclude Include="mini\byte_buffer.h">
+      <Filter>Header Files\mini</Filter>
+    </ClInclude>
+    <ClInclude Include="mini\buffer_ref.h">
+      <Filter>Header Files\mini</Filter>
+    </ClInclude>
+    <ClInclude Include="mini\byte_buffer_ref.h">
+      <Filter>Header Files\mini</Filter>
+    </ClInclude>
+    <ClInclude Include="mini\stack_buffer.h">
+      <Filter>Header Files\mini</Filter>
+    </ClInclude>
+    <ClInclude Include="mini\threading\thread.h">
+      <Filter>Header Files\mini\threading</Filter>
+    </ClInclude>
+    <ClInclude Include="mini\threading\mutex.h">
+      <Filter>Header Files\mini\threading</Filter>
+    </ClInclude>
+    <ClInclude Include="mini\threading\thread_function.h">
+      <Filter>Header Files\mini\threading</Filter>
+    </ClInclude>
+    <ClInclude Include="mini\function.h">
+      <Filter>Header Files\mini</Filter>
+    </ClInclude>
+    <ClInclude Include="mini\console.h">
+      <Filter>Header Files\mini</Filter>
+    </ClInclude>
+    <ClInclude Include="mini\tor\cell.h">
+      <Filter>Header Files\mini\tor</Filter>
+    </ClInclude>
+    <ClInclude Include="mini\tor\circuit.h">
+      <Filter>Header Files\mini\tor</Filter>
+    </ClInclude>
+    <ClInclude Include="mini\tor\consensus.h">
+      <Filter>Header Files\mini\tor</Filter>
+    </ClInclude>
+    <ClInclude Include="mini\tor\hidden_service.h">
+      <Filter>Header Files\mini\tor</Filter>
+    </ClInclude>
+    <ClInclude Include="mini\tor\onion_router.h">
+      <Filter>Header Files\mini\tor</Filter>
+    </ClInclude>
+    <ClInclude Include="mini\tor\tor_stream.h">
+      <Filter>Header Files\mini\tor</Filter>
+    </ClInclude>
+    <ClInclude Include="mini\net\ip_address.h">
+      <Filter>Header Files\mini\net</Filter>
+    </ClInclude>
+    <ClInclude Include="mini\crypto\base32.h">
+      <Filter>Header Files\mini\crypto</Filter>
+    </ClInclude>
+    <ClInclude Include="mini\tor\crypto\key_agreement.h">
+      <Filter>Header Files\mini\tor\crypto</Filter>
+    </ClInclude>
+    <ClInclude Include="mini\tor\crypto\hybrid_encryption.h">
+      <Filter>Header Files\mini\tor\crypto</Filter>
+    </ClInclude>
+    <ClInclude Include="mini\tor\circuit_node.h">
+      <Filter>Header Files\mini\tor</Filter>
+    </ClInclude>
+    <ClInclude Include="mini\tor\circuit_node_crypto_state.h">
+      <Filter>Header Files\mini\tor</Filter>
+    </ClInclude>
+    <ClInclude Include="mini\tor\relay_cell.h">
+      <Filter>Header Files\mini\tor</Filter>
+    </ClInclude>
+    <ClInclude Include="mini\tor\types.h">
+      <Filter>Header Files\mini\tor</Filter>
+    </ClInclude>
+    <ClInclude Include="mini\collections\pair_list.h">
+      <Filter>Header Files\mini\collections</Filter>
+    </ClInclude>
+    <ClInclude Include="mini\tor\tor_socket.h">
+      <Filter>Header Files\mini\tor</Filter>
+    </ClInclude>
+    <ClInclude Include="mini\logger.h">
+      <Filter>Header Files\mini</Filter>
+    </ClInclude>
+    <ClInclude Include="mini\algorithm.h">
+      <Filter>Header Files\mini</Filter>
+    </ClInclude>
+    <ClInclude Include="mini\threading\event.h">
+      <Filter>Header Files\mini\threading</Filter>
+    </ClInclude>
+    <ClInclude Include="mini\threading\locked_value.h">
+      <Filter>Header Files\mini\threading</Filter>
+    </ClInclude>
+    <ClInclude Include="mini\io\stream_reader.h">
+      <Filter>Header Files\mini\io</Filter>
+    </ClInclude>
+    <ClInclude Include="mini\string_hash.h">
+      <Filter>Header Files\mini</Filter>
+    </ClInclude>
+    <ClInclude Include="mini\tor\parsers\server_descriptor_parser.h">
+      <Filter>Header Files\mini\tor\parsers</Filter>
+    </ClInclude>
+    <ClInclude Include="mini\tor\parsers\consensus_parser.h">
+      <Filter>Header Files\mini\tor\parsers</Filter>
+    </ClInclude>
+    <ClInclude Include="mini\tor\parsers\introduction_point_parser.h">
+      <Filter>Header Files\mini\tor\parsers</Filter>
+    </ClInclude>
+    <ClInclude Include="mini\tor\parsers\hidden_service_descriptor_parser.h">
+      <Filter>Header Files\mini\tor\parsers</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="mini\collections\list.inl">
+      <Filter>Source Files\mini\collections</Filter>
+    </None>
+    <None Include="mini\ptr.inl">
+      <Filter>Source Files\mini</Filter>
+    </None>
+    <None Include="mini\buffer_ref.inl">
+      <Filter>Source Files\mini</Filter>
+    </None>
+    <None Include="mini\stack_buffer.inl">
+      <Filter>Source Files\mini</Filter>
+    </None>
+    <None Include="mini\collections\pair_list.inl">
+      <Filter>Source Files\mini\collections</Filter>
+    </None>
+    <None Include="mini\threading\locked_value.inl">
+      <Filter>Source Files\mini\threading</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Natvis Include="mini\mini.natvis">
+      <Filter>Header Files\mini</Filter>
+    </Natvis>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="mini\crt\msvcrt.def">
+      <Filter>Source Files\mini\crt</Filter>
+    </CustomBuild>
+  </ItemGroup>
+</Project>

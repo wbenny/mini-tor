@@ -1,0 +1,24 @@
+LIBRARY msvcrt.dll
+
+EXPORTS
+  malloc=msvcrt.malloc
+  calloc=msvcrt.calloc
+  realloc=msvcrt.realloc
+  free=msvcrt.free
+  memmove=msvcrt.memmove
+  strstr=msvcrt.strstr
+  exit=msvcrt.exit
+  atexit=msvcrt.atexit
+  abort=msvcrt.abort
+  memchr=msvcrt.memchr
+  memcmp=msvcrt.memcmp
+  memcpy=msvcrt.memcpy
+  memset=msvcrt.memset
+  printf=msvcrt.printf
+  scanf=msvcrt.scanf
+  sscanf=msvcrt.sscanf
+  sprintf=msvcrt.sprintf
+  vprintf=msvcrt.vprintf
+
+  wcslen=msvcrt.wcslen
+  wcstombs=msvcrt.wcstombs

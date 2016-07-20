@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="utf-8"?>
+<AutoVisualizer xmlns="http://schemas.microsoft.com/vstudio/debugger/natvis/2010">
+
+  <!-- mini::string -->
+  <Type Name="mini::string">
+    <DisplayString>{_buffer._first,na}</DisplayString>
+    <StringView>_buffer._first</StringView>
+    <Expand>
+      <Item Name="[size]" ExcludeView="simple">_buffer._last - _buffer._first</Item>
+      <Item Name="[capacity]" ExcludeView="simple">_buffer._end - _buffer._first</Item>
+      <ArrayItems>
+        <Size>_buffer._last - _buffer._first</Size>
+        <ValuePointer>_buffer._first</ValuePointer>
+      </ArrayItems>
+    </Expand>
+  </Type>
+
+  <!-- mini::string_ref -->
+  <Type Name="mini::string_ref">
+    <DisplayString>{_buffer._begin,na}</DisplayString>
+    <Expand>
+      <Item Name="[size]" ExcludeView="simple">_end - _begin</Item>
+      <ArrayItems>
+        <Size>_end - _begin</Size>
+        <ValuePointer>_buffer._begin</ValuePointer>
+      </ArrayItems>
+    </Expand>
+  </Type>
+
+  <!-- mini::buffer_ref -->
+  <Type Name="mini::buffer_ref&lt;*&gt;">
+    <DisplayString>{{ size={_end - _begin} }}</DisplayString>
+    <Expand>
+      <Item Name="[size]" ExcludeView="simple">_end - _begin</Item>
+      <ArrayItems>
+        <Size>_end - _begin</Size>
+        <ValuePointer>_begin</ValuePointer>
+      </ArrayItems>
+    </Expand>
+  </Type>
+
+  <!-- mini::pair -->
+  <Type Name="mini::pair&lt;*&gt;">
+    <DisplayString>({first}, {second})</DisplayString>
+    <Expand>
+      <Item Name="first">first</Item>
+      <Item Name="second">second</Item>
+    </Expand>
+  </Type>
+
+  <!-- mini::flags<T> -->
+  <Type Name="mini::flags&lt;*&gt;">
+    <DisplayString>{_i}</DisplayString>
+  </Type>
+
+  <!-- mini::ptr<T> -->
+  <Type Name="mini::ptr&lt;*&gt;">
+    <SmartPointer Usage="Minimal">_raw_pointer</SmartPointer>
+    <DisplayString Condition="_raw_pointer == 0">empty</DisplayString>
+    <DisplayString Condition="_raw_pointer != 0">ptr {*_raw_pointer}</DisplayString>
+    <Expand>
+      <Item Condition="_raw_pointer != 0" Name="[ptr]">_raw_pointer</Item>
+    </Expand>
+  </Type>
+
+  <!--
+    mini::collections
+    -->
+
+  <!-- mini::collections::list<T> -->
+  <Type Name="mini::collections::list&lt;*&gt;">
+    <DisplayString>{{ size={_last - _first} }}</DisplayString>
+    <Expand>
+      <Item Name="[size]" ExcludeView="simple">_last - _first</Item>
+      <Item Name="[capacity]" ExcludeView="simple">_end - _first</Item>
+      <ArrayItems>
+        <Size>_last - _first</Size>
+        <ValuePointer>_first</ValuePointer>
+      </ArrayItems>
+    </Expand>
+  </Type>
+
+  <!-- mini::collections::pair_list<TKEY, TVALUE> -->
+  <Type Name="mini::collections::pair_list&lt;*&gt;">
+    <DisplayString>{{ size={_buffer._last - _buffer._first} }}</DisplayString>
+    <Expand>
+      <Item Name="[size]" ExcludeView="simple">_buffer._last - _buffer._first</Item>
+      <Item Name="[capacity]" ExcludeView="simple">_buffer._end - _buffer._first</Item>
+      <ArrayItems>
+        <Size>_buffer._last - _buffer._first</Size>
+        <ValuePointer>_buffer._first</ValuePointer>
+      </ArrayItems>
+    </Expand>
+  </Type>
+
+  <!--
+    mini::threading
+    -->
+
+  <!-- mini::threading::locked_value -->
+  <Type Name="mini::threading::locked_value&lt;*&gt;">
+    <DisplayString>{ _value }</DisplayString>
+  </Type>
+
+  <!--
+    mini::net
+    -->
+
+  <!-- mini::net::ip_address -->
+  <Type Name="mini::net::ip_address">
+    <DisplayString>{ ((_ip &gt;&gt;  0) &amp; 0xFF) }.{ ((_ip &gt;&gt;  8) &amp; 0xFF) }.{ ((_ip &gt;&gt; 16) &amp; 0xFF) }.{ ((_ip &gt;&gt; 24) &amp; 0xFF) }</DisplayString>
+  </Type>
+
+  <!--
+    mini::crypto
+    -->
+
+  <!-- mini::crypto::big_integer -->
+  <Type Name="mini::crypto::big_integer">
+    <DisplayString>{{ size={_impl->size * 4} }}</DisplayString>
+    <Expand>
+      <Item Name="[size]" ExcludeView="simple">_impl->size * 4</Item>
+      <ArrayItems>
+        <Size>_impl->size</Size>
+        <ValuePointer>_impl->comps</ValuePointer>
+      </ArrayItems>
+    </Expand>
+  </Type>
+
+  <!--
+    mini::tor
+    -->
+
+  <!-- mini::tor::cell -->
+  <Type Name="mini::tor::cell">
+    <DisplayString>{{ circuit={_circuit_id &amp; 0x7fffffff}, cmd={_command}, payload={_payload} }}</DisplayString>
+    <Expand>
+      <Item Name="[circuit id]" ExcludeView="simple">_circuit_id</Item>
+      <Item Name="[command]" ExcludeView="simple">_command</Item>
+      <Item Name="[payload]" ExcludeView="simple">_payload</Item>
+    </Expand>
+  </Type>
+
+  <!-- mini::tor::relay_cell -->
+  <Type Name="mini::tor::relay_cell">
+    <DisplayString>{{ circuit={_circuit_id &amp; 0x7fffffff}, stream={_stream_id}, cmd={_relay_command}, payload={_relay_payload} }}</DisplayString>
+    <Expand>
+      <Item Name="[node]" ExcludeView="simple">_circuit_node</Item>
+      <Item Name="[circuit id]" ExcludeView="simple">_circuit_id</Item>
+      <Item Name="[stream id]" ExcludeView="simple">_stream_id</Item>
+      <Item Name="[command]" ExcludeView="simple">_relay_command</Item>
+      <Item Name="[payload]" ExcludeView="simple">_relay_payload</Item>
+    </Expand>
+  </Type>
+
+  <!-- mini::tor::circuit_node -->
+  <Type Name="mini::tor::circuit_node">
+    <DisplayString>{{ router={_onion_router} }}</DisplayString>
+    <Expand>
+      <Item Name="[router]" ExcludeView="simple">_onion_router</Item>
+    </Expand>
+  </Type>
+
+  <!-- mini::tor::onion_router -->
+  <Type Name="mini::tor::onion_router">
+    <DisplayString>{_name}</DisplayString>
+    <Expand>
+      <Item Name="[name]" ExcludeView="simple">_name</Item>
+      <Item Name="[identity fingerprint]" ExcludeView="simple">_identity_fingerprint</Item>
+      <Item Name="[ip]" ExcludeView="simple">_ip</Item>
+      <Item Name="[or port]" ExcludeView="simple">_or_port</Item>
+      <Item Name="[dir port]" ExcludeView="simple">_dir_port</Item>
+      <Item Name="[flags]" ExcludeView="simple">_flags</Item>
+    </Expand>
+  </Type>
+
+</AutoVisualizer>
