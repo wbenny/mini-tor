@@ -16,7 +16,7 @@ accessing hidden service content via mini-tor:
 
 ### Remarks
 
-* s i stated above, this application is proof of concept.
+* as i stated above, this application is proof of concept.
 * you can sometimes expect buggy behavior.
 * this is definitelly not full-blown secure replacement for tor. 
 
