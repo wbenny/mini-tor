@@ -5,7 +5,7 @@ namespace mini::tor {
 
 onion_router::status_flags
 consensus_parser::string_to_status_flags(
-  const collections::list<string>& splitted
+  const string_collection& splitted
   )
 {
   onion_router::status_flags result = onion_router::status_flag::none;
@@ -27,11 +27,11 @@ consensus_parser::string_to_status_flags(
 void
 consensus_parser::parse(
   consensus& consensus,
-  const string& content,
+  const string_ref content,
   bool reject_invalid
   )
 {
-  string_collection lines = content.split("\n");
+  string_collection lines = static_cast<string>(content).split("\n");
   document_location current_location = document_location::preamble;
   onion_router* current_router = nullptr;
 

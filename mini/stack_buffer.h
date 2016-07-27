@@ -27,60 +27,6 @@ class stack_buffer
     static constexpr size_type not_found = (size_type)-1;
 
     //
-    // constructors.
-    //
-
-//     stack_buffer(
-//       void
-//       );
-//
-//     stack_buffer(
-//       const stack_buffer& other
-//       );
-//
-//     stack_buffer(
-//       stack_buffer&& other
-//       );
-//
-//     stack_buffer(
-//       std::initializer_list<T> values
-//       );
-//
-//     template <
-//       typename ITERATOR_TYPE
-//     >
-//     stack_buffer(
-//       ITERATOR_TYPE begin,
-//       ITERATOR_TYPE end
-//       );
-//
-//     stack_buffer(
-//       size_type initial_size
-//       );
-
-    //
-    // destructor.
-    //
-
-//     ~stack_buffer(
-//       void
-//       );
-
-    //
-    // assign operators.
-    //
-
-//     stack_buffer&
-//     operator=(
-//       const stack_buffer& other
-//       );
-//
-//     stack_buffer&
-//     operator=(
-//       stack_buffer&& other
-//       );
-
-    //
     // swap.
     //
 
@@ -148,6 +94,16 @@ class stack_buffer
       ) const;
 
     //
+    // lookup.
+    //
+
+    constexpr size_type
+    index_of(
+      const T& item,
+      size_type from_offset = 0
+      ) const;
+
+    //
     // capacity.
     //
 
@@ -163,24 +119,6 @@ class stack_buffer
     operator mutable_buffer_ref<T>(
       void
       );
-
-    //
-    // lookup.
-    //
-
-    constexpr size_type
-    index_of(
-      const T& item,
-      size_type from_offset = 0
-      ) const
-    {
-      return
-        from_offset >= N
-        ? not_found
-        : buffer[from_offset] == item
-          ? from_offset
-          : index_of(item, from_offset + 1);
-    }
 
     //
     // public buffer.

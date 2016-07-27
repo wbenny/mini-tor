@@ -97,10 +97,7 @@ class onion_router
       const string_ref ip,
       uint16_t or_port,
       uint16_t dir_port,
-      const string_ref identity_fingerprint,
-      const byte_buffer_ref onion_key = nullptr,
-      const byte_buffer_ref signing_key = nullptr,
-      const byte_buffer_ref service_key = nullptr
+      const string_ref identity_fingerprint
       );
 
     consensus&

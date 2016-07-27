@@ -44,7 +44,7 @@ key_agreement::generate_key_pair(
   //
   // generate private key.
   //
-  byte_buffer private_key(128);
+  byte_buffer private_key(private_key_bytes);
   rnd->get_random_bytes(private_key);
   _private_key = crypto::big_integer(private_key);
 

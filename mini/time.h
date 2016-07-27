@@ -78,6 +78,18 @@ class time
     //
 
     friend bool
+    operator==(
+      const time& lhs,
+      const time& rhs
+      );
+
+    friend bool
+    operator!=(
+      const time& lhs,
+      const time& rhs
+      );
+
+    friend bool
     operator<(
       const time& lhs,
       const time& rhs
@@ -85,6 +97,18 @@ class time
 
     friend bool
     operator>(
+      const time& lhs,
+      const time& rhs
+      );
+
+    friend bool
+    operator<=(
+      const time& lhs,
+      const time& rhs
+      );
+
+    friend bool
+    operator>=(
       const time& lhs,
       const time& rhs
       );

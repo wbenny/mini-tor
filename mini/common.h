@@ -32,7 +32,7 @@
 #define mini_assert(expression)
 #endif
 
-#define mini_break_if(expression) if (expression) { break; } else {}
+#define mini_break_if(expression) if (expression) { break; } else;
 
 namespace mini {
 
@@ -42,26 +42,51 @@ using pointer_difference_type = ptrdiff_t;
 
 static constexpr size_type size_type_max = static_cast<size_type>(-1);
 
-template <typename T>
-T min(T a, T b)
+template <
+  typename T
+>
+T
+min(
+  T a,
+  T b
+  )
 {
   return (a < b) ? a : b;
 }
 
-template <typename T>
-T max(T a, T b)
+template <
+  typename T
+>
+T
+max(
+  T a,
+  T b
+  )
 {
   return (a > b) ? a : b;
 }
 
-template <typename T>
-T clamp(T value, T low, T high)
+template <
+  typename T
+>
+T
+clamp(
+  T value,
+  T low,
+  T high
+  )
 {
   return min(low, max(value, high));
 }
 
-template <typename T>
-T round_up_to_multiple(T value, T multiple)
+template <
+  typename T
+>
+T
+round_up_to_multiple(
+  T value,
+  T multiple
+  )
 {
   return ((value + multiple - 1) / multiple) * multiple;
 }
@@ -80,10 +105,13 @@ swap(
   rhs = temp;
 }
 
-template <typename T>
+template <
+  typename T
+>
 T
 swap_endianness(
-  T u)
+  T u
+  )
 {
   union
   {
@@ -93,9 +121,9 @@ swap_endianness(
 
   source.u = u;
 
-  for (size_t k = 0; k < sizeof(T); k++)
+  for (size_t i = 0; i < sizeof(T); i++)
   {
-    dest.u8[k] = source.u8[sizeof(T) - k - 1];
+    dest.u8[i] = source.u8[sizeof(T) - i - 1];
   }
 
   return dest.u;

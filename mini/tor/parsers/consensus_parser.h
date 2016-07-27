@@ -138,13 +138,13 @@ struct consensus_parser
 
   onion_router::status_flags
   string_to_status_flags(
-    const collections::list<string>& splitted
+    const string_collection& splitted
     );
 
   void
   parse(
     consensus& consensus,
-    const string& content,
+    const string_ref content,
     bool reject_invalid = true
     );
 };

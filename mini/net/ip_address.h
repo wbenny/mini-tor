@@ -8,21 +8,19 @@ namespace mini::net {
 class ip_address
 {
   public:
-    ip_address()
-      : _ip(0)
-    {
+    constexpr ip_address(
+      void
+      ) = default;
 
-    }
-
-    ip_address(
+    constexpr ip_address(
       const ip_address& other
       ) = default;
 
-    ip_address(
+    constexpr ip_address(
       ip_address&& other
       ) = default;
 
-    ip_address(
+    constexpr ip_address(
       uint32_t value
       )
       : _ip(value)
@@ -48,20 +46,28 @@ class ip_address
       ip_address&& other
       ) = default;
 
-    void
+    static constexpr ip_address
     from_int(
       uint32_t value
       )
     {
-      _ip = value;
+      return ip_address(value);
     }
 
-    void
+    static constexpr ip_address
     from_string(
       const char* value
       )
     {
-      _ip = inet_addr(value);
+      return ip_address(ip_to_int_chunk(value));
+    }
+
+    static constexpr uint32_t
+    to_int(
+      const char* value
+      )
+    {
+      return ip_to_int_chunk(value);
     }
 
     string
@@ -79,14 +85,58 @@ class ip_address
       return result;
     }
 
-    uint32_t
+    constexpr uint32_t
     to_int() const
     {
       return _ip;
     }
 
   private:
-    uint32_t _ip;
+    constexpr static bool
+    is_digit(
+      char c
+      )
+    {
+      return c <= '9' && c >= '0';
+    }
+
+    constexpr static uint32_t
+    stoi_impl(
+      const char* str,
+      int value = 0
+      )
+    {
+      return *str
+        ? is_digit(*str)
+          ? stoi_impl(str + 1, (*str - '0') + value * 10)
+          : value
+        : value;
+    }
+
+    constexpr static const char*
+    strchr(
+      const char* s,
+      int c
+      )
+    {
+      return *s == static_cast<char>(c) ? s
+        : !*s ? nullptr
+        : strchr(s + 1, c);
+    }
+
+    static constexpr uint32_t
+    ip_to_int_chunk(
+      const char* value
+      )
+    {
+      return
+        stoi_impl(value) |
+        stoi_impl(strchr(value, '.') + 1) << 8 |
+        stoi_impl(strchr(strchr(value, '.') + 1, '.') + 1) << 16 |
+        stoi_impl(strchr(strchr(strchr(value, '.') + 1, '.') + 1, '.') + 1) << 24;
+    }
+
+    uint32_t _ip = 0;
 };
 
 }

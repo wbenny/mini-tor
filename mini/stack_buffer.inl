@@ -2,119 +2,6 @@
 
 namespace mini {
 
-// template <
-//   typename T,
-//   size_t N
-// >
-// stack_buffer<T, N>::stack_buffer(
-//   void
-//   )
-// {
-//
-// }
-//
-// template <
-//   typename T,
-//   size_t N
-// >
-// stack_buffer<T, N>::stack_buffer(
-//   const stack_buffer& other
-//   )
-// {
-//
-// }
-//
-// template <
-//   typename T,
-//   size_t N
-// >
-// stack_buffer<T, N>::stack_buffer(
-//   stack_buffer&& other
-//   )
-// {
-//
-// }
-//
-// template <
-//   typename T,
-//   size_t N
-// >
-// stack_buffer<T, N>::stack_buffer(
-//   std::initializer_list<T> values
-//   )
-// {
-//
-// }
-//
-// template <
-//   typename T,
-//   size_t N
-// >
-// template <
-//   typename ITERATOR_TYPE
-// >
-// stack_buffer<T, N>::stack_buffer(
-//   ITERATOR_TYPE begin,
-//   ITERATOR_TYPE end
-//   )
-// {
-//
-// }
-//
-// template <
-//   typename T,
-//   size_t N
-// >
-// stack_buffer<T, N>::stack_buffer(
-//   size_type initial_size
-//   )
-// {
-//
-// }
-//
-// //
-// // destructor.
-// //
-//
-// template <
-//   typename T,
-//   size_t N
-// >
-// stack_buffer<T, N>::~stack_buffer(
-//   void
-//   )
-// {
-//
-// }
-
-//
-// assign operators.
-//
-
-// template <
-//   typename T,
-//   size_t N
-// >
-// stack_buffer<T, N>&
-// stack_buffer<T, N>::operator=(
-//   const stack_buffer& other
-//   )
-// {
-//
-// }
-//
-// template <
-//   typename T,
-//   size_t N
-// >
-// stack_buffer<T, N>&
-// stack_buffer<T, N>::operator=(
-//   stack_buffer&& other
-//   )
-// {
-//
-// }
-
 //
 // swap.
 //
@@ -257,6 +144,28 @@ stack_buffer<T, N>::end(
   ) const
 {
   return buffer + N;
+}
+
+//
+// lookup.
+//
+
+template <
+  typename T,
+  size_t N
+>
+constexpr size_type
+stack_buffer<T, N>::index_of(
+  const T& item,
+  size_type from_offset = 0
+  ) const
+{
+  return
+    from_offset >= N
+    ? not_found
+    : buffer[from_offset] == item
+      ? from_offset
+      : index_of(item, from_offset + 1);
 }
 
 //

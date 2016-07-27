@@ -428,7 +428,6 @@ list<T, ALLOCATOR_TYPE>::reserve(
 // lookup.
 //
 
-
 template <
   typename T,
   typename ALLOCATOR_TYPE
@@ -505,7 +504,7 @@ list<T, ALLOCATOR_TYPE>::add_many(
   size_type new_size = get_size() + items.get_size();
   reserve_to_at_least(new_size);
 
-  memcpy(&_first[get_size()], items.get_buffer(), items.get_size());
+  memory::copy(&_first[get_size()], items.get_buffer(), items.get_size() * sizeof(T));
 
   //_allocator.construct_range(_first + get_size(), _first + new_size, T());
 
@@ -584,7 +583,7 @@ list<T, ALLOCATOR_TYPE>::insert_many(
   size_type new_size = index + items.get_size();
   reserve_to_at_least(new_size);
 
-  memcpy(&_first[index], items.get_buffer(), items.get_size());
+  memory::copy(&_first[index], items.get_buffer(), items.get_size());
 
   //_allocator.construct_range(_first + get_size(), _first + new_size, T());
 

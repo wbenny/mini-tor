@@ -9,7 +9,7 @@ namespace mini {
 template <
   typename T
 >
-buffer_ref<T>::buffer_ref(
+constexpr buffer_ref<T>::buffer_ref(
   void
   )
   : _begin(nullptr)
@@ -21,29 +21,7 @@ buffer_ref<T>::buffer_ref(
 template <
   typename T
 >
-buffer_ref<T>::buffer_ref(
-  const buffer_ref& other
-  )
-  : _begin(other._begin)
-  , _end(other._end)
-{
-
-}
-
-template <
-  typename T
->
-buffer_ref<T>::buffer_ref(
-  buffer_ref&& other
-  ) : buffer_ref()
-{
-  swap(other);
-}
-
-template <
-  typename T
->
-buffer_ref<T>::buffer_ref(
+constexpr buffer_ref<T>::buffer_ref(
   std::nullptr_t
   ) : buffer_ref()
 {
@@ -68,7 +46,7 @@ template <
 template <
   typename CONST_ITERATOR_TYPE
 >
-buffer_ref<T>::buffer_ref(
+constexpr buffer_ref<T>::buffer_ref(
   CONST_ITERATOR_TYPE begin,
   CONST_ITERATOR_TYPE end
   )
@@ -85,7 +63,7 @@ template <
   typename U,
   size_type N
 >
-buffer_ref<T>::buffer_ref(
+constexpr buffer_ref<T>::buffer_ref(
   const U (&array)[N]
   )
   : _begin((T*)array)
@@ -148,7 +126,7 @@ buffer_ref<T>::swap(
 template <
   typename T
 >
-typename buffer_ref<T>::const_reference
+constexpr typename buffer_ref<T>::const_reference
 buffer_ref<T>::operator[](
   size_type index
   ) const
@@ -159,7 +137,7 @@ buffer_ref<T>::operator[](
 template <
   typename T
 >
-typename buffer_ref<T>::const_reference
+constexpr typename buffer_ref<T>::const_reference
 buffer_ref<T>::at(
   size_type index
   ) const
@@ -331,7 +309,7 @@ buffer_ref<T>::compare(
   const buffer_ref other
   ) const
 {
-  return memcmp(_begin, other._begin, get_size());
+  return memory::compare(_begin, other._begin, get_size());
 }
 
 template <
@@ -347,7 +325,7 @@ buffer_ref<T>::copy_to(
     ? min(get_size(), other.get_size())
     : size;
 
-  memcpy(other._begin, _begin, size);
+  memory::copy(other._begin, _begin, size);
 }
 
 template <
@@ -397,39 +375,6 @@ swap(
 //
 // constructors.
 //
-
-template <
-  typename T
->
-mutable_buffer_ref<T>::mutable_buffer_ref(
-  void
-  )
-  : buffer_ref<T>()
-{
-
-}
-
-template <
-  typename T
->
-mutable_buffer_ref<T>::mutable_buffer_ref(
-  const mutable_buffer_ref& other
-  )
-  : buffer_ref<T>(other)
-{
-
-}
-
-template <
-  typename T
->
-mutable_buffer_ref<T>::mutable_buffer_ref(
-  mutable_buffer_ref&& other
-  )
-  : buffer_ref<T>(std::move(other))
-{
-
-}
 
 template <
   typename T
@@ -657,7 +602,7 @@ mutable_buffer_ref<T>::copy_from(
   )
 {
   size_type size_to_copy = min(get_size(), other.get_size());
-  memcpy(_begin, other._begin, size_to_copy);
+  memory::copy(_begin, other._begin, size_to_copy);
   return *this;
 }
 

@@ -3,7 +3,7 @@
 
 #include <windows.h>
 
-#if 0 || _DEBUG
+#if 1 || _DEBUG
 # define mini_log(format, ...)      ::mini::log.log(::mini::logger::level::info,    format "\n", __VA_ARGS__)
 # define mini_debug(format, ...)    ::mini::log.log(::mini::logger::level::debug,   format "\n", __VA_ARGS__)
 # define mini_info(format, ...)     ::mini::log.log(::mini::logger::level::info,    format "\n", __VA_ARGS__)

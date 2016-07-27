@@ -23,7 +23,7 @@ hidden_service::hidden_service(
   , _onion(onion)
   , _permanent_id(crypto::base32::decode(_onion))
 {
-  mini_info("hidden_service() [%s.onion]", onion.get_buffer());
+  mini_debug("hidden_service() [%s.onion]", onion.get_buffer());
 }
 
 bool
@@ -176,8 +176,25 @@ hidden_service::fetch_hidden_service_descriptor(
     //
     // create new circuit and extend it with responsible directory.
     //
+    mini_info(
+      "\tCreating circuit for hidden service (try #%u), connecting to '%s' (%s:%u)",
+      (uint32_t)(i + 1),
+      _socket.get_onion_router()->get_name().get_buffer(),
+      _socket.get_onion_router()->get_ip_address().to_string().get_buffer(),
+      _socket.get_onion_router()->get_or_port());
+    mini_info("\tConnected...");
+
     ptr<circuit> directory_circuit = _socket.create_circuit();
+
+    mini_info(
+      "\tExtending circuit for hidden service, connecting to responsible directory '%s' (%s:%u)",
+      responsible_directory->get_name().get_buffer(),
+      responsible_directory->get_ip_address().to_string().get_buffer(),
+      responsible_directory->get_or_port());
+
     directory_circuit->extend(responsible_directory);
+
+    mini_info("\tExtended...");
 
     replica_type replica = i >= 3;
 
@@ -189,27 +206,37 @@ hidden_service::fetch_hidden_service_descriptor(
     //
     // request the hidden service descriptor.
     //
-    mini_info(
+    mini_debug(
       "hidden_service::fetch_hidden_service_descriptor() [path: %s]",
       ("/tor/rendezvous2/" + crypto::base32::encode(get_descriptor_id(replica))).get_buffer());
 
+    mini_info("\tSending request for hidden service descriptor...");
     string request = "GET /tor/rendezvous2/" + crypto::base32::encode(get_descriptor_id(replica)) + " HTTP/1.1\r\nHost: " + responsible_directory->get_ip_address().to_string() + "\r\n\r\n";
     directory_stream->write(request.get_buffer(), request.get_size());
+    mini_info("\tRequest sent...");
 
+    mini_info("\tReceiving hidden service descriptor...");
     io::stream_reader stream_reader(*directory_stream);
     string hidden_service_descriptor = stream_reader.read_string_to_end();
+    mini_info("\tHidden service descriptor received...");
 
     //
     // parse hidden service descriptor.
     //
     if (hidden_service_descriptor.contains("404 Not found") == false)
     {
+      mini_info("\tHidden service descriptor is valid...");
+
       hidden_service_descriptor_parser parser;
       parser.parse(_consensus, hidden_service_descriptor);
 
       _introduction_point_list = std::move(parser.introduction_point_list);
 
       return i;
+    }
+    else
+    {
+      mini_warning("\tHidden service descriptor is invalid...");
     }
   }
 
@@ -223,13 +250,39 @@ hidden_service::introduce(
 {
   for (onion_router* introduction_point : _introduction_point_list)
   {
+    mini_info(
+      "\tCreating circuit for hidden service introduce, connecting to '%s' (%s:%u)",
+      _socket.get_onion_router()->get_name().get_buffer(),
+      _socket.get_onion_router()->get_ip_address().to_string().get_buffer(),
+      _socket.get_onion_router()->get_or_port());
+
     ptr<circuit> introduce_circuit = _socket.create_circuit();
+
+    mini_info("\tConnected...");
+
+    mini_info(
+      "\tExtending circuit to introduction point '%s' (%s:%u)",
+      introduction_point->get_name().get_buffer(),
+      introduction_point->get_ip_address().to_string().get_buffer(),
+      introduction_point->get_or_port());
+
     introduce_circuit->extend(introduction_point);
+
+    mini_info("\tExtended...");
+
+    mini_info("\tSending introduce...");
+
     introduce_circuit->rendezvous_introduce(_rendezvous_circuit, _rendezvous_cookie);
 
     if (introduce_circuit->get_state() == circuit::state::rendezvous_introduced)
     {
+      mini_info("\tIntroduced successfully...");
+
       break;
+    }
+    else
+    {
+      mini_warning("\tIntroduce failed...");
     }
   }
 }

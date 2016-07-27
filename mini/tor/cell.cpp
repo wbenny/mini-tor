@@ -150,6 +150,15 @@ cell::get_bytes(
 }
 
 bool
+cell::is_recognized(
+  void
+  ) const
+{
+  return _payload[1] == 0
+      && _payload[2] == 0;
+}
+
+bool
 cell::is_valid(
   void
   ) const

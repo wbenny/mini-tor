@@ -86,7 +86,7 @@ circuit_node::set_shared_secret(
   crypto::big_integer shared_secret = _dh.get_shared_secret(peer_public);
   auto key_material = derive_keys(shared_secret.to_bytes());
 
-  if (memcmp(key_material.get_buffer(), kh.get_buffer(), kh.get_size()) == 0)
+  if (memory::equal(key_material.get_buffer(), kh.get_buffer(), kh.get_size()))
   {
     _crypto_state = new circuit_node_crypto_state(key_material);
   }

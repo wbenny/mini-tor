@@ -1,66 +1,91 @@
 #pragma once
 #include <cstdlib>
 #include <cstring>
+#include <type_traits>
 
-namespace mini { namespace memory {
+namespace mini::memory {
 
-static void*
+void*
 allocate(
   size_t size
-  )
-{
-  return ::malloc(size);
-}
+  );
 
-static void*
+void*
 reallocate(
   void* ptr,
   size_t new_size
-  )
-{
-  return ::realloc(ptr, new_size);
-}
+  );
 
-static void
+void
 deallocate(
   void* ptr
-  )
-{
-  ::free(ptr);
-}
+  );
 
-static void*
+void*
+copy(
+  void* destination,
+  const void* source,
+  size_t size
+  );
+
+void*
+move(
+  void* destination,
+  const void* source,
+  size_t size
+  );
+
+int
+compare(
+  const void* lhs,
+  const void* rhs,
+  size_t size
+  );
+
+bool
+equal(
+  const void* rhs,
+  const void* lhs,
+  size_t size
+  );
+
+void*
 find(
-  const void *l,
-  size_t l_len,
-  const void *s,
-  size_t s_len
+  const void *haystack,
+  size_t haystack_size,
+  const void *needle,
+  size_t needle_size
+  );
+
+void*
+zero(
+  void* destination,
+  size_t size
+  );
+
+template <
+  typename T,
+  typename = std::enable_if_t<std::is_pod_v<T>>
+>
+T&
+zero(
+  T& destination
   )
 {
-  register char *cur, *last;
-  const char *cl = (const char *)l;
-  const char *cs = (const char *)s;
-
-  /* we need something to compare */
-  if (l_len == 0 || s_len == 0)
-    return NULL;
-
-  /* "s" must be smaller or equal to "l" */
-  if (l_len < s_len)
-    return NULL;
-
-  /* special case where s_len == 1 */
-  if (s_len == 1)
-    return (void*)memchr(l, (int)*cs, l_len);
-
-  /* the last position where its possible to find "s" in "l" */
-  last = (char *)cl + l_len - s_len;
-
-  for (cur = (char *)cl; cur <= last; cur++)
-    if (cur[0] == cs[0] && memcmp(cur, cs, s_len) == 0)
-      return cur;
-
-  return NULL;
+  return *reinterpret_cast<T*>(zero(&destination, sizeof(destination)));
 }
 
-} }
+template <
+  typename T,
+  size_t N,
+  typename = std::enable_if_t<std::is_pod_v<T>>
+>
+T*
+zero(
+  T (&destination)[N]
+  )
+{
+  return reinterpret_cast<T*>(zero(destination, sizeof(T) * N));
+}
+
+}

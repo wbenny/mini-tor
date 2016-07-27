@@ -195,7 +195,16 @@
     <ClCompile Include="mini\tor\parsers\introduction_point_parser.cpp">
       <Filter>Source Files\mini\tor\parsers</Filter>
     </ClCompile>
-    <ClCompile Include="mini\tor\parsers\server_descriptor_parser.cpp">
+    <ClCompile Include="mini\memory.cpp">
+      <Filter>Source Files\mini</Filter>
+    </ClCompile>
+    <ClCompile Include="mini\crypto\random.cpp">
+      <Filter>Source Files\mini\crypto</Filter>
+    </ClCompile>
+    <ClCompile Include="mini\string_ref.cpp">
+      <Filter>Source Files\mini</Filter>
+    </ClCompile>
+    <ClCompile Include="mini\tor\parsers\onion_router_descriptor_parser.cpp">
       <Filter>Source Files\mini\tor\parsers</Filter>
     </ClCompile>
   </ItemGroup>
@@ -377,9 +386,6 @@
     <ClInclude Include="mini\string_hash.h">
       <Filter>Header Files\mini</Filter>
     </ClInclude>
-    <ClInclude Include="mini\tor\parsers\server_descriptor_parser.h">
-      <Filter>Header Files\mini\tor\parsers</Filter>
-    </ClInclude>
     <ClInclude Include="mini\tor\parsers\consensus_parser.h">
       <Filter>Header Files\mini\tor\parsers</Filter>
     </ClInclude>
@@ -387,6 +393,9 @@
       <Filter>Header Files\mini\tor\parsers</Filter>
     </ClInclude>
     <ClInclude Include="mini\tor\parsers\hidden_service_descriptor_parser.h">
+      <Filter>Header Files\mini\tor\parsers</Filter>
+    </ClInclude>
+    <ClInclude Include="mini\tor\parsers\onion_router_descriptor_parser.h">
       <Filter>Header Files\mini\tor\parsers</Filter>
     </ClInclude>
   </ItemGroup>

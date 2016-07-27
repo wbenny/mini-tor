@@ -101,6 +101,24 @@ time::timestamp(
 //
 
 bool
+operator==(
+  const time& lhs,
+  const time& rhs
+  )
+{
+  return lhs._timestamp == rhs._timestamp;
+}
+
+bool
+operator!=(
+  const time& lhs,
+  const time& rhs
+  )
+{
+  return lhs._timestamp != rhs._timestamp;
+}
+
+bool
 operator<(
   const time& lhs,
   const time& rhs
@@ -116,6 +134,24 @@ operator>(
   )
 {
   return lhs._timestamp > rhs._timestamp;
+}
+
+bool
+operator<=(
+  const time& lhs,
+  const time& rhs
+  )
+{
+  return lhs._timestamp <= rhs._timestamp;
+}
+
+bool
+operator>=(
+  const time& lhs,
+  const time& rhs
+  )
+{
+  return lhs._timestamp >= rhs._timestamp;
 }
 
 };

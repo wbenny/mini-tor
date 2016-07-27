@@ -12,73 +12,51 @@ class string_ref
 
     string_ref(
       char value
-      )
-      : buffer_ref<char>(_internal_char_buffer, _internal_char_buffer + 2)
-    {
-      _internal_char_buffer[0] = value;
-      _internal_char_buffer[1] = '\0';
-    }
+      );
+
+    template <
+      size_t N
+    >
+    constexpr string_ref(
+      const char (&value)[N]
+      );
 
     string_ref(
       const char* value
-      )
-      : buffer_ref<char>(value, value + strlen(value) + 1)
-    {
-
-    }
+      );
 
     size_type
     get_size(
       void
-      ) const
-    {
-      return buffer_ref<char>::is_empty()
-        ? 0
-        : buffer_ref<char>::get_size() - 1;
-    }
+      ) const;
 
     operator string(
       void
-      ) const
-    {
-      return string(begin(), get_size());
-    }
+      ) const;
 
     friend bool
     operator==(
       const string_ref& lhs,
       const string& rhs
-      )
-    {
-      return lhs.equals(rhs);
-    }
+      );
 
     friend bool
     operator!=(
       const string_ref& lhs,
       const string& rhs
-      )
-    {
-      return !(lhs == rhs);
-    }
+      );
 
     friend bool
     operator==(
       const string_ref& lhs,
       const string_ref& rhs
-      )
-    {
-      return lhs.equals(rhs);
-    }
+      );
 
     friend bool
     operator!=(
       const string_ref& lhs,
       const string_ref& rhs
-      )
-    {
-      return !(lhs == rhs);
-    }
+      );
 
   private:
     char _internal_char_buffer[2];

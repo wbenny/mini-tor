@@ -56,7 +56,7 @@ tor_stream::read(
   mini_lock(_buffer_mutex)
   {
     size_to_copy = min(size, _buffer.get_size());
-    memcpy(buffer, &_buffer[0], size_to_copy);
+    memory::copy(buffer, &_buffer[0], size_to_copy);
 
     _buffer = byte_buffer_ref(_buffer).slice(size_to_copy);
   }

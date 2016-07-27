@@ -55,7 +55,7 @@ class memory_stream
       ) override
     {
       size = min(size, (size_t)(_position - _end));
-      memcpy(buffer, _position, size);
+      memory::copy(buffer, _position, size);
       _position += size;
       return size;
     }
@@ -67,7 +67,7 @@ class memory_stream
       ) override
     {
       size = min(size, (size_t)(_position - _end));
-      memcpy(_position, buffer, size);
+      memory::copy(_position, buffer, size);
       _position += size;
       return size;
     }

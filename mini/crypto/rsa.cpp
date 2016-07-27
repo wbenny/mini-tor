@@ -88,7 +88,7 @@ rsa::public_encrypt(
   byte_buffer output;
   output.resize(_key_size);
 
-  memcpy(output.get_buffer(), input.get_buffer(), input.get_size());
+  memory::copy(output.get_buffer(), input.get_buffer(), input.get_size());
 
   DWORD dword_input_size = (DWORD)input.get_size();
   BOOL result;
@@ -121,7 +121,7 @@ rsa::private_decrypt(
   byte_buffer output;
   output.resize(_key_size);
 
-  memcpy(output.get_buffer(), input.get_buffer(), input.get_size());
+  memory::copy(output.get_buffer(), input.get_buffer(), input.get_size());
 
   for (DWORD i = 0; i < (_key_size / 2); i++)
   {

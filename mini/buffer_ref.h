@@ -39,19 +39,19 @@ class buffer_ref
     // constructors.
     //
 
-    buffer_ref(
+    constexpr buffer_ref(
       void
       );
 
-    buffer_ref(
+    constexpr buffer_ref(
       const buffer_ref& other
-      );
+      ) = default;
 
-    buffer_ref(
+    constexpr buffer_ref(
       buffer_ref&& other
-      );
+      ) = default;
 
-    buffer_ref(
+    constexpr buffer_ref(
       std::nullptr_t
       );
 
@@ -62,7 +62,7 @@ class buffer_ref
     template <
       typename CONST_ITERATOR_TYPE
     >
-    buffer_ref(
+    constexpr buffer_ref(
       CONST_ITERATOR_TYPE begin,
       CONST_ITERATOR_TYPE end
       );
@@ -71,7 +71,7 @@ class buffer_ref
       typename U,
       size_type N
     >
-    buffer_ref(
+    constexpr buffer_ref(
       const U (&array)[N]
       );
 
@@ -110,12 +110,12 @@ class buffer_ref
     // element access.
     //
 
-    const_reference
+    constexpr const_reference
     operator[](
       size_type index
       ) const;
 
-    const_reference
+    constexpr const_reference
     at(
       size_type index
       ) const;
@@ -224,6 +224,11 @@ class buffer_ref
       );
 
   protected:
+    template <
+      typename T
+    >
+    friend class mutable_buffer_ref;
+
     T* _begin;
     T* _end;
 };
@@ -254,15 +259,15 @@ class mutable_buffer_ref
 
     mutable_buffer_ref(
       void
-      );
+      ) = default;
 
     mutable_buffer_ref(
       const mutable_buffer_ref& other
-      );
+      ) = default;
 
     mutable_buffer_ref(
       mutable_buffer_ref&& other
-      );
+      ) = default;
 
     template <
       typename ITERATOR_TYPE

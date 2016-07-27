@@ -66,7 +66,7 @@ circuit_node_crypto_state::encrypt_forward_cell(
     //
     _forward_digest->update(relay_payload_bytes);
     auto digest = _forward_digest->duplicate()->get();
-    memcpy(&relay_payload_bytes[5], &digest[0], 4);
+    memory::copy(&relay_payload_bytes[5], &digest[0], sizeof(uint32_t));
   }
   else
   {
@@ -97,24 +97,23 @@ circuit_node_crypto_state::decrypt_backward_cell(
   //
   // check if this is a cell for us.
   //
-  if (cell.get_payload()[1] == 0x00 &&
-      cell.get_payload()[2] == 0x00)
+  if (cell.is_recognized())
   {
     //
     // remove the digest from the payload
     //
     byte_buffer payload_without_digest(cell.get_payload());
-    memset(payload_without_digest.get_buffer() + 5, 0, 4);;
+    memory::zero(payload_without_digest.get_buffer() + 5, sizeof(uint32_t));
 
     stack_byte_buffer<4> payload_digest;
-    memcpy(payload_digest.get_buffer(), cell.get_payload().get_buffer() + 5, 4);
+    memory::copy(payload_digest.get_buffer(), cell.get_payload().get_buffer() + 5, sizeof(uint32_t));
 
     auto backward_digest_clone = _backward_digest->duplicate();
     backward_digest_clone->update(payload_without_digest);
 
     auto digest = backward_digest_clone->get();
 
-    if (memcmp(payload_digest.get_buffer(), &digest[0], 4) == 0)
+    if (memory::equal(payload_digest.get_buffer(), &digest[0], sizeof(payload_digest)))
     {
       _backward_digest->update(payload_without_digest);
 

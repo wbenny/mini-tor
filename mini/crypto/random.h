@@ -6,6 +6,8 @@
 #include <windows.h>
 #include <wincrypt.h>
 
+#include <type_traits>
+
 namespace mini::crypto {
 
 class random
@@ -13,48 +15,43 @@ class random
   public:
     MINI_MAKE_NONCOPYABLE(random);
 
-    template <typename T>
+    byte_buffer
+    get_random_bytes(
+      size_t byte_count
+      );
+
+    void
+    get_random_bytes(
+      mutable_byte_buffer_ref output
+      );
+
+    template <
+      typename T,
+      typename = std::enable_if_t<std::is_integral_v<T>>
+    >
     T
-    get_random()
+    get_random(
+      void
+      )
     {
       T result;
-      CryptGenRandom(
-        _provider->get_handle(),
-        sizeof(T),
-        (BYTE*)&result);
+      get_random_bytes(mutable_byte_buffer_ref(
+        reinterpret_cast<byte_type*>(&result),
+        reinterpret_cast<byte_type*>(&result) + sizeof(T)));
 
       return result;
     }
 
-    template <typename T>
+    template <
+      typename T,
+      typename = std::enable_if_t<std::is_integral_v<T>>
+    >
     T
     get_random(
         T max
       )
     {
-      return get_random() % max;
-    }
-
-    byte_buffer
-    get_random_bytes(
-      size_t byte_count
-      )
-    {
-      byte_buffer result(byte_count);
-      get_random_bytes(result);
-
-      return result;
-    }
-
-    void
-    get_random_bytes(
-      mutable_byte_buffer_ref output
-      )
-    {
-      CryptGenRandom(
-        _provider->get_handle(),
-        (DWORD)output.get_size(),
-        output.get_buffer());
+      return get_random<std::make_unsigned_t<T>>() % max;
     }
 
   private:
@@ -62,13 +59,11 @@ class random
 
     random(
       provider* crypto_provider
-      )
-      : _provider(crypto_provider)
-    {
-
-    }
+      );
 
     provider* _provider;
 };
+
+extern ptr<random> random_device;
 
 }

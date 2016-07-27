@@ -43,8 +43,12 @@ aes::init(
     BYTE       key[32];
   };
 
-  memset(_counter, 0, 32);
-  memset(_counter_out, 0, 32);
+  memory::zero(_counter);
+  memory::zero(_counter_out);
+
+  // memset(_counter, 0, 32);
+  // memset(_counter_out, 0, 32);
+  
   _keystream_pointer = 0xFFFF;
 
   //
@@ -57,7 +61,7 @@ aes::init(
   key_blob.header.aiKeyAlg = aes_key_size;
   key_blob.size = _key_size;
 
-  memcpy(key_blob.key, key.get_buffer(), key_blob.size);
+  memory::copy(key_blob.key, key.get_buffer(), key_blob.size);
 
   BOOL result;
   result = CryptImportKey(
@@ -101,7 +105,7 @@ aes::update(
 {
   if (_mode == mode_ctr)
   {
-    for (uint8_t byte : input)
+    for (byte_type byte : input)
     {
       *output++ = byte ^ next_keystream_byte();
     }
@@ -137,7 +141,7 @@ aes::crypt(
   return aes->update(input, (aes_mode == mode::mode_ctr || aes_mode == mode::mode_ecb) ? false : true);
 }
 
-uint8_t
+byte_type
 aes::next_keystream_byte(
   void
   )
@@ -187,10 +191,9 @@ aes::increment_counter(
       carry = 0;
     }
 
-    _counter[i] = (uint8_t)x;
+    _counter[i] = static_cast<byte_type>(x);
   }
 }
-
 
 void
 aes::do_update(
@@ -199,10 +202,10 @@ aes::do_update(
   bool do_final
   )
 {
-  memcpy(output.get_buffer(), input.get_buffer(), _key_size);
+  output.copy_from(input.slice(0, _key_size));
 
-  DWORD crypted_size = _key_size;
   BOOL result;
+  DWORD crypted_size = _key_size;
   result = CryptEncrypt(
     _key,
     0,

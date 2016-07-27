@@ -596,6 +596,9 @@ circuit::handle_cell(
     break;
 
     default:
+      mini_warning(
+        "tor_socket::recv_cell() !! unhandled cell [ command: %u ]",
+        cell.get_command());
       break;
   }
 }

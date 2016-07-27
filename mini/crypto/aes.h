@@ -1,6 +1,7 @@
 #pragma once
 #include <mini/common.h>
 #include <mini/byte_buffer.h>
+#include <mini/stack_buffer.h>
 
 #include <windows.h>
 #include <wincrypt.h>
@@ -73,7 +74,7 @@ class aes
       provider* crypto_provider
       );
 
-    uint8_t
+    byte_type
     next_keystream_byte(
       void
       );
@@ -105,8 +106,8 @@ class aes
     mode _mode;
     DWORD _key_size;
 
-    uint8_t _counter[32];
-    uint8_t _counter_out[32];
+    stack_byte_buffer<32> _counter;
+    stack_byte_buffer<32> _counter_out;
     size_t _keystream_pointer;
 };
 

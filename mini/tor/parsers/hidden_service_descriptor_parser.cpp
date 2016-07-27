@@ -6,10 +6,10 @@ namespace mini::tor {
 void
 hidden_service_descriptor_parser::parse(
   consensus& consensus,
-  const string& descriptor
+  const string_ref descriptor
   )
 {
-  string_collection lines = descriptor.split("\n");
+  string_collection lines = static_cast<string>(descriptor).split("\n");
   document_location current_location = document_location::control_word;
   string current_message;
 

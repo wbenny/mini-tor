@@ -15,6 +15,11 @@
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
     <LocalDebuggerCommandArguments>"http://duskgytldkxiuqc6.onion/fedpapers/federndx.htm"</LocalDebuggerCommandArguments>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release_Small|Win32'">
+    <LocalDebuggerWorkingDirectory>$(SolutionDir)bin\$(PlatformShortName)\$(Configuration)\</LocalDebuggerWorkingDirectory>
+    <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
+    <LocalDebuggerCommandArguments>"http://duskgytldkxiuqc6.onion/fedpapers/federndx.htm"</LocalDebuggerCommandArguments>
+  </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LocalDebuggerWorkingDirectory>$(SolutionDir)bin\$(PlatformShortName)\$(Configuration)\</LocalDebuggerWorkingDirectory>
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
@@ -26,6 +31,11 @@
     <LocalDebuggerCommandArguments>"http://duskgytldkxiuqc6.onion/fedpapers/federndx.htm"</LocalDebuggerCommandArguments>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <LocalDebuggerWorkingDirectory>$(SolutionDir)bin\$(PlatformShortName)\$(Configuration)\</LocalDebuggerWorkingDirectory>
+    <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
+    <LocalDebuggerCommandArguments>"http://duskgytldkxiuqc6.onion/fedpapers/federndx.htm"</LocalDebuggerCommandArguments>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release_Small|x64'">
     <LocalDebuggerWorkingDirectory>$(SolutionDir)bin\$(PlatformShortName)\$(Configuration)\</LocalDebuggerWorkingDirectory>
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
     <LocalDebuggerCommandArguments>"http://duskgytldkxiuqc6.onion/fedpapers/federndx.htm"</LocalDebuggerCommandArguments>

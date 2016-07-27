@@ -62,7 +62,7 @@ tcp_socket::connect(
   ::sockaddr_in sin;
   sin.sin_family = AF_INET;
   sin.sin_port = ::htons(port);
-  memcpy(&sin.sin_addr, h->h_addr_list[0], h->h_length);
+  memory::copy(&sin.sin_addr, h->h_addr_list[0], h->h_length);
 
   _ip = ip_address(sin.sin_addr.s_addr);
 

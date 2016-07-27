@@ -10,10 +10,10 @@ namespace mini::tor {
 void
 introduction_point_parser::parse(
   consensus& consensus,
-  const string& descriptor
+  const string_ref descriptor
   )
 {
-  string_collection lines = descriptor.split("\n");
+  string_collection lines = static_cast<string>(descriptor).split("\n");
   document_location current_location = document_location::control_word;
   onion_router* current_router = nullptr;
   string current_key;

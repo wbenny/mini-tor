@@ -297,7 +297,7 @@ string::compare(
   const string& other
   ) const
 {
-  return memcmp(_buffer.get_buffer(), other.get_buffer(), get_size());
+  return memory::compare(_buffer.get_buffer(), other.get_buffer(), get_size());
 }
 
 string
@@ -317,7 +317,7 @@ string::substring(
   string result;
   length = min(get_size() - offset, length);
   result.resize(length);
-  memcpy(result.get_buffer(), get_buffer() + offset, length);
+  memory::copy(result.get_buffer(), get_buffer() + offset, length);
 
   return result;
 }
@@ -401,7 +401,7 @@ string::assign(
     : size;
 
   resize(size);
-  memcpy(_buffer.get_buffer(), other, size);
+  memory::copy(_buffer.get_buffer(), other, size);
 
   return *this;
 }
@@ -447,7 +447,7 @@ string::append(
   size_type old_size = get_size();
   _buffer.resize(old_size + size + 1);
 
-  memcpy(get_buffer() + old_size, other, size);
+  memory::copy(get_buffer() + old_size, other, size);
   _buffer[old_size + size] = '\0';
 
   return *this;

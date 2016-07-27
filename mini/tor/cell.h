@@ -141,6 +141,11 @@ class cell
       ) const;
 
     bool
+    is_recognized(
+      void
+      ) const;
+
+    bool
     is_valid(
       void
       ) const;

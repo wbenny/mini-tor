@@ -1,6 +1,6 @@
 #include "onion_router.h"
 #include "consensus.h"
-#include "parsers/server_descriptor_parser.h"
+#include "parsers/onion_router_descriptor_parser.h"
 
 namespace mini::tor {
 
@@ -10,10 +10,7 @@ onion_router::onion_router(
   const string_ref ip,
   uint16_t or_port,
   uint16_t dir_port,
-  const string_ref identity_fingerprint,
-  const byte_buffer_ref onion_key,
-  const byte_buffer_ref signing_key,
-  const byte_buffer_ref service_key
+  const string_ref identity_fingerprint
   )
   : _consensus(consensus)
   , _name(name)
@@ -21,10 +18,10 @@ onion_router::onion_router(
   , _or_port(or_port)
   , _dir_port(dir_port)
   , _identity_fingerprint(identity_fingerprint)
-  , _flags((status_flag)0)
-  , _onion_key(onion_key)
-  , _signing_key(signing_key)
-  , _service_key(service_key)
+  , _flags(status_flag::none)
+  , _onion_key()
+  , _signing_key()
+  , _service_key()
 {
 
 }
@@ -197,8 +194,8 @@ onion_router::fetch_descriptor(
   void
   )
 {
-  server_descriptor_parser parser;
-  parser.parse(this, _consensus.get_router_consensus(_identity_fingerprint));
+  onion_router_descriptor_parser parser;
+  parser.parse(this, _consensus.get_onion_router_descriptor(_identity_fingerprint));
 }
 
 }

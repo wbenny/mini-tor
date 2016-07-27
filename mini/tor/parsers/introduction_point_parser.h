@@ -39,7 +39,7 @@ struct introduction_point_parser
   void
   parse(
     consensus& consensus,
-    const string& descriptor
+    const string_ref descriptor
     );
 };
 

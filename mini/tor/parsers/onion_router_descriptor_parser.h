@@ -6,7 +6,7 @@
 
 namespace mini::tor {
 
-struct server_descriptor_parser
+struct onion_router_descriptor_parser
 {
   enum class document_location
   {
@@ -39,7 +39,7 @@ struct server_descriptor_parser
   void
   parse(
     onion_router* router,
-    const string& descriptor
+    const string_ref descriptor
     );
 };
 

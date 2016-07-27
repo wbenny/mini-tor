@@ -85,7 +85,7 @@ relay_cell::set_digest(
   const byte_buffer_ref digest
   )
 {
-  memcpy(_digest, digest.get_buffer(), sizeof(_digest));
+  memory::copy(_digest, digest.get_buffer(), sizeof(_digest));
 }
 
 byte_buffer_ref

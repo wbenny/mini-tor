@@ -1,17 +1,17 @@
 #pragma once
-#include "server_descriptor_parser.h"
+#include "onion_router_descriptor_parser.h"
 
 #include <mini/crypto/base64.h>
 
 namespace mini::tor {
 
 void
-server_descriptor_parser::parse(
+onion_router_descriptor_parser::parse(
   onion_router* router,
-  const string& descriptor
+  const string_ref descriptor
   )
 {
-  string_collection lines = descriptor.split("\n");
+  string_collection lines = static_cast<string>(descriptor).split("\n");
   document_location current_location = document_location::control_word;
   string current_key;
 
