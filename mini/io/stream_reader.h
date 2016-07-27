@@ -1,10 +1,8 @@
 #pragma once
 #include "stream.h"
-#include <mini/common.h>
+
 #include <mini/string.h>
 #include <mini/byte_buffer.h>
-
-#include <cstdint>
 
 namespace mini::io {
 

@@ -1,15 +1,9 @@
 #include "consensus.h"
-
-#include <mini/crypto/base64.h>
-#include <mini/crypto/base16.h>
-#include <mini/net/http.h>
-#include <mini/io/file_stream.h>
-#include <mini/string.h>
-#include <mini/collections/list.h>
-#include <mini/io/file.h>
-#include <mini/logger.h>
-
 #include "parsers/consensus_parser.h"
+
+#include <mini/logger.h>
+#include <mini/io/file.h>
+#include <mini/net/http.h>
 
 namespace mini::tor {
 

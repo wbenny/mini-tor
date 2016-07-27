@@ -1,11 +1,8 @@
-#include <winsock2.h>
 #include "circuit_node_crypto_state.h"
-#include "circuit_node.h"
 #include "relay_cell.h"
 
-#include <mini/crypto/aes.h>
-#include <mini/crypto/sha1.h>
-
+#include <mini/stack_buffer.h>
+#include <mini/crypto/provider.h>
 #include <mini/io/memory_stream.h>
 #include <mini/io/stream_wrapper.h>
 

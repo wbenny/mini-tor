@@ -1,6 +1,5 @@
 #pragma once
 #include "cell.h"
-#include "types.h"
 
 namespace mini::tor {
 

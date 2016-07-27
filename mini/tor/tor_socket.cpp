@@ -1,11 +1,9 @@
 #include "tor_socket.h"
 #include "circuit.h"
 
-#include <mini/time.h>
-#include <mini/stack_buffer.h>
+#include <mini/logger.h>
 #include <mini/io/memory_stream.h>
 #include <mini/io/stream_wrapper.h>
-#include <mini/logger.h>
 
 namespace mini::tor {
 

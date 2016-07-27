@@ -1,5 +1,4 @@
 #pragma once
-#include <mini/common.h>
 #include <mini/collections/list.h>
 
 namespace mini {

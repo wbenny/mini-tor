@@ -1,22 +1,7 @@
 #pragma once
-#include <mini/algorithm.h>
-#include <mini/byte_buffer.h>
-#include <mini/string_ref.h>
 #include <mini/stack_buffer.h>
-#include <mini/time.h>
-#include <mini/collections/list.h>
-#include <mini/crypto/provider.h>
-#include <mini/crypto/base16.h>
-#include <mini/crypto/base32.h>
-#include <mini/crypto/sha1.h>
-#include <mini/io/memory_stream.h>
-#include <mini/io/stream_wrapper.h>
 #include <mini/tor/circuit.h>
 #include <mini/tor/consensus.h>
-#include <mini/tor/onion_router.h>
-#include <mini/tor/tor_socket.h>
-
-#include <mini/tor/parsers/introduction_point_parser.h>
 
 namespace mini::tor {
 

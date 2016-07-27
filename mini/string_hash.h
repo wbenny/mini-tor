@@ -1,5 +1,5 @@
 #pragma once
-#include <mini/string_ref.h>
+#include <mini/string.h>
 
 namespace mini {
 

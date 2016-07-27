@@ -1,10 +1,8 @@
 #pragma once
-#include <cstdint>
-#include <cstddef>
-#include <type_traits>
-#include <cstring>
-
 #include <mini/common.h>
+
+#include <cstring>
+#include <type_traits>
 
 namespace mini {
 

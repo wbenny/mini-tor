@@ -1,12 +1,7 @@
 #pragma once
-#include "cell.h"
-#include "onion_router.h"
 #include "circuit_node_crypto_state.h"
 #include "crypto/key_agreement.h"
 
-#include <mini/collections/list.h>
-#include <mini/crypto/aes.h>
-#include <mini/crypto/sha1.h>
 #include <mini/threading/mutex.h>
 
 namespace mini::tor {

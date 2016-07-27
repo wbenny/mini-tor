@@ -1,6 +1,4 @@
 #pragma once
-#include <cstdint>
-
 #include <mini/string.h>
 #include <mini/byte_buffer.h>
 

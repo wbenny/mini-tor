@@ -1,9 +1,6 @@
 #pragma once
 #include "base64.h"
 
-#include <mini/memory.h>
-#include <mini/collections/list.h>
-
 #include <windows.h>
 #include <wincrypt.h>
 

@@ -1,8 +1,7 @@
 #pragma once
-#include <windows.h>
-#include <cstdarg>
-
 #include <mini/common.h>
+
+#include <windows.h>
 
 #if 0 || _DEBUG
 # define mini_log(format, ...)      ::mini::log.log(::mini::logger::level::info,    format "\n", __VA_ARGS__)

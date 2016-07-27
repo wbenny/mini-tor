@@ -1,9 +1,4 @@
 #pragma once
-#include <cstdint>
-#include <windows.h>
-#include <winternl.h>
-
-#include <mini/common.h>
 #include <mini/string.h>
 
 namespace mini {

@@ -1,6 +1,5 @@
 #include "hybrid_encryption.h"
 
-#include <mini/crypto/provider.h>
 #include <mini/crypto/random.h>
 #include <mini/crypto/rsa.h>
 #include <mini/crypto/aes.h>

@@ -1,5 +1,8 @@
 #include "time.h"
 
+#include <windows.h>
+#include <winternl.h>
+
 namespace mini {
 
 //

@@ -1,12 +1,9 @@
 #pragma once
-#include <winsock2.h>
-#include <mini/error.h>
-#include <mini/net/ip_address.h>
 #include <mini/string.h>
+#include <mini/net/ip_address.h>
 #include <mini/io/stream.h>
 
-#include <cstdint>
-
+#include <winsock2.h>
 
 namespace mini::net {
 

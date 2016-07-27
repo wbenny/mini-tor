@@ -1,8 +1,8 @@
 #pragma once
 #include "impl/bigint_impl.h"
-#include <mini/byte_buffer.h>
 
-#include <cstdint>
+#include <mini/common.h>
+#include <mini/byte_buffer.h>
 
 namespace mini::crypto {
 

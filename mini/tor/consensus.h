@@ -3,9 +3,6 @@
 
 #include <mini/time.h>
 #include <mini/collections/pair_list.h>
-#include <mini/string.h>
-
-#include <cstdint>
 
 namespace mini::tor {
 

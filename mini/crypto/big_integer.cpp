@@ -1,8 +1,6 @@
 #pragma once
 #include "big_integer.h"
 
-#include <mini/common.h>
-
 namespace mini::crypto {
 
 static BI_CTX* bigint_ctx = nullptr;

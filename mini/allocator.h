@@ -1,7 +1,7 @@
 #pragma once
+#include <mini/common.h>
+
 #include <new>
-#include <cstdint>
-#include <cstddef>
 #include <utility>
 
 namespace mini {

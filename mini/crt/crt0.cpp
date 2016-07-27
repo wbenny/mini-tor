@@ -1,6 +1,10 @@
 #ifndef _DEBUG
 #include "crt0.h"
+
+#include <cstdlib>
+
 #include <windows.h>
+#include <shellapi.h>
 
 extern "C" {
 

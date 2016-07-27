@@ -1,7 +1,6 @@
 #pragma once
 #include "base32.h"
 
-#include <mini/common.h>
 #include <mini/stack_buffer.h>
 
 namespace mini::crypto::base32 {

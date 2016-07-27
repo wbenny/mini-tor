@@ -1,10 +1,9 @@
 #pragma once
 #include "cell.h"
 
-#include <mini/crypto/provider.h>
-
 #include <mini/byte_buffer.h>
-#include <mini/stack_buffer.h>
+#include <mini/crypto/aes.h>
+#include <mini/crypto/sha1.h>
 
 namespace mini::tor {
 

@@ -1,10 +1,9 @@
 #pragma once
+#include <mini/ptr.h>
+#include <mini/byte_buffer.h>
+
 #include <windows.h>
 #include <wincrypt.h>
-#include <cstdint>
-
-#include "provider.h"
-#include <mini/byte_buffer.h>
 
 namespace mini::crypto {
 

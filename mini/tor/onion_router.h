@@ -1,9 +1,7 @@
 #pragma once
+#include <mini/flags.h>
 #include <mini/byte_buffer.h>
 #include <mini/net/ip_address.h>
-#include <mini/flags.h>
-
-#include <cstdint>
 
 namespace mini::tor {
 

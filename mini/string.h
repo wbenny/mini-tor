@@ -1,9 +1,9 @@
 #pragma once
+#include <mini/common.h>
 #include <mini/collections/list.h>
 #include <mini/byte_buffer_ref.h>
 
 #include <type_traits>
-#include <windows.h>
 
 namespace mini {
 

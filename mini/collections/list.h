@@ -1,10 +1,8 @@
 #pragma once
-#include <cstdint>
-#include <initializer_list>
-#include <vector>
-
 #include <mini/allocator.h>
 #include <mini/byte_buffer_ref.h>
+
+#include <initializer_list>
 
 namespace mini::collections {
 

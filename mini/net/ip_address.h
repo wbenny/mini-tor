@@ -1,8 +1,7 @@
 #pragma once
-#include <winsock2.h>
 #include <mini/string.h>
 
-#include <cstdint>
+#include <winsock2.h>
 
 namespace mini::net {
 
@@ -32,9 +31,9 @@ class ip_address
     }
 
     ip_address(
-      const char* value
+      const string_ref value
       )
-      : _ip(inet_addr(value))
+      : _ip(inet_addr(value.get_buffer()))
     {
 
     }

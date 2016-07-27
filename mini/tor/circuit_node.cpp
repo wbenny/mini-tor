@@ -1,12 +1,9 @@
-#include <winsock2.h>
 #include "circuit_node.h"
-#include "circuit.h"
-#include "crypto/key_agreement.h"
 #include "crypto/hybrid_encryption.h"
 
-#include <mini/io/memory_stream.h>
-#include <mini/io/stream_wrapper.h>
 #include <mini/logger.h>
+#include <mini/crypto/aes.h>
+#include <mini/crypto/sha1.h>
 
 namespace mini::tor {
 

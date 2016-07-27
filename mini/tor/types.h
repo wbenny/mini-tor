@@ -1,10 +1,8 @@
 #pragma once
-#include <mini/collections/pair_list.h>
 #include <mini/string.h>
+#include <mini/collections/pair_list.h>
 
 #include "onion_router.h"
-
-#include <cstdint>
 
 namespace mini::tor {
 

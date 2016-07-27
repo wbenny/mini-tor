@@ -1,5 +1,5 @@
 #pragma once
-#include <cstdint>
+#include <mini/common.h>
 
 namespace mini::io {
 

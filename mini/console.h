@@ -2,7 +2,7 @@
 #include <mini/common.h>
 #include <mini/string.h>
 
-#include <cstdarg>
+#include <windows.h>
 
 namespace mini::console {
 

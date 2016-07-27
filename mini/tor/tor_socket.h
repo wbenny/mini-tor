@@ -2,14 +2,10 @@
 #include "onion_router.h"
 #include "cell.h"
 
-#include <mini/string.h>
-#include <mini/collections/pair_list.h>
 #include <mini/net/ssl_socket.h>
 #include <mini/threading/thread_function.h>
 #include <mini/threading/mutex.h>
 #include <mini/threading/locked_value.h>
-
-#include <cstdint>
 
 namespace mini::tor {
 

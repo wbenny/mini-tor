@@ -16,7 +16,6 @@ assert(
     mini_error("!! assertion failed !! %s at %s:%i)", expression_str, filename, line);
     __debugbreak();
   }
-
 }
 
 }

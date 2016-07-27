@@ -1,9 +1,5 @@
 #pragma once
 #include "stream.h"
-#include <mini/common.h>
-
-#include <cstring>
-#include <cstdint>
 
 namespace mini::io {
 

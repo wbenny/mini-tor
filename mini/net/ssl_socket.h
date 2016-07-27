@@ -3,9 +3,7 @@
 
 #include <mini/io/stream.h>
 
-#include <cstdint>
 #include <schannel.h>
-
 #define SECURITY_WIN32
 #include <sspi.h>
 

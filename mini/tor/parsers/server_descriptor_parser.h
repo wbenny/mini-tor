@@ -1,11 +1,8 @@
 #pragma once
-#include <mini/crypto/base64.h>
-#include <mini/collections/list.h>
 #include <mini/string.h>
 #include <mini/string_hash.h>
 #include <mini/stack_buffer.h>
-
-#include <cstdint>
+#include <mini/tor/onion_router.h>
 
 namespace mini::tor {
 
@@ -43,68 +40,7 @@ struct server_descriptor_parser
   parse(
     onion_router* router,
     const string& descriptor
-    )
-  {
-    string_collection lines = descriptor.split("\n");
-    document_location current_location = document_location::control_word;
-    string current_key;
-
-    for (auto&& line : lines)
-    {
-      //
-      // onion-key
-      //
-      if (line == control_words[control_word_onion_key])
-      {
-        current_location = document_location::onion_key;
-        continue;
-      }
-      //
-      // signing-key
-      //
-      else if (line == control_words[control_word_signing_key])
-      {
-        current_location = document_location::signing_key;
-        continue;
-      }
-      //
-      // -----BEGIN RSA PUBLIC KEY-----
-      //
-      else if (line == control_words[control_word_key_begin])
-      {
-        if (current_location == document_location::onion_key)
-        {
-          current_location = document_location::onion_key_content;
-        }
-        else if (current_location == document_location::signing_key)
-        {
-          current_location = document_location::signing_key_content;
-        }
-        continue;
-      }
-      //
-      // -----END RSA PUBLIC KEY-----
-      //
-      else if (line == control_words[control_word_key_end])
-      {
-        if (current_location == document_location::onion_key_content)
-        {
-          router->set_onion_key(crypto::base64::decode(current_key));
-        }
-        else if (current_location == document_location::signing_key_content)
-        {
-          router->set_signing_key(crypto::base64::decode(current_key));
-        }
-        current_location = document_location::control_word;
-        current_key.clear();
-      }
-      else if (current_location == document_location::onion_key_content ||
-               current_location == document_location::signing_key_content)
-      {
-        current_key += line;
-      }
-    }
-  }
+    );
 };
 
 }

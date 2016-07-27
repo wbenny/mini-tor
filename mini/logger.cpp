@@ -1,9 +1,6 @@
 #include "logger.h"
 #include "console.h"
 
-#include <cstdarg>
-#include <cstdio>
-
 namespace mini {
 
 static constexpr WORD level_colors[] = {

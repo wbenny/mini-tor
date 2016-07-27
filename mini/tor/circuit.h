@@ -1,19 +1,10 @@
 #pragma once
 #include "tor_socket.h"
-#include "onion_router.h"
 #include "tor_stream.h"
 #include "relay_cell.h"
-#include "types.h"
 
 #include <mini/crypto/provider.h>
-#include <mini/crypto/big_integer.h>
-#include <mini/collections/list.h>
-#include <mini/collections/pair_list.h>
-#include <mini/byte_buffer.h>
-#include <mini/stack_buffer.h>
 #include <mini/threading/locked_value.h>
-
-#include <cstdint>
 
 namespace mini::tor {
 

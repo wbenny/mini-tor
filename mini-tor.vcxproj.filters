@@ -76,6 +76,9 @@
     <Filter Include="Header Files\mini\tor\parsers">
       <UniqueIdentifier>{92d3e4ec-5970-4108-a779-3228ca2ec400}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\mini\tor\parsers">
+      <UniqueIdentifier>{cd47b506-5842-4bd6-918e-146fd28194fe}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -183,11 +186,20 @@
     <ClCompile Include="mini\tor\crypto\hybrid_encryption.cpp">
       <Filter>Source Files\mini\tor\crypto</Filter>
     </ClCompile>
+    <ClCompile Include="mini\tor\parsers\consensus_parser.cpp">
+      <Filter>Source Files\mini\tor\parsers</Filter>
+    </ClCompile>
+    <ClCompile Include="mini\tor\parsers\hidden_service_descriptor_parser.cpp">
+      <Filter>Source Files\mini\tor\parsers</Filter>
+    </ClCompile>
+    <ClCompile Include="mini\tor\parsers\introduction_point_parser.cpp">
+      <Filter>Source Files\mini\tor\parsers</Filter>
+    </ClCompile>
+    <ClCompile Include="mini\tor\parsers\server_descriptor_parser.cpp">
+      <Filter>Source Files\mini\tor\parsers</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="mini\error.h">
-      <Filter>Header Files\mini</Filter>
-    </ClInclude>
     <ClInclude Include="mini\flags.h">
       <Filter>Header Files\mini</Filter>
     </ClInclude>

@@ -1,5 +1,6 @@
 #pragma once
 #include "thread.h"
+
 #include <mini/function.h>
 
 namespace mini::threading {

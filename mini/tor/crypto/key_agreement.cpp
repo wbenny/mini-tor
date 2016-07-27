@@ -1,5 +1,7 @@
 #include "key_agreement.h"
 
+#include <mini/crypto/random.h>
+
 namespace mini::tor {
 
 //

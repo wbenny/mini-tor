@@ -1,5 +1,4 @@
 #pragma once
-#include <winsock2.h>
 #include "relay_cell.h"
 #include "circuit_node.h"
 #include "circuit.h"

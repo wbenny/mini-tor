@@ -1,5 +1,5 @@
 #include "ssl_socket.h"
-#include <mini/common.h>
+
 #include <mini/logger.h>
 
 //

@@ -1,18 +1,10 @@
-#include <winsock2.h>
-#include <mini/common.h>
-#include <mini/stack_buffer.h>
-#include <mini/threading/thread.h>
-#include <mini/threading/thread_function.h>
-#include <mini/threading/mutex.h>
-#include <mini/function.h>
-#include <mini/console.h>
-#include <mini/crypto/big_integer.h>
-#include <mini/tor/consensus.h>
-#include <mini/tor/circuit.h>
-#include <mini/tor/hidden_service.h>
 #include <mini/logger.h>
+#include <mini/console.h>
 #include <mini/io/stream_reader.h>
-#include <atomic>
+#include <mini/tor/circuit.h>
+#include <mini/tor/consensus.h>
+#include <mini/tor/tor_socket.h>
+#include <mini/tor/tor_stream.h>
 
 class tor_client
 {

@@ -1,6 +1,6 @@
 #pragma once
-#include <mini/common.h>
 #include <mini/ptr.h>
+#include <mini/common.h>
 
 #include <windows.h>
 #include <wincrypt.h>

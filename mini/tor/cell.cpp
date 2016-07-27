@@ -1,12 +1,7 @@
-#include <winsock2.h>
 #include "cell.h"
 
-#include <mini/common.h>
-#include <mini/collections/list.h>
 #include <mini/io/memory_stream.h>
 #include <mini/io/stream_wrapper.h>
-
-#include <cstring>
 
 namespace mini::tor {
 

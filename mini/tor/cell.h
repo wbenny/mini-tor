@@ -4,8 +4,6 @@
 #include <mini/byte_buffer.h>
 #include <mini/io/stream.h>
 
-#include <cstdint>
-
 namespace mini::tor {
 
 enum class cell_command : uint8_t

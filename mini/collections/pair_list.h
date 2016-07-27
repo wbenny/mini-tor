@@ -1,6 +1,6 @@
 #pragma once
-#include <mini/collections/list.h>
 #include <mini/pair.h>
+#include <mini/collections/list.h>
 
 namespace mini::collections {
 

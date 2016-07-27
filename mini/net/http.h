@@ -1,8 +1,6 @@
 #pragma once
 #include <mini/string.h>
 
-#include <cstdint>
-
 namespace mini::net::http::client {
 
 string

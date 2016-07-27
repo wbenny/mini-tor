@@ -3,7 +3,6 @@
 #include <mini/time.h>
 
 #include <windows.h>
-#include <cstdint>
 
 namespace mini::threading {
 

@@ -1,20 +1,12 @@
 #include "circuit.h"
 #include "circuit_node.h"
-#include "relay_cell.h"
 #include "hidden_service.h"
 #include "crypto/hybrid_encryption.h"
-#include "crypto/key_agreement.h"
 
-#include <mini/common.h>
 #include <mini/logger.h>
-#include <mini/console.h>
-#include <mini/crypto/provider.h>
-#include <mini/crypto/random.h>
-#include <mini/crypto/big_integer.h>
 #include <mini/crypto/base16.h>
-#include <mini/crypto/sha1.h>
-#include <mini/crypto/aes.h>
 #include <mini/io/memory_stream.h>
+#include <mini/io/stream_reader.h>
 #include <mini/io/stream_wrapper.h>
 
 namespace mini::tor {

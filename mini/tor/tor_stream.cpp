@@ -1,14 +1,7 @@
-#include <winsock2.h>
 #include "tor_stream.h"
-#include "cell.h"
 #include "circuit.h"
 
-#include <mini/common.h>
-#include <mini/collections/list.h>
-#include <mini/threading/thread.h>
 #include <mini/logger.h>
-
-#include <cmath>
 
 namespace mini::tor {
 

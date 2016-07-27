@@ -1,9 +1,14 @@
-#include <winsock2.h>
 #include "hidden_service.h"
-#include "circuit_node.h"
 
+#include <mini/algorithm.h>
 #include <mini/logger.h>
+#include <mini/crypto/base16.h>
+#include <mini/crypto/base32.h>
+#include <mini/crypto/random.h>
+#include <mini/crypto/sha1.h>
+#include <mini/io/memory_stream.h>
 #include <mini/io/stream_reader.h>
+#include <mini/io/stream_wrapper.h>
 #include <mini/tor/parsers/hidden_service_descriptor_parser.h>
 
 namespace mini::tor {
