@@ -164,7 +164,7 @@ __cdecl main(
 {
   if (argc != 2)
   {
-    mini::console::write("No parametr provided!\n");
+    mini::console::write("No parameter provided!\n");
     mini::console::write("Usage:\n");
     mini::console::write("  mini-tor [url]\n");
     mini::console::write("Example:\n");
