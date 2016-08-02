@@ -231,7 +231,10 @@ consensus::download_from_random_authority(
   net::ip_address ip;
   uint16_t port;
 
-  auto authority = default_authority_list[mini::crypto::random_device->get_random(default_authority_list.get_size())];
+  auto authority = default_authority_list[
+    3
+    //  mini::crypto::random_device->get_random(default_authority_list.get_size())
+  ];
 
   ip = authority.ip;
   port = authority.dir_port;

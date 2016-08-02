@@ -44,6 +44,22 @@ circuit::get_circuit_id(
   return _circuit_id;
 }
 
+const circuit_node_list&
+circuit::get_circuit_node_list(
+  void
+  ) const
+{
+  return _node_list;
+}
+
+size_t
+circuit::get_circuit_node_list_size(
+  void
+  ) const
+{
+  return _node_list.get_size();
+}
+
 circuit_node*
 circuit::get_final_circuit_node(
   void
@@ -55,9 +71,15 @@ circuit::get_final_circuit_node(
 tor_stream*
 circuit::create_stream(
   const string_ref host,
-  int port
+  uint16_t port
   )
 {
+  //
+  // convert port number to the string.
+  //
+  string port_string;
+  port_string.from_int(port);
+
   //
   // tor-spec.txt
   // 6.2.
@@ -68,25 +90,13 @@ circuit::create_stream(
   // ADDRPORT is made of ADDRESS | ':' | PORT | [00]
   //
 
-  byte_buffer relay_data_bytes(100);
+  byte_buffer relay_data_bytes(host.get_size() + 1 + port_string.get_size() + 1);
   io::memory_stream relay_data_stream(relay_data_bytes);
   io::stream_wrapper relay_data_buffer(relay_data_stream, endianness::big_endian);
 
-  string ps;
-  ps.from_int(port);
-
-  const string hp = host + ":" + ps;
-  relay_data_buffer.write(hp);
-
-  //
-  // null terminator.
-  //
+  const string host_port = host + ":" + port_string;
+  relay_data_buffer.write(host_port);
   relay_data_buffer.write('\0');
-
-  //
-  // flags.
-  //
-  relay_data_buffer.write(static_cast<uint32_t>(0));
 
   //
   // send RELAY_BEGIN cell.
@@ -96,27 +106,36 @@ circuit::create_stream(
   tor_stream* stream = new tor_stream(stream_id, this);
   _stream_map.insert(stream_id, stream);
 
-  mini_debug("circuit::create_stream() [url: %s, stream: %u, status: creating]", hp.get_buffer(), stream_id);
+  mini_debug("circuit::create_stream() [url: %s, stream: %u, status: creating]", host_port.get_buffer(), stream_id);
   set_state(state::connecting);
   {
     send_relay_cell(stream_id, cell_command::relay_begin, relay_data_bytes);
   }
   wait_for_state(state::ready);
-  mini_debug("circuit::create_stream() [url: %s, stream: %u, status: created]", hp.get_buffer(), stream_id);
+  mini_debug("circuit::create_stream() [url: %s, stream: %u, status: created]", host_port.get_buffer(), stream_id);
 
-  return stream;
+  //
+  // if the circuit has been destroyed,
+  // the stream has been destroyed as well,
+  // so we don't need to delete it here.
+  //
+
+  return is_destroyed()
+    ? nullptr
+    : stream;
 }
 
 tor_stream*
 circuit::create_onion_stream(
   const string_ref onion,
-  int port
+  uint16_t port
   )
 {
   hidden_service hidden_service_connector(this, onion);
-  hidden_service_connector.connect();
-
-  return create_stream(onion, port);
+  
+  return hidden_service_connector.connect()
+    ? create_stream(onion, port)
+    : nullptr;
 }
 
 tor_stream*
@@ -137,7 +156,15 @@ circuit::create_dir_stream(
   wait_for_state(state::ready);
   mini_debug("circuit::create_dir_stream() [stream: %u, state: connected]", stream_id);
 
-  return stream;
+  //
+  // if the circuit has been destroyed,
+  // the stream has been destroyed as well,
+  // so we don't need to delete it here.
+  //
+
+  return is_destroyed()
+    ? nullptr
+    : stream;
 }
 
 void
@@ -218,6 +245,14 @@ circuit::destroy(
   _tor_socket.remove_circuit(this);
 }
 
+bool
+circuit::is_destroyed(
+  void
+  ) const
+{
+  return get_state() == state::destroyed;
+}
+
 tor_stream*
 circuit::get_stream_by_id(
   tor_stream_id_type stream_id
@@ -238,7 +273,7 @@ circuit::close_streams(
   //
   // destroy each stream in this circuit.
   //
-  while (_stream_map.is_empty() == false)
+  while (!_stream_map.is_empty())
   {
     //
     // this call removes the stream from our stream map.
@@ -246,6 +281,11 @@ circuit::close_streams(
     send_relay_end_cell(_stream_map.last_value());
   }
 
+  _node_list.clear();
+
+  //
+  // signal destroy.
+  //
   set_state(state::destroyed);
 }
 
@@ -275,6 +315,14 @@ circuit::rendezvous_establish(
   }
   wait_for_state(state::rendezvous_established);
   mini_debug("circuit::rendezvous_establish() [circuit: %u, state: established]", _circuit_id);
+}
+
+bool
+circuit::is_rendezvous_established(
+  void
+  ) const
+{
+  return get_state() == state::rendezvous_established;
 }
 
 void
@@ -368,6 +416,22 @@ circuit::rendezvous_introduce(
   mini_debug("circuit::rendezvous_introduce() [or: %s, state: completed]", introduction_point->get_name().get_buffer());
 }
 
+bool
+circuit::is_rendezvous_introduced(
+  void
+  ) const
+{
+  return get_state() == state::rendezvous_introduced;
+}
+
+bool
+circuit::is_rendezvous_completed(
+  void
+  ) const
+{
+  return get_state() == state::rendezvous_completed;
+}
+
 cell&
 circuit::encrypt(
   relay_cell& cell
@@ -457,11 +521,9 @@ circuit::send_relay_data_cell(
   const byte_buffer_ref buffer
   )
 {
-  static const size_t max_data_size = 509 - 1 - 2 - 2 - 4 - 2;
-
-  for (size_t i = 0; i < round_up_to_multiple(buffer.get_size(), max_data_size); i += max_data_size)
+  for (size_t i = 0; i < round_up_to_multiple(buffer.get_size(), relay_cell::payload_data_size); i += relay_cell::payload_data_size)
   {
-    const size_t data_size = min(buffer.get_size() - i, max_data_size);
+    const size_t data_size = min(buffer.get_size() - i, relay_cell::payload_data_size);
 
     get_final_circuit_node()->decrement_package_window();
 
@@ -482,6 +544,9 @@ circuit::send_relay_end_cell(
     cell_command::relay_end,
     { 6 }); // reason
 
+  //
+  // signal destroy.
+  //
   stream->set_state(tor_stream::state::destroyed);
 
   _stream_map.remove(stream->get_stream_id());
@@ -533,7 +598,7 @@ circuit::handle_cell(
 
       if (decrypted_relay_cell.is_relay_cell_valid() == false)
       {
-        mini_warning("circuit::handle_cell() cannot decrypt relay cell, destroying circuit");
+        mini_error("circuit::handle_cell() cannot decrypt relay cell, destroying circuit");
         destroy();
         break;
       }
@@ -618,17 +683,22 @@ circuit::handle_created_cell(
   if (_extend_node->has_valid_crypto_state())
   {
     _node_list.add(_extend_node);
+
+    //
+    // we're ready here.
+    //
+    _extend_node = nullptr;
+    set_state(state::ready);
   }
   else
   {
-    mini_warning("circuit::handle_created_cell() extend node [ %s ] has invalid crypto state", _extend_node->get_onion_router()->get_name());
-  }
+    mini_error("circuit::handle_created_cell() extend node [ %s ] has invalid crypto state", _extend_node->get_onion_router()->get_name());
 
-  //
-  // we're ready here.
-  //
-  _extend_node = nullptr;
-  set_state(state::ready);
+    delete _extend_node;
+    _extend_node = nullptr;
+
+    destroy();
+  }
 }
 
 void
@@ -654,17 +724,22 @@ circuit::handle_relay_extended_cell(
   if (_extend_node->has_valid_crypto_state())
   {
     _node_list.add(_extend_node);
+
+    //
+    // we're ready here.
+    //
+    _extend_node = nullptr;
+    set_state(state::ready);
   }
   else
   {
-    mini_warning("circuit::handle_relay_extended_cell() extend node [ %s ] has invalid crypto state", _extend_node->get_onion_router()->get_name());
-  }
+    mini_error("circuit::handle_created_cell() extend node [ %s ] has invalid crypto state", _extend_node->get_onion_router()->get_name());
 
-  //
-  // we're ready here.
-  //
-  _extend_node = nullptr;
-  set_state(state::ready);
+    delete _extend_node;
+    _extend_node = nullptr;
+
+    destroy();
+  }
 }
 
 void
@@ -756,7 +831,7 @@ circuit::handle_relay_truncated_cell(
   // should send a DESTROY cell down the circuit.
   //
 
-  mini_warning("circuit::handle_relay_truncated_cell() destroying circuit");
+  mini_error("circuit::handle_relay_truncated_cell() destroying circuit");
   destroy();
 }
 
@@ -796,7 +871,7 @@ circuit::get_next_stream_id(
 circuit::state
 circuit::get_state(
   void
-  )
+  ) const
 {
   return _state.get_value();
 }
@@ -807,6 +882,11 @@ circuit::set_state(
   )
 {
   _state.set_value(new_state);
+
+  if (new_state == state::destroyed)
+  {
+    _state.cancel_all_waits();
+  }
 }
 
 void

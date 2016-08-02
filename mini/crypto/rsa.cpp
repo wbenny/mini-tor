@@ -15,7 +15,10 @@ rsa::~rsa(
   void
   )
 {
-  CryptDestroyKey(_key);
+  if (_key)
+  {
+    CryptDestroyKey(_key);
+  }
 }
 
 void
@@ -45,7 +48,10 @@ rsa::set_public_key(
     _key_blob.get_buffer(),
     &key_blob_size);
 
-  import_key(_key_blob);
+  if (result)
+  {
+    import_key(_key_blob);
+  }
 }
 
 void
@@ -86,29 +92,32 @@ rsa::public_encrypt(
   )
 {
   byte_buffer output;
-  output.resize(_key_size);
 
-  memory::copy(output.get_buffer(), input.get_buffer(), input.get_size());
-
-  DWORD dword_input_size = (DWORD)input.get_size();
-  BOOL result;
-  result = CryptEncrypt(
-    _key,
-    0,
-    do_final,
-    CRYPT_OAEP,
-    output.get_buffer(),
-    &dword_input_size,
-    _key_size);
-
-  for (DWORD i = 0; i < (_key_size / 2); i++)
+  if (_key_size)
   {
-    BYTE c = output[i];
-    output[i] = output[_key_size - 1 - i];
-    output[_key_size - 1 - i] = c;
+    output.resize(_key_size);
+
+    memory::copy(output.get_buffer(), input.get_buffer(), input.get_size());
+
+    DWORD dword_input_size = (DWORD)input.get_size();
+    BOOL result;
+    result = CryptEncrypt(
+      _key,
+      0,
+      do_final,
+      CRYPT_OAEP,
+      output.get_buffer(),
+      &dword_input_size,
+      _key_size);
+
+    for (DWORD i = 0; i < (_key_size / 2); i++)
+    {
+      BYTE c = output[i];
+      output[i] = output[_key_size - 1 - i];
+      output[_key_size - 1 - i] = c;
+    }
   }
 
-  output.resize(dword_input_size); // is this necessary?
   return output;
 }
 
@@ -119,28 +128,31 @@ rsa::private_decrypt(
   )
 {
   byte_buffer output;
-  output.resize(_key_size);
 
-  memory::copy(output.get_buffer(), input.get_buffer(), input.get_size());
-
-  for (DWORD i = 0; i < (_key_size / 2); i++)
+  if (_key_size)
   {
-    BYTE c = output[i];
-    output[i] = output[_key_size - 1 - i];
-    output[_key_size - 1 - i] = c;
+    output.resize(_key_size);
+
+    memory::copy(output.get_buffer(), input.get_buffer(), input.get_size());
+
+    for (DWORD i = 0; i < (_key_size / 2); i++)
+    {
+      BYTE c = output[i];
+      output[i] = output[_key_size - 1 - i];
+      output[_key_size - 1 - i] = c;
+    }
+
+    DWORD dword_input_size = (DWORD)input.get_size();
+    BOOL result;
+    result = CryptDecrypt(
+      _key,
+      0,
+      do_final,
+      CRYPT_OAEP,
+      output.get_buffer(),
+      &dword_input_size);
   }
 
-  DWORD dword_input_size = (DWORD)input.get_size();
-  BOOL result;
-  result = CryptDecrypt(
-    _key,
-    0,
-    do_final,
-    CRYPT_OAEP,
-    output.get_buffer(),
-    &dword_input_size);
-
-  output.resize(dword_input_size); // is this necessary?
   return output;
 }
 

@@ -159,7 +159,7 @@ tor_stream::append_to_recv_buffer(
 tor_stream::state
 tor_stream::get_state(
   void
-  )
+  ) const
 {
   return _state.get_value();
 }
@@ -170,6 +170,11 @@ tor_stream::set_state(
   )
 {
   _state.set_value(new_state);
+
+  if (new_state == state::destroyed)
+  {
+    _state.cancel_all_waits();
+  }
 }
 
 void
@@ -257,8 +262,6 @@ tor_stream::consider_sending_sendme(
     mini_debug("tor_stream::consider_sending_sendme(): true");
     return true;
   }
-
-  MINI_UNREACHABLE;
 }
 
 }

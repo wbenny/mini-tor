@@ -53,27 +53,56 @@ class tor_client
       if (_circuit == nullptr)
       {
         mini_info(
-          "Connecting to: '%s' (%s:%u)",
+          "Connecting to node #%u: '%s' (%s:%u)",
+          get_hop_count() + 1,
           onion_router->get_name().get_buffer(),
           onion_router->get_ip_address().to_string().get_buffer(),
           onion_router->get_or_port());
 
         _socket.connect(onion_router);
-        _circuit = _socket.create_circuit();
 
-        mini_info("Connected...");
+        if (_socket.is_connected())
+        {
+          _circuit = _socket.create_circuit();
+
+          if (get_hop_count() == 1)
+          {
+            mini_info("Connected...");
+          }
+          else
+          {
+            mini_error("Error while creating circuit!");
+          }
+        }
+        else
+        {
+          mini_error("Error while connecting!");
+        }
       }
       else
       {
         mini_info(
-          "Extending to: '%s' (%s:%u)",
+          "Extending to node #%u: '%s' (%s:%u)",
+          get_hop_count() + 1,
           onion_router->get_name().get_buffer(),
           onion_router->get_ip_address().to_string().get_buffer(),
           onion_router->get_or_port());
 
+        auto previous_hop_count = get_hop_count();
+
         _circuit->extend(onion_router);
 
-        mini_info("Extended...");
+        if (get_hop_count() == (previous_hop_count + 1))
+        {
+          mini_info("Extended...");
+        }
+        else
+        {
+          delete _circuit;
+          _circuit = nullptr;
+
+          mini_warning("Error when extending!");
+        }
       }
     }
 
@@ -122,7 +151,16 @@ class tor_client
 
         mini_info("Creating onion stream...");
         stream = _circuit->create_onion_stream(onion, port);
-        mini_info("Created...");
+
+        if (stream)
+        {
+          mini_info("Created...");
+        }
+        else
+        {
+          mini_error("Error while creating the onion stream");
+          return mini::string();
+        }
       }
       else
       {
@@ -144,6 +182,16 @@ class tor_client
       return result;
     }
 
+    size_t
+    get_hop_count(
+      void
+      )
+    {
+      return _circuit
+        ? _circuit->get_circuit_node_list().get_size()
+        : 0;
+    }
+
   private:
     mini::tor::consensus _consensus
 #if defined (MINI_TOR_USE_CONSENSUS_CACHE)
@@ -155,6 +203,9 @@ class tor_client
     mini::tor::circuit* _circuit = nullptr;
     mini::collections::list<mini::tor::onion_router*> _forbidden_onion_routers;
 };
+
+#include <mini/threading/locked_value.h>
+#include <mini/threading/thread_function.h>
 
 int
 __cdecl main(
@@ -173,43 +224,70 @@ __cdecl main(
   }
 
 #if defined(_DEBUG)
-  mini::log.set_level(mini::logger::level::info);
+  mini::log.set_level(mini::logger::level::debug);
 #endif
 
-  size_t hops = 2;
-
-  mini_info("Fetching consensus...");
-  tor_client tor;
-  mini_info("Consensus fetched...");
-
-  tor.extend_to_random(
-    mini::tor::onion_router::status_flag::fast |
-    mini::tor::onion_router::status_flag::running |
-    mini::tor::onion_router::status_flag::valid,
-    { 80, 443 });
-
-  hops--;
-  while (hops-- > 1)
+  for (;;)
   {
-    tor.extend_to_random(
-      mini::tor::onion_router::status_flag::fast |
-      mini::tor::onion_router::status_flag::running |
-      mini::tor::onion_router::status_flag::valid);
+    static constexpr size_t hops = 9;
+    static_assert(hops >= 2, "There must be at least 2 hops in the circuit");
+
+    mini_info("Fetching consensus...");
+    tor_client tor;
+    mini_info("Consensus fetched...");
+
+    connect_again:
+    while (tor.get_hop_count() < hops)
+    {
+      //
+      // first hop.
+      //
+      if (tor.get_hop_count() == 0)
+      {
+        tor.extend_to_random(
+          mini::tor::onion_router::status_flag::fast |
+          mini::tor::onion_router::status_flag::running |
+          mini::tor::onion_router::status_flag::valid,
+          { 80, 443 });
+      }
+
+      //
+      // last hop (exit node).
+      //
+      else if (tor.get_hop_count() == (hops - 1))
+      {
+        tor.extend_to_random(
+          mini::tor::onion_router::status_flag::fast |
+          mini::tor::onion_router::status_flag::running |
+          mini::tor::onion_router::status_flag::valid |
+          mini::tor::onion_router::status_flag::exit);
+      }
+
+      //
+      // middle hops.
+      //
+      else
+      {
+        tor.extend_to_random(
+          mini::tor::onion_router::status_flag::fast |
+          mini::tor::onion_router::status_flag::running |
+          mini::tor::onion_router::status_flag::valid);
+      }
+    }
+
+    mini::string content = tor.http_get(0 ? "http://duskgytldkxiuqc6.onion/fedpapers/federndx.htm" : argv[1]);
+    if (content.is_empty())
+    {
+      mini_info("Trying to build new circuit...");
+      goto connect_again;
+    }
+
+    mini::console::write("%s", content.get_buffer());
+
+    mini_info("");
+    mini_info("-----------------------------");
+    mini_info("content size: %u bytes", content.get_size());
+    mini_info("-----------------------------");
   }
-
-  tor.extend_to_random(
-    mini::tor::onion_router::status_flag::fast |
-    mini::tor::onion_router::status_flag::running |
-    mini::tor::onion_router::status_flag::valid |
-    mini::tor::onion_router::status_flag::exit);
-
-  mini::string content = tor.http_get(0 ? "http://duskgytldkxiuqc6.onion/fedpapers/federndx.htm" : argv[1]);
-  mini::console::write("%s", content.get_buffer());
-
-  mini_info("");
-  mini_info("-----------------------------");
-  mini_info("content size: %u bytes", content.get_size());
-  mini_info("-----------------------------");
-
   return 0;
 }

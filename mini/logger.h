@@ -89,6 +89,6 @@ class logger
     level _level = level::info;
 };
 
-static logger log;
+extern logger log;
 
 }

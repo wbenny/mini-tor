@@ -32,6 +32,7 @@ cell::swap(
   mini::swap(_circuit_id, other._circuit_id);
   mini::swap(_command, other._command);
   mini::swap(_payload, other._payload);
+  mini::swap(_is_valid, other._is_valid);
 }
 
 circuit_id_type
@@ -89,7 +90,7 @@ cell::get_bytes(
 {
   byte_buffer cell_bytes;
 
-  if (_command == cell_command::versions || (uint32_t)_command >= 128)
+  if (is_variable_length_cell_command(_command))
   {
     cell_bytes.resize(
       //
@@ -114,7 +115,7 @@ cell::get_bytes(
   }
   else
   {
-    cell_bytes.resize(514);
+    cell_bytes.resize(cell::size);
   }
 
   io::memory_stream cell_stream(cell_bytes);
@@ -139,7 +140,7 @@ cell::get_bytes(
 
   cell_buffer.write(_command);
 
-  if (_command == cell_command::versions || (uint32_t)_command >= 128)
+  if (is_variable_length_cell_command(_command))
   {
     cell_buffer.write(static_cast<payload_size_type>(_payload.get_size()));
   }
@@ -154,8 +155,25 @@ cell::is_recognized(
   void
   ) const
 {
-  return _payload[1] == 0
-      && _payload[2] == 0;
+  //
+  // tor-spec.txt
+  // 6.1.
+  //    The payload of each unencrypted RELAY cell consists of:
+  //          Relay command           [1 byte]
+  //          'Recognized'            [2 bytes]
+  //          StreamID                [2 bytes]
+  //          Digest                  [4 bytes]
+  //          Length                  [2 bytes]
+  //          Data                    [PAYLOAD_LEN-11 bytes]
+  //
+  // we're looking for the 'recognized' value.
+  //
+  //  return
+  //      _payload[1] == 0
+  //   && _payload[2] == 0;
+  //
+
+  return *reinterpret_cast<const uint16_t*>(&_payload[1]) == 0x0000;
 }
 
 bool
@@ -172,6 +190,16 @@ cell::mark_as_valid(
   )
 {
   _is_valid = true;
+}
+
+bool
+cell::is_variable_length_cell_command(
+  cell_command command
+  )
+{
+  return
+    command == cell_command::versions ||
+    static_cast<std::underlying_type_t<cell_command>>(command) >= 128;
 }
 
 }

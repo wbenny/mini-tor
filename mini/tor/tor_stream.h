@@ -106,7 +106,7 @@ class tor_stream
     state
     get_state(
       void
-      );
+      ) const;
 
     void
     set_state(

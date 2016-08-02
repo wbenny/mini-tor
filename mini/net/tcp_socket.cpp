@@ -104,7 +104,8 @@ bool tcp_socket::can_write(
   return true;
 }
 
-bool tcp_socket::can_seek(
+bool
+tcp_socket::can_seek(
   void
   ) const
 {

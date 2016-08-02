@@ -9,7 +9,7 @@ namespace mini::tor {
 enum class cell_command : uint8_t
 {
   //
-  // cell command types.
+  // cell commands.
   //
   padding = 0,
   create = 1,
@@ -23,7 +23,7 @@ enum class cell_command : uint8_t
   versions = 7,
 
   //
-  // relay command types.
+  // relay commands.
   //
   relay_begin = 1,
   relay_data = 2,
@@ -40,7 +40,7 @@ enum class cell_command : uint8_t
   relay_begin_dir = 13,
 
   //
-  //
+  // rendezvous commands.
   //
   relay_command_establish_intro = 32,
   relay_command_establish_rendezvous = 33,
@@ -53,7 +53,7 @@ enum class cell_command : uint8_t
   relay_command_introduce_ack = 40,
 
   //
-  //
+  // variable-length cell commands.
   //
   vpadding = 128,
   certs = 129,
@@ -65,10 +65,20 @@ enum class cell_command : uint8_t
 class cell
 {
   public:
-    static constexpr size_t size = 512;
-    static constexpr size_t header_size = 3;
-    static constexpr size_t variable_header_size = 5;
-    static constexpr size_t payload_size = size - header_size;
+    //
+    // tor-spec.txt
+    // 0.2.
+    //    CELL_LEN(v) -- The length of a Tor cell, in bytes, for link protocol
+    //       version v.
+    //        CELL_LEN(v) = 512    if v is less than 4;
+    //                    = 514    otherwise.
+    //
+    static constexpr size_t size = 514;
+
+    //
+    // PAYLOAD_LEN -- The longest allowable cell payload, in bytes. (509)
+    //
+    static constexpr size_t payload_size = 509;
 
     cell(
       void
@@ -155,11 +165,16 @@ class cell
       void
       );
 
+    static bool
+    is_variable_length_cell_command(
+      cell_command command
+      );
+
   protected:
     circuit_id_type _circuit_id = 0;
     cell_command _command = (cell_command)0;
     byte_buffer _payload;
-    bool _is_valid = true;
+    bool _is_valid = false;
 };
 
 }

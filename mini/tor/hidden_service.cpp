@@ -45,17 +45,17 @@ hidden_service::connect(
     //
     _rendezvous_circuit->rendezvous_establish(_rendezvous_cookie);
 
-    onion_router_list::size_type responsible_directory_index = 0;
-    while ((responsible_directory_index = fetch_hidden_service_descriptor(responsible_directory_index)) != onion_router_list::not_found)
+    if (_rendezvous_circuit->is_rendezvous_established())
     {
-      //
-      // introduce rendezvous.
-      //
-      introduce();
-
-      if (_rendezvous_circuit->get_state() == circuit::state::rendezvous_completed)
+      onion_router_list::size_type responsible_directory_index = 0;
+      while ((responsible_directory_index = fetch_hidden_service_descriptor(responsible_directory_index)) != onion_router_list::not_found)
       {
-        return true;
+        introduce();
+
+        if (_rendezvous_circuit->is_rendezvous_completed())
+        {
+          return true;
+        }
       }
     }
   }
@@ -186,6 +186,17 @@ hidden_service::fetch_hidden_service_descriptor(
 
     ptr<circuit> directory_circuit = _socket.create_circuit();
 
+    if (!directory_circuit)
+    {
+      //
+      // either tor socket is destroyed
+      // or we couldn't create circuit with the first
+      // onion router. try it again anyway.
+      // but if the socket is destroyed, we're out of luck.
+      //
+      continue;
+    }
+
     mini_info(
       "\tExtending circuit for hidden service, connecting to responsible directory '%s' (%s:%u)",
       responsible_directory->get_name().get_buffer(),
@@ -193,6 +204,17 @@ hidden_service::fetch_hidden_service_descriptor(
       responsible_directory->get_or_port());
 
     directory_circuit->extend(responsible_directory);
+
+    if (directory_circuit->is_destroyed())
+    {
+      mini_warning("\tError while extending the directory circuit");
+      continue;
+    }
+
+    //
+    // circuit must have exactly 2 nodes now.
+    //
+    mini_assert(directory_circuit->get_circuit_node_list_size() == 2);
 
     mini_info("\tExtended...");
 
@@ -202,6 +224,12 @@ hidden_service::fetch_hidden_service_descriptor(
     // create the directory stream on the directory circuit.
     //
     ptr<tor_stream> directory_stream = directory_circuit->create_dir_stream();
+
+    if (!directory_stream)
+    {
+      mini_warning("\tError while establishing the directory stream");
+      continue;
+    }
 
     //
     // request the hidden service descriptor.
@@ -223,14 +251,24 @@ hidden_service::fetch_hidden_service_descriptor(
     //
     // parse hidden service descriptor.
     //
-    if (hidden_service_descriptor.contains("404 Not found") == false)
+    if (!hidden_service_descriptor.is_empty() &&
+        !hidden_service_descriptor.contains("404 Not found"))
     {
       mini_info("\tHidden service descriptor is valid...");
 
       hidden_service_descriptor_parser parser;
       parser.parse(_consensus, hidden_service_descriptor);
 
-      _introduction_point_list = std::move(parser.introduction_point_list);
+      mini_assert(!parser.introduction_point_list.is_empty());
+
+      if (!parser.introduction_point_list.is_empty())
+      {
+        _introduction_point_list = std::move(parser.introduction_point_list);
+      }
+      else
+      {
+        mini_warning("\tHidden service descriptor contains no introduction points...");
+      }
 
       return i;
     }
@@ -257,6 +295,17 @@ hidden_service::introduce(
       _socket.get_onion_router()->get_or_port());
 
     ptr<circuit> introduce_circuit = _socket.create_circuit();
+    
+    if (!introduce_circuit)
+    {
+      //
+      // either tor socket is destroyed
+      // or we couldn't create circuit with the first
+      // onion router. try it again anyway.
+      // but if the socket is destroyed, we're out of luck.
+      //
+      continue;
+    }
 
     mini_info("\tConnected...");
 
@@ -268,8 +317,18 @@ hidden_service::introduce(
 
     introduce_circuit->extend(introduction_point);
 
-    mini_info("\tExtended...");
+    if (introduce_circuit->is_destroyed())
+    {
+      mini_warning("\tError while extending the introduce circuit");
+      continue;
+    }
 
+    //
+    // circuit must have exactly 2 nodes now.
+    //
+    mini_assert(introduce_circuit->get_circuit_node_list_size() == 2);
+
+    mini_info("\tExtended...");
     mini_info("\tSending introduce...");
 
     introduce_circuit->rendezvous_introduce(_rendezvous_circuit, _rendezvous_cookie);
@@ -277,7 +336,6 @@ hidden_service::introduce(
     if (introduce_circuit->get_state() == circuit::state::rendezvous_introduced)
     {
       mini_info("\tIntroduced successfully...");
-
       break;
     }
     else

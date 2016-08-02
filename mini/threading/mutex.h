@@ -3,11 +3,18 @@
 
 #include <windows.h>
 
-#define mini_lock(mutex_instance)                           \
-  if (::mini::threading::mutex_holder __h = mutex_instance) \
-  {                                                         \
-                                                            \
-  }                                                         \
+#define mini_lock(mutex_instance)                             \
+  if (::mini::threading::mutex_holder __h = mutex_instance)   \
+  {                                                           \
+    MINI_UNREACHABLE;                                         \
+  }                                                           \
+  else
+
+#define mini_unlock(mutex_instance)                           \
+  if (::mini::threading::mutex_unholder __h = mutex_instance) \
+  {                                                           \
+    MINI_UNREACHABLE;                                         \
+  }                                                           \
   else
 
 namespace mini::threading {
@@ -54,7 +61,28 @@ class mutex_holder
 
     operator bool(
       void
+      ) const;
+
+  private:
+    mutex& _mutex;
+};
+
+class mutex_unholder
+{
+  public:
+    MINI_MAKE_NONCOPYABLE(mutex_unholder);
+
+    mutex_unholder(
+      mutex& mutex
       );
+
+    ~mutex_unholder(
+      void
+      );
+
+    operator bool(
+      void
+      ) const;
 
   private:
     mutex& _mutex;

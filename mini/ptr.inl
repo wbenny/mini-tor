@@ -65,7 +65,7 @@ ptr<T>::operator=(
   pointer p
   )
 {
-  _raw_pointer = p;
+  reset(p);
 
   return *this;
 }

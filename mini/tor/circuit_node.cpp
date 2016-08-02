@@ -81,7 +81,7 @@ circuit_node::set_shared_secret(
   const byte_buffer_ref kh // derivative key data, for verification of derivation
   )
 {
-  // assert(kh.get_size() == 20)
+  mini_assert(kh.get_size() == HASH_LEN)
 
   crypto::big_integer shared_secret = _dh.get_shared_secret(peer_public);
   auto key_material = derive_keys(shared_secret.to_bytes());
@@ -182,8 +182,6 @@ circuit_node::consider_sending_sendme(
     mini_debug("circuit_node::consider_sending_sendme(): true");
     return true;
   }
-
-  MINI_UNREACHABLE;
 }
 
 }

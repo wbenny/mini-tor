@@ -8,6 +8,8 @@
 
 namespace mini::tor {
 
+using circuit_node_list = collections::list<ptr<circuit_node>>;
+
 class circuit_node;
 
 class circuit
@@ -31,6 +33,16 @@ class circuit
       void
       ) const;
 
+    const circuit_node_list&
+    get_circuit_node_list(
+      void
+      ) const;
+
+    size_t
+    get_circuit_node_list_size(
+      void
+      ) const;
+
     circuit_node*
     get_final_circuit_node(
       void
@@ -39,13 +51,13 @@ class circuit
     tor_stream*
     create_stream(
       const string_ref host,
-      int port
+      uint16_t port
       );
 
     tor_stream*
     create_onion_stream(
       const string_ref onion,
-      int port
+      uint16_t port
       );
 
     tor_stream*
@@ -68,6 +80,11 @@ class circuit
       void
       );
 
+    bool
+    is_destroyed(
+      void
+      ) const;
+
     tor_stream*
     get_stream_by_id(
       tor_stream_id_type stream_id
@@ -77,6 +94,8 @@ class circuit
     friend class tor_stream;
     friend class tor_socket;
     friend class hidden_service;
+
+    using tor_stream_map = collections::pair_list<tor_stream_id_type, tor_stream*>;
 
     enum class state
     {
@@ -111,11 +130,26 @@ class circuit
       const byte_buffer_ref rendezvous_cookie
       );
 
+    bool
+    is_rendezvous_established(
+      void
+      ) const;
+
     void
     rendezvous_introduce(
       circuit* rendezvous_circuit,
       const byte_buffer_ref rendezvous_cookie
       );
+
+    bool
+    is_rendezvous_introduced(
+      void
+      ) const;
+
+    bool
+    is_rendezvous_completed(
+      void
+      ) const;
 
     cell&
     encrypt(
@@ -220,7 +254,7 @@ class circuit
     state
     get_state(
       void
-      );
+      ) const;
 
     void
     set_state(
@@ -237,10 +271,10 @@ class circuit
 
     threading::locked_value<state> _state;
 
-    collections::pair_list<tor_stream_id_type, tor_stream*> _stream_map;
+    tor_stream_map _stream_map;
 
     circuit_node* _extend_node = nullptr;
-    collections::list<ptr<circuit_node>> _node_list;
+    circuit_node_list _node_list;
 };
 
 }

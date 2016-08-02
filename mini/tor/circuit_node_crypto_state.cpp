@@ -6,6 +6,8 @@
 #include <mini/io/memory_stream.h>
 #include <mini/io/stream_wrapper.h>
 
+#include <mini/logger.h>
+
 namespace mini::tor {
 
 circuit_node_crypto_state::circuit_node_crypto_state(
@@ -77,7 +79,7 @@ circuit_node_crypto_state::encrypt_forward_cell(
   // encrypt the payload
   //
   auto encrypted_payload = _forward_cipher->update(relay_payload_bytes, false);
-  encrypted_payload.resize(cell::payload_size);
+  mini_assert(encrypted_payload.get_size() == cell::payload_size);
 
   //
   // set the payload
@@ -90,8 +92,10 @@ circuit_node_crypto_state::decrypt_backward_cell(
   cell& cell
   )
 {
+  mini_assert(cell.get_payload().get_size() == cell::payload_size);
   auto decrypted_payload = _backward_cipher->update(cell.get_payload(), false);
-  decrypted_payload.resize(cell::payload_size);
+
+  mini_assert(decrypted_payload.get_size() == cell::payload_size);
   cell.set_payload(decrypted_payload);
 
   //
@@ -105,7 +109,7 @@ circuit_node_crypto_state::decrypt_backward_cell(
     byte_buffer payload_without_digest(cell.get_payload());
     memory::zero(payload_without_digest.get_buffer() + 5, sizeof(uint32_t));
 
-    stack_byte_buffer<4> payload_digest;
+    stack_byte_buffer<sizeof(uint32_t)> payload_digest;
     memory::copy(payload_digest.get_buffer(), cell.get_payload().get_buffer() + 5, sizeof(uint32_t));
 
     auto backward_digest_clone = _backward_digest->duplicate();

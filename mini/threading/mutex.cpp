@@ -58,7 +58,33 @@ mutex_holder::~mutex_holder(
 
 mutex_holder::operator bool(
   void
+  ) const
+{
+  return false;
+}
+
+//
+// mutex holder implementation.
+//
+
+mutex_unholder::mutex_unholder(
+  mutex& mutex
   )
+  : _mutex(mutex)
+{
+  _mutex.release();
+}
+
+mutex_unholder::~mutex_unholder(
+  void
+  )
+{
+  _mutex.acquire();
+}
+
+mutex_unholder::operator bool(
+  void
+  ) const
 {
   return false;
 }

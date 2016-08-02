@@ -195,7 +195,8 @@ class list
       size_type new_capacity
       );
 
-    void shrink(
+    void
+    shrink(
       void
       );
 
@@ -287,7 +288,8 @@ class list
       void
       );
 
-    void clear(
+    void
+    clear(
       void
       );
 

@@ -624,7 +624,7 @@ ssl_socket::client_create_credentials(
     NULL,
     NULL,
     phCreds,
-    &tsExpiry);;
+    &tsExpiry);
 }
 
 BOOL

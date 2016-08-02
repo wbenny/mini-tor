@@ -19,7 +19,7 @@ relay_cell::relay_cell(
   io::stream_wrapper payload_buffer(payload_stream, endianness::big_endian);
 
   cell_command       relay_command = payload_buffer.read<cell_command>();
-  uint16_t           dummy         = payload_buffer.read<uint16_t>();
+  uint16_t           recognized    = payload_buffer.read<uint16_t>();
   tor_stream_id_type stream_id     = payload_buffer.read<tor_stream_id_type>();
   uint32_t           digest        = payload_buffer.read<uint32_t>();
   payload_size_type  payload_size  = payload_buffer.read<payload_size_type>();
@@ -48,6 +48,14 @@ relay_cell::relay_cell(
   this->set_relay_payload(relay_payload);
 }
 
+cell_command
+relay_cell::get_relay_command(
+  void
+  ) const
+{
+  return _relay_command;
+}
+
 tor_stream_id_type
 relay_cell::get_stream_id(
   void
@@ -64,28 +72,12 @@ relay_cell::get_stream(
   return _circuit_node->get_circuit()->get_stream_by_id(_stream_id);
 }
 
-cell_command
-relay_cell::get_relay_command(
-  void
-  ) const
-{
-  return _relay_command;
-}
-
-circuit_node*
-relay_cell::get_circuit_node(
-  void
-  )
-{
-  return _circuit_node;
-}
-
 void
 relay_cell::set_digest(
   const byte_buffer_ref digest
   )
 {
-  memory::copy(_digest, digest.get_buffer(), sizeof(_digest));
+  digest.copy_to(_digest, sizeof(_digest));
 }
 
 byte_buffer_ref
@@ -102,6 +94,14 @@ relay_cell::set_relay_payload(
   )
 {
   _relay_payload = payload;
+}
+
+circuit_node*
+relay_cell::get_circuit_node(
+  void
+  )
+{
+  return _circuit_node;
 }
 
 bool

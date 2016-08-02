@@ -23,7 +23,7 @@ class locked_value
     const T&
     get_value(
       void
-      );
+      ) const;
 
     void
     set_value(
@@ -36,9 +36,20 @@ class locked_value
       timeout_type timeout = wait_infinite
       );
 
+    wait_result
+    wait_for_change(
+      timeout_type timeout = wait_infinite
+      );
+
+    void
+    cancel_all_waits(
+      void
+      );
+
   private:
-    mutex _mutex;
+    mutable mutex _mutex;
     event _event;
+    event _cancel_event;
     T _value;
 };
 

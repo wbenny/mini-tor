@@ -2,10 +2,13 @@
 #include "onion_router.h"
 #include "cell.h"
 
+#include <mini/ptr.h>
 #include <mini/net/ssl_socket.h>
 #include <mini/threading/thread_function.h>
 #include <mini/threading/mutex.h>
 #include <mini/threading/locked_value.h>
+
+#define MINI_TOR_ASSUME_PROTOCOL_VERSION_PREFERRED
 
 namespace mini::tor {
 
@@ -14,7 +17,8 @@ class circuit;
 class tor_socket
 {
   public:
-    static const protocol_version_type protocol_version_preferred = 4;
+    static constexpr protocol_version_type protocol_version_initial   = 3;
+    static constexpr protocol_version_type protocol_version_preferred = 4;
 
     tor_socket(
       onion_router* onion_router = nullptr
@@ -74,6 +78,11 @@ class tor_socket
       void
       ) const;
 
+    bool
+    is_ready(
+      void
+      ) const;
+
   private:
     friend class circuit;
 
@@ -89,7 +98,7 @@ class tor_socket
     state
     get_state(
       void
-      );
+      ) const;
 
     void
     set_state(
@@ -136,13 +145,13 @@ class tor_socket
       void
       );
 
-    net::ssl_socket _socket;
+    ptr<net::ssl_socket> _socket;
     onion_router* _onion_router = nullptr;
-    uint32_t _protocol_version = 3;
+    uint32_t _protocol_version = protocol_version_initial;
 
     threading::thread_function _recv_cell_loop_thread;
     collections::pair_list<circuit_id_type, circuit*> _circuit_map;
-    threading::locked_value<state> _state = state::connecting;
+    threading::locked_value<state> _state = state::closed;
 };
 
 }

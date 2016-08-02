@@ -1,5 +1,6 @@
 #pragma once
 #include "cell.h"
+#include <mini/stack_buffer.h>
 
 namespace mini::tor {
 
@@ -10,6 +11,8 @@ class relay_cell
   : public cell
 {
   public:
+    static constexpr size_t payload_data_size = cell::payload_size - 11;
+
     relay_cell(
       void
       ) = default;
@@ -28,6 +31,11 @@ class relay_cell
       const byte_buffer_ref relay_payload
       );
 
+    cell_command
+    get_relay_command(
+      void
+      ) const;
+
     tor_stream_id_type
     get_stream_id(
       void
@@ -35,16 +43,6 @@ class relay_cell
 
     tor_stream*
     get_stream(
-      void
-      );
-
-    cell_command
-    get_relay_command(
-      void
-      ) const;
-
-    circuit_node*
-    get_circuit_node(
       void
       );
 
@@ -63,6 +61,11 @@ class relay_cell
       const byte_buffer_ref payload
       );
 
+    circuit_node*
+    get_circuit_node(
+      void
+      );
+
     bool
     is_relay_cell_valid(
       void
@@ -70,9 +73,22 @@ class relay_cell
 
   private:
     circuit_node* _circuit_node = nullptr;
+
+    //
+    // tor-spec.txt
+    // 6.1.
+    //
+    //   The payload of each unencrypted RELAY cell consists of:
+    //     Relay command           [1 byte]
+    //     'Recognized'            [2 bytes]
+    //     StreamID                [2 bytes]
+    //     Digest                  [4 bytes]
+    //     Length                  [2 bytes]
+    //     Data                    [PAYLOAD_LEN-11 bytes]
+    //
     cell_command _relay_command = (cell_command)0;
     tor_stream_id_type _stream_id = 0;
-    uint8_t _digest[4];
+    stack_byte_buffer<4> _digest;
     byte_buffer _relay_payload;
 };
 

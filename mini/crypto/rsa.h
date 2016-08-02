@@ -68,8 +68,8 @@ class rsa
       const byte_buffer_ref key_blob
       );
 
-    HCRYPTKEY _key;
-    DWORD _key_size;
+    HCRYPTKEY _key = 0;
+    DWORD _key_size = 0;
 
     byte_buffer _key_blob;
 };

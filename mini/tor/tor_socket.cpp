@@ -31,11 +31,27 @@ tor_socket::connect(
   onion_router* or
   )
 {
+  //
+  // if this socket is alive, we need to close it first.
+  //
+  if (is_connected())
+  {
+    close();
+  }
+
+  set_state(state::connecting);
+
   _onion_router = or;
 
-  _socket.connect(
+  _socket.reset(new net::ssl_socket(
     _onion_router->get_ip_address().to_string().get_buffer(),
-    _onion_router->get_or_port());
+    _onion_router->get_or_port()));
+
+  if (!is_connected())
+  {
+    set_state(state::closed);
+    return;
+  }
 
   set_state(handshake_in_progress);
 
@@ -45,6 +61,16 @@ tor_socket::connect(
   send_versions();
   recv_versions();
 
+#if !defined(MINI_TOR_ASSUME_PROTOCOL_VERSION_PREFERRED)
+
+  if (_protocol_version != protocol_version_preferred)
+  {
+    set_state(state::closed);
+    return;
+  }
+
+#endif
+
   recv_certificates();
   recv_net_info();
   send_net_info();
@@ -53,6 +79,7 @@ tor_socket::connect(
   // start the receive loop.
   //
   _recv_cell_loop_thread.start();
+  wait_for_state(state::ready);
 }
 
 void
@@ -60,9 +87,20 @@ tor_socket::close(
   void
   )
 {
+  if (get_state() == state::closing)
+  {
+    wait_for_state(state::closed);
+    return;
+  }
+
+  if (get_state() == state::closed)
+  {
+    return;
+  }
+
   set_state(state::closing);
 
-  while (_circuit_map.is_empty() == false)
+  while (!_circuit_map.is_empty())
   {
     _circuit_map.end()[-1].second->send_destroy_cell();
 
@@ -76,9 +114,9 @@ tor_socket::close(
 
   mini_assert(_circuit_map.is_empty());
 
-  _socket.close();
-  _recv_cell_loop_thread.join();
-
+  //
+  // joins the receive loop thread.
+  //
   set_state(state::closed);
 }
 
@@ -87,11 +125,21 @@ tor_socket::create_circuit(
   void
   )
 {
+  if (!is_ready())
+  {
+    return nullptr;
+  }
+
   circuit* new_circuit = new circuit(*this);
   _circuit_map.insert(new_circuit->get_circuit_id(), new_circuit);
   new_circuit->create(_onion_router);
 
-  return new_circuit;
+  //
+  // should't we close the socket in the case of failure?
+  //
+  return new_circuit->get_circuit_node_list_size() == 1
+    ? new_circuit
+    : nullptr;
 }
 
 void
@@ -109,8 +157,11 @@ tor_socket::send_cell(
   const cell& cell
   )
 {
-  byte_buffer cell_content = cell.get_bytes(_protocol_version);
-  _socket.write(cell_content.get_buffer(), cell_content.get_size());
+  if (is_connected())
+  {
+    byte_buffer cell_content = cell.get_bytes(_protocol_version);
+    _socket->write(cell_content.get_buffer(), cell_content.get_size());
+  }
 }
 
 cell
@@ -120,9 +171,9 @@ tor_socket::recv_cell(
 {
   cell cell;
 
-  do
+  if (is_connected()) do
   {
-    io::stream_wrapper socket_buffer(_socket, endianness::big_endian);
+    io::stream_wrapper socket_buffer(*_socket, endianness::big_endian);
 
     //
     // get circuit id based on the current protocol version.
@@ -149,8 +200,8 @@ tor_socket::recv_cell(
     //
     // get payload size for variable-length cell types.
     //
-    payload_size_type payload_size = 509;
-    if (command == cell_command::versions || (uint32_t)command >= 128)
+    payload_size_type payload_size = cell::payload_size;
+    if (cell::is_variable_length_cell_command(command))
     {
       mini_break_if(socket_buffer.read<payload_size_type>(payload_size) != sizeof(payload_size_type));
     }
@@ -158,8 +209,7 @@ tor_socket::recv_cell(
     //
     // get the content of the payload.
     //
-    byte_buffer payload;
-    payload.resize(payload_size);
+    byte_buffer payload(payload_size);
     mini_break_if(socket_buffer.read(payload.get_buffer(), payload_size) != payload_size);
 
     //
@@ -207,13 +257,25 @@ tor_socket::is_connected(
   void
   ) const
 {
-  return _socket.is_connected();
+  return
+    _socket &&
+    _socket->is_connected();
+}
+
+bool
+tor_socket::is_ready(
+  void
+  ) const
+{
+  return
+    is_connected() &&
+    get_state() == state::ready;
 }
 
 tor_socket::state
 tor_socket::get_state(
   void
-  )
+  ) const
 {
   return _state.get_value();
 }
@@ -223,6 +285,22 @@ tor_socket::set_state(
   state new_state
   )
 {
+  if (new_state == state::closed)
+  {
+    //
+    // close the socket and wait for the thread to end.
+    // this must be done before the actual change
+    // of the state.
+    //
+    _socket.reset();
+    _recv_cell_loop_thread.join();
+
+    //
+    // set back the protocol version to 3.
+    //
+    _protocol_version = protocol_version_initial;
+  }
+
   _state.set_value(new_state);
 }
 
@@ -254,18 +332,31 @@ tor_socket::recv_versions(
 
   cell versions_cell = recv_cell();
 
+#if !defined(MINI_TOR_ASSUME_PROTOCOL_VERSION_PREFERRED)
+
   io::memory_stream versions_stream(versions_cell.get_payload());
   io::stream_wrapper versions_buffer(versions_stream, endianness::big_endian);
 
-  for (size_t i = 0; i < versions_cell.get_payload().get_size(); i += 2)
+  for (
+    size_t i = 0;
+    i < versions_cell.get_payload().get_size();
+    i += sizeof(protocol_version_type)
+    )
   {
     protocol_version_type offered_version = versions_buffer.read<protocol_version_type>();
 
     if (offered_version == protocol_version_preferred)
     {
       _protocol_version = offered_version;
+      break;
     }
   }
+
+#else
+
+  _protocol_version = protocol_version_preferred;
+
+#endif
 }
 
 void
@@ -275,7 +366,7 @@ tor_socket::send_net_info(
 {
   mini_debug("tor_socket::send_net_info()");
 
-  const uint32_t remote = _socket.get_underlying_socket().get_ip().to_int();
+  const uint32_t remote = _socket->get_underlying_socket().get_ip().to_int();
   const uint32_t local = 0; // FIXME: local IP address.
   const uint32_t epoch = time::now().to_timestamp();
 
@@ -370,9 +461,8 @@ tor_socket::recv_cell_loop(
 
     if (cell.is_valid() == false)
     {
-      mini_warning(
-        "tor_socket::recv_cell_loop() !! received invalid cell, stream has ended the connection %u");
-
+      mini_warning("tor_socket::recv_cell_loop() !! received invalid cell, closing stream");
+      close();
       break;
     }
 

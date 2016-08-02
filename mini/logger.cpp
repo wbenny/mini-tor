@@ -3,6 +3,8 @@
 
 namespace mini {
 
+logger log;
+
 static constexpr WORD level_colors[] = {
   FOREGROUND_INTENSITY | FOREGROUND_GREEN /* | FOREGROUND_BLUE */,  // debug
   FOREGROUND_INTENSITY | FOREGROUND_GREEN,                    // info

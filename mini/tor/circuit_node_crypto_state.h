@@ -7,7 +7,10 @@
 
 namespace mini::tor {
 
-static const size_t HASH_LEN = 20;
+//
+// sha1 hash size.
+//
+static constexpr size_t HASH_LEN = 20;
 
 class relay_cell;
 
