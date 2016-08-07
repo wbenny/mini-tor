@@ -13,11 +13,6 @@ namespace mini {
 struct allocator_argument_type { };
 
 template <
-  typename ITERATOR_TYPE
->
-auto get_iterator_value_type(ITERATOR_TYPE iterator) -> decltype(*iterator) {}
-
-template <
   typename T
 >
 class allocator
