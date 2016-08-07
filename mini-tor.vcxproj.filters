@@ -207,6 +207,9 @@
     <ClCompile Include="mini\tor\parsers\onion_router_descriptor_parser.cpp">
       <Filter>Source Files\mini\tor\parsers</Filter>
     </ClCompile>
+    <ClCompile Include="mini\crt\excpt.cpp">
+      <Filter>Source Files\mini\crt</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="mini\flags.h">
@@ -428,5 +431,13 @@
     <CustomBuild Include="mini\crt\msvcrt.def">
       <Filter>Source Files\mini\crt</Filter>
     </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <MASM Include="mini\crt\excpt32.asm">
+      <Filter>Source Files\mini\crt</Filter>
+    </MASM>
+    <MASM Include="mini\crt\excpt64.asm">
+      <Filter>Source Files\mini\crt</Filter>
+    </MASM>
   </ItemGroup>
 </Project>

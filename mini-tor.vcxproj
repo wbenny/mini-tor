@@ -95,6 +95,7 @@
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
+    <Import Project="$(VCTargetsPath)\BuildCustomizations\masm.props" />
   </ImportGroup>
   <ImportGroup Label="Shared">
   </ImportGroup>
@@ -326,6 +327,9 @@
       <GenerateMapFile>false</GenerateMapFile>
       <RandomizedBaseAddress>false</RandomizedBaseAddress>
       <DataExecutionPrevention>false</DataExecutionPrevention>
+      <SectionAlignment>
+      </SectionAlignment>
+      <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
     </Link>
     <PreLinkEvent>
       <Command>lib /nologo /def:"$(SolutionDir)\mini\crt\msvcrt.def" /out:"$(SolutionDir)bin\$(PlatformShortName)\$(Configuration)\mini-msvcrt.lib" /machine:$(PlatformShortName)</Command>
@@ -405,6 +409,9 @@
       <GenerateMapFile>false</GenerateMapFile>
       <RandomizedBaseAddress>false</RandomizedBaseAddress>
       <DataExecutionPrevention>false</DataExecutionPrevention>
+      <SectionAlignment>
+      </SectionAlignment>
+      <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
     </Link>
     <PreLinkEvent>
       <Command>lib /nologo /def:"$(SolutionDir)\mini\crt\msvcrt.def" /out:"$(SolutionDir)bin\$(PlatformShortName)\$(Configuration)\mini-msvcrt.lib" /machine:$(PlatformShortName)</Command>
@@ -422,6 +429,7 @@
     <ClCompile Include="mini\common.cpp" />
     <ClCompile Include="mini\console.cpp" />
     <ClCompile Include="mini\crt\crt0.cpp" />
+    <ClCompile Include="mini\crt\excpt.cpp" />
     <ClCompile Include="mini\crt\thread_safe_statics.cpp" />
     <ClCompile Include="mini\crypto\aes.cpp" />
     <ClCompile Include="mini\crypto\base32.cpp" />
@@ -531,6 +539,40 @@
     <None Include="mini\collections\list.inl" />
     <None Include="mini\collections\pair_list.inl" />
     <CustomBuild Include="mini\crt\msvcrt.def" />
+    <MASM Include="mini\crt\excpt32.asm">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release_STL|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release_Small|Win32'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release_STL|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release_Small|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+      <FileType>Document</FileType>
+      <UseSafeExceptionHandlers Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</UseSafeExceptionHandlers>
+      <UseSafeExceptionHandlers Condition="'$(Configuration)|$(Platform)'=='Release_STL|Win32'">true</UseSafeExceptionHandlers>
+      <UseSafeExceptionHandlers Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</UseSafeExceptionHandlers>
+      <UseSafeExceptionHandlers Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</UseSafeExceptionHandlers>
+      <UseSafeExceptionHandlers Condition="'$(Configuration)|$(Platform)'=='Release_STL|x64'">true</UseSafeExceptionHandlers>
+      <UseSafeExceptionHandlers Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</UseSafeExceptionHandlers>
+    </MASM>
+    <MASM Include="mini\crt\excpt64.asm">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release_STL|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release_Small|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release_STL|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release_Small|x64'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+      <FileType>Document</FileType>
+      <UseSafeExceptionHandlers Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</UseSafeExceptionHandlers>
+      <UseSafeExceptionHandlers Condition="'$(Configuration)|$(Platform)'=='Release_STL|Win32'">true</UseSafeExceptionHandlers>
+      <UseSafeExceptionHandlers Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</UseSafeExceptionHandlers>
+      <UseSafeExceptionHandlers Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</UseSafeExceptionHandlers>
+      <UseSafeExceptionHandlers Condition="'$(Configuration)|$(Platform)'=='Release_STL|x64'">true</UseSafeExceptionHandlers>
+      <UseSafeExceptionHandlers Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</UseSafeExceptionHandlers>
+    </MASM>
     <None Include="mini\ptr.inl" />
     <None Include="mini\stack_buffer.inl" />
     <None Include="mini\threading\locked_value.inl" />
@@ -540,5 +582,6 @@
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
+    <Import Project="$(VCTargetsPath)\BuildCustomizations\masm.targets" />
   </ImportGroup>
 </Project>

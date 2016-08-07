@@ -22,3 +22,6 @@ EXPORTS
 
   wcslen=msvcrt.wcslen
   wcstombs=msvcrt.wcstombs
+
+  _EH_prolog=msvcrt._EH_prolog
+  __CxxFrameHandler3=msvcrt.__CxxFrameHandler3
