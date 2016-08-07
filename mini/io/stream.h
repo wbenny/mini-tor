@@ -6,6 +6,26 @@ namespace mini::io {
 class stream
 {
   public:
+    //
+    // this value is returned when a stream has been closed during read.
+    //
+    static constexpr size_t closed = (size_t)0;
+
+    //
+    // this value is returned when a stream has encountered an error.
+    //
+    static constexpr size_t error  = (size_t)-1;
+
+    static bool
+    success(
+      size_t return_value
+      )
+    {
+      return
+        return_value != closed &&
+        return_value != error;
+    }
+
     enum seek_origin
     {
       begin,

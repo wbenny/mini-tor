@@ -2,6 +2,7 @@
 #include <mini/console.h>
 #include <mini/crypto/random.h>
 #include <mini/io/stream_reader.h>
+#include <mini/io/file.h>
 #include <mini/tor/circuit.h>
 #include <mini/tor/consensus.h>
 #include <mini/tor/tor_socket.h>
@@ -179,6 +180,15 @@ class tor_client
 
       delete stream;
 
+      auto header_position = result.index_of("\r\n\r\n");
+      if (header_position != mini::string::not_found)
+      {
+        header_position += 4;
+
+        mini::string header = result.substring(0, header_position);
+        result = result.substring(header_position);
+      }
+
       return result;
     }
 
@@ -204,90 +214,130 @@ class tor_client
     mini::collections::list<mini::tor::onion_router*> _forbidden_onion_routers;
 };
 
-#include <mini/threading/locked_value.h>
-#include <mini/threading/thread_function.h>
-
-int
-__cdecl main(
+int __cdecl
+main(
   int argc,
   char* argv[]
   )
 {
-  if (argc != 2)
+  if (argc < 2)
   {
     mini::console::write("No parameter provided!\n");
     mini::console::write("Usage:\n");
-    mini::console::write("  mini-tor [url]\n");
+    mini::console::write("  mini-tor [-v] [-vv] [-vvv] [url]\n");
     mini::console::write("Example:\n");
     mini::console::write("  mini-tor \"http://duskgytldkxiuqc6.onion/fedpapers/federndx.htm\"\n");
     return -1;
   }
 
+  mini::log.set_level(mini::logger::level::off);
+
+  //
+  // parse arguments.
+  //
+  int arg_index = 1;
+  if (mini::string_ref(argv[arg_index]).equals("-v"))
+  {
+    mini::log.set_level(mini::logger::level::warning);
+    arg_index += 1;
+
+    if (arg_index == argc)
+    {
+      return -1;
+    }
+  }
+
+  if (mini::string_ref(argv[arg_index]).equals("-vv"))
+  {
+    mini::log.set_level(mini::logger::level::info);
+    arg_index += 1;
+
+    if (arg_index == argc)
+    {
+      return -1;
+    }
+  }
+
+  if (mini::string_ref(argv[arg_index]).equals("-vvv"))
+  {
+    mini::log.set_level(mini::logger::level::debug);
+    arg_index += 1;
+
+    if (arg_index == argc)
+    {
+      return -1;
+    }
+  }
+
 #if defined(_DEBUG)
-  mini::log.set_level(mini::logger::level::debug);
+  mini::log.set_level(mini::logger::level::info);
 #endif
 
-  for (;;)
+  //
+  // fetch the page.
+  //
+  static constexpr size_t hops = 2;
+  static_assert(hops >= 2, "There must be at least 2 hops in the circuit");
+
+  mini_info("Fetching consensus...");
+  tor_client tor;
+  mini_info("Consensus fetched...");
+
+connect_again:
+  while (tor.get_hop_count() < hops)
   {
-    static constexpr size_t hops = 9;
-    static_assert(hops >= 2, "There must be at least 2 hops in the circuit");
-
-    mini_info("Fetching consensus...");
-    tor_client tor;
-    mini_info("Consensus fetched...");
-
-    connect_again:
-    while (tor.get_hop_count() < hops)
+    //
+    // first hop.
+    //
+    if (tor.get_hop_count() == 0)
     {
-      //
-      // first hop.
-      //
-      if (tor.get_hop_count() == 0)
-      {
-        tor.extend_to_random(
-          mini::tor::onion_router::status_flag::fast |
-          mini::tor::onion_router::status_flag::running |
-          mini::tor::onion_router::status_flag::valid,
-          { 80, 443 });
-      }
-
-      //
-      // last hop (exit node).
-      //
-      else if (tor.get_hop_count() == (hops - 1))
-      {
-        tor.extend_to_random(
-          mini::tor::onion_router::status_flag::fast |
-          mini::tor::onion_router::status_flag::running |
-          mini::tor::onion_router::status_flag::valid |
-          mini::tor::onion_router::status_flag::exit);
-      }
-
-      //
-      // middle hops.
-      //
-      else
-      {
-        tor.extend_to_random(
-          mini::tor::onion_router::status_flag::fast |
-          mini::tor::onion_router::status_flag::running |
-          mini::tor::onion_router::status_flag::valid);
-      }
+      tor.extend_to_random(
+        mini::tor::onion_router::status_flag::fast |
+        mini::tor::onion_router::status_flag::running |
+        mini::tor::onion_router::status_flag::valid,
+        { 80, 443 });
     }
 
-    mini::string content = tor.http_get(0 ? "http://duskgytldkxiuqc6.onion/fedpapers/federndx.htm" : argv[1]);
-    if (content.is_empty())
+    //
+    // last hop (exit node).
+    //
+    else if (tor.get_hop_count() == (hops - 1))
     {
-      mini_info("Trying to build new circuit...");
-      goto connect_again;
+      tor.extend_to_random(
+        mini::tor::onion_router::status_flag::fast |
+        mini::tor::onion_router::status_flag::running |
+        mini::tor::onion_router::status_flag::valid |
+        mini::tor::onion_router::status_flag::exit);
     }
 
-    mini::console::write("%s", content.get_buffer());
-
-    mini_info("");
-    mini_info("-----------------------------");
-    mini_info("content size: %u bytes", content.get_size());
-    mini_info("-----------------------------");
+    //
+    // middle hops.
+    //
+    else
+    {
+      tor.extend_to_random(
+        mini::tor::onion_router::status_flag::fast |
+        mini::tor::onion_router::status_flag::running |
+        mini::tor::onion_router::status_flag::valid);
+    }
   }
+
+  mini::string content = tor.http_get(1 ? "http://duskgytldkxiuqc6.onion/fedpapers/federndx.htm" : argv[arg_index]);
+  if (content.is_empty())
+  {
+    mini_info("Trying to build new circuit...");
+    goto connect_again;
+  }
+
+  //mini::io::file::write_from_string("out.txt", content);
+
+  mini::console::write("%s", content.get_buffer());
+
+  mini_info("");
+  mini_info("-----------------------------");
+  mini_info("content size: %u bytes", content.get_size());
+  mini_info("-----------------------------");
+
+
   return 0;
 }

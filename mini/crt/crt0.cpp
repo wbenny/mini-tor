@@ -125,6 +125,8 @@ _initterm(
 
 #pragma region CRT startup
 
+int _fltused = 0;
+
 int __argc;
 char** __argv;
 

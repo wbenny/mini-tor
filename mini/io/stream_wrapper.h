@@ -54,7 +54,7 @@ class stream_wrapper
       T& result
       )
     {
-      size_t bytes_read = _stream.read(&result, sizeof(result));
+      size_t bytes_read = read_impl(&result, sizeof(result));
 
       if (_endianness != current_endianness)
       {
@@ -83,7 +83,7 @@ class stream_wrapper
       size_t size
       )
     {
-      return _stream.read(buffer, size);
+      return read_impl(buffer, size);
     }
 
     size_t
@@ -91,7 +91,7 @@ class stream_wrapper
       mutable_byte_buffer_ref buffer
       )
     {
-      return _stream.read(buffer.get_buffer(), buffer.get_size());
+      return read_impl(buffer.get_buffer(), buffer.get_size());
     }
 
     template <
@@ -110,7 +110,7 @@ class stream_wrapper
         value_to_write = swap_endianness(value);
       }
 
-      return _stream.write(&value_to_write, sizeof(value_to_write));
+      return write_impl(&value_to_write, sizeof(value_to_write));
     }
 
     size_t
@@ -118,7 +118,7 @@ class stream_wrapper
       const byte_buffer_ref buffer
       )
     {
-      return _stream.write(buffer.get_buffer(), buffer.get_size());
+      return write_impl(buffer.get_buffer(), buffer.get_size());
     }
 
     stream&
@@ -146,6 +146,50 @@ class stream_wrapper
     }
 
   private:
+    size_t
+    read_impl(
+      void* buffer,
+      size_t size
+      )
+    {
+      byte_type* buffer_bytes = reinterpret_cast<byte_type*>(buffer);
+
+      size_t total_bytes_read = 0;
+      size_t bytes_read;
+      while (stream::success(bytes_read = _stream.read(buffer_bytes + total_bytes_read, size - total_bytes_read)))
+      {
+        total_bytes_read += bytes_read;
+
+        mini_break_if(total_bytes_read >= size);
+      }
+
+      mini_assert(stream::success(bytes_read) ? total_bytes_read == size : true);
+
+      return total_bytes_read;
+    }
+
+    size_t
+    write_impl(
+      const void* buffer,
+      size_t size
+      )
+    {
+      const byte_type* buffer_bytes = reinterpret_cast<const byte_type*>(buffer);
+
+      size_t total_bytes_written = 0;
+      size_t bytes_written;
+      while (stream::success(bytes_written = _stream.write(buffer_bytes + total_bytes_written, size - total_bytes_written)))
+      {
+        total_bytes_written += bytes_written;
+
+        mini_break_if(total_bytes_written >= size);
+      }
+
+      mini_assert(stream::success(bytes_written) ? total_bytes_written == size : true);
+
+      return total_bytes_written;
+    }
+
     stream& _stream;
     endianness _endianness;
 };

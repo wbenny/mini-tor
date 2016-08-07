@@ -383,7 +383,7 @@ list<T, ALLOCATOR_TYPE>::resize(
   }
   else if (new_size > get_capacity())
   {
-    reserve(new_size);
+    reserve(max(new_size, (get_size() * 3) / 2));
     _allocator.construct_range(_first + get_size(), _first + new_size, item);
   }
 

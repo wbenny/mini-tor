@@ -57,23 +57,23 @@ tcp_socket::connect(
   uint16_t port
   )
 {
-  ::hostent* h = ::gethostbyname(host.get_buffer());
+  hostent* h = gethostbyname(host.get_buffer());
 
-  ::sockaddr_in sin;
+  sockaddr_in sin;
   sin.sin_family = AF_INET;
-  sin.sin_port = ::htons(port);
+  sin.sin_port = htons(port);
   memory::copy(&sin.sin_addr, h->h_addr_list[0], h->h_length);
 
   _ip = ip_address(sin.sin_addr.s_addr);
 
-  if ((_socket = ::socket(AF_INET, SOCK_STREAM, IPPROTO_TCP)) == SOCKET_ERROR)
+  if ((_socket = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP)) == SOCKET_ERROR)
   {
     return;
   }
 
-  if ((::connect(_socket, (::sockaddr*)&sin, sizeof(sin))) == SOCKET_ERROR)
+  if ((::connect(_socket, (sockaddr*)&sin, sizeof(sin))) == SOCKET_ERROR)
   {
-    ::closesocket(_socket);
+    closesocket(_socket);
     return;
   }
 
@@ -85,7 +85,7 @@ tcp_socket::close(
   void
   )
 {
-  ::closesocket(_socket);
+  closesocket(_socket);
 
   _socket = INVALID_SOCKET;
 }
@@ -118,7 +118,33 @@ tcp_socket::read(
   size_t size
   )
 {
-  return (size_t)::recv(_socket, (char*)buffer, (int)size, 0);
+  //
+  // early exit.
+  //
+  if (size == 0)
+  {
+    return 0;
+  }
+
+  size_t result = (size_t)recv(_socket, (char*)buffer, (int)size, 0);
+
+  //
+  // close & invalidate socket when we've received 0 bytes.
+  //
+  if (result == 0)
+  {
+    close();
+  }
+
+  //
+  // invalidate socket when we've encountered an error.
+  //
+  if (result == SOCKET_ERROR)
+  {
+    _socket = INVALID_SOCKET;
+  }
+
+  return result;
 }
 
 size_t
@@ -127,7 +153,25 @@ tcp_socket::write(
   size_t size
   )
 {
-  return (size_t)::send(_socket, (const char*)buffer, (int)size, 0);
+  //
+  // early exit.
+  //
+  if (size == 0)
+  {
+    return 0;
+  }
+
+  size_t result = (size_t)send(_socket, (const char*)buffer, (int)size, 0);
+
+  //
+  // invalidate socket when we've encountered an error.
+  //
+  if (result == SOCKET_ERROR)
+  {
+    _socket = INVALID_SOCKET;
+  }
+
+  return result;
 }
 
 size_t
