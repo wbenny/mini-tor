@@ -1,4 +1,8 @@
-#ifndef _DEBUG
+#ifdef _DEBUG
+#include <cstdio>
+#include <cstdlib>
+#include <cstddef>
+#else
 #include <cstddef>
 
 #define MINI_MSVCRT_LIB

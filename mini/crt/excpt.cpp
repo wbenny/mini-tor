@@ -102,4 +102,12 @@ mini_ThrowException(
 }
 
 #include "crt0.h"
-[[noreturn]] void __cdecl __std_terminate() { exit(-1); }
+extern "C"
+[[noreturn]]
+void __cdecl
+__std_terminate(
+  void
+  )
+{
+  exit(3);
+}
