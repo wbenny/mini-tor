@@ -278,6 +278,7 @@ main(
   //
   static constexpr size_t hops = 2;
   static_assert(hops >= 2, "There must be at least 2 hops in the circuit");
+  static_assert(hops <= 9, "There must be at most 9 hops in the circuit");
 
   mini_info("Fetching consensus...");
   tor_client tor;
@@ -322,7 +323,7 @@ connect_again:
     }
   }
 
-  mini::string content = tor.http_get(1 ? "http://duskgytldkxiuqc6.onion/fedpapers/federndx.htm" : argv[arg_index]);
+  mini::string content = tor.http_get(0 ? "http://duskgytldkxiuqc6.onion/fedpapers/federndx.htm" : argv[arg_index]);
   if (content.is_empty())
   {
     mini_info("Trying to build new circuit...");
