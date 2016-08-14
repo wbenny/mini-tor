@@ -137,7 +137,7 @@ create_argc_and_argv(
 {
   wchar_t** argvW = CommandLineToArgvW(GetCommandLineW(), &__argc);
 
-  __argv = (char**)malloc(__argc);
+  __argv = (char**)malloc(__argc * sizeof(char*));
   for (int i = 0; i < __argc; i++)
   {
     size_t argv_size = wcslen(argvW[i]) + 1;
@@ -158,6 +158,7 @@ destroy_argc_and_argv(
   {
     free(__argv[i]);
   }
+
   free(__argv);
 }
 
