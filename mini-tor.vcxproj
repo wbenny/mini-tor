@@ -434,9 +434,8 @@
     <ClCompile Include="mini\crypto\aes.cpp" />
     <ClCompile Include="mini\crypto\base32.cpp" />
     <ClCompile Include="mini\crypto\base64.cpp" />
-    <ClCompile Include="mini\crypto\big_integer.cpp" />
     <ClCompile Include="mini\crypto\base16.cpp" />
-    <ClCompile Include="mini\crypto\impl\bigint_impl.c" />
+    <ClCompile Include="mini\crypto\dh1024.cpp" />
     <ClCompile Include="mini\crypto\provider.cpp" />
     <ClCompile Include="mini\crypto\random.cpp" />
     <ClCompile Include="mini\crypto\rsa.cpp" />
@@ -483,9 +482,8 @@
     <ClInclude Include="mini\crypto\aes.h" />
     <ClInclude Include="mini\crypto\base32.h" />
     <ClInclude Include="mini\crypto\base64.h" />
-    <ClInclude Include="mini\crypto\big_integer.h" />
     <ClInclude Include="mini\crypto\base16.h" />
-    <ClInclude Include="mini\crypto\impl\bigint_impl.h" />
+    <ClInclude Include="mini\crypto\dh1024.h" />
     <ClInclude Include="mini\crypto\provider.h" />
     <ClInclude Include="mini\crypto\random.h" />
     <ClInclude Include="mini\crypto\rsa.h" />

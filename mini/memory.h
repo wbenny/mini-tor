@@ -29,6 +29,13 @@ copy(
   );
 
 void*
+reverse_copy(
+  void* destination,
+  const void* source,
+  size_t size
+  );
+
+void*
 move(
   void* destination,
   const void* source,

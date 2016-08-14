@@ -31,12 +31,6 @@
     <Filter Include="Source Files\mini\crypto">
       <UniqueIdentifier>{d09dd70a-52f9-4832-b7aa-1a76251b4c39}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\mini\crypto\impl">
-      <UniqueIdentifier>{c9e7c7ab-4ea8-4d5e-80d6-6360c7172a3f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\mini\crypto\impl">
-      <UniqueIdentifier>{d2626f7e-8946-4c15-9183-c40ab2501413}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\mini\io">
       <UniqueIdentifier>{6ee5f187-2203-4bd3-ae99-4129cb4f6b8b}</UniqueIdentifier>
     </Filter>
@@ -111,9 +105,6 @@
     <ClCompile Include="mini\crypto\base64.cpp">
       <Filter>Source Files\mini\crypto</Filter>
     </ClCompile>
-    <ClCompile Include="mini\crypto\impl\bigint_impl.c">
-      <Filter>Source Files\mini\crypto\impl</Filter>
-    </ClCompile>
     <ClCompile Include="mini\string.cpp">
       <Filter>Source Files\mini</Filter>
     </ClCompile>
@@ -124,9 +115,6 @@
       <Filter>Source Files\mini\crt</Filter>
     </ClCompile>
     <ClCompile Include="mini\crypto\base16.cpp">
-      <Filter>Source Files\mini\crypto</Filter>
-    </ClCompile>
-    <ClCompile Include="mini\crypto\big_integer.cpp">
       <Filter>Source Files\mini\crypto</Filter>
     </ClCompile>
     <ClCompile Include="mini\threading\mutex.cpp">
@@ -210,6 +198,9 @@
     <ClCompile Include="mini\crt\excpt.cpp">
       <Filter>Source Files\mini\crt</Filter>
     </ClCompile>
+    <ClCompile Include="mini\crypto\dh1024.cpp">
+      <Filter>Source Files\mini\crypto</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="mini\flags.h">
@@ -244,9 +235,6 @@
     </ClInclude>
     <ClInclude Include="mini\memory.h">
       <Filter>Header Files\mini</Filter>
-    </ClInclude>
-    <ClInclude Include="mini\crypto\impl\bigint_impl.h">
-      <Filter>Header Files\mini\crypto\impl</Filter>
     </ClInclude>
     <ClInclude Include="mini\string.h">
       <Filter>Header Files\mini</Filter>
@@ -288,9 +276,6 @@
       <Filter>Header Files\mini</Filter>
     </ClInclude>
     <ClInclude Include="mini\crypto\base16.h">
-      <Filter>Header Files\mini\crypto</Filter>
-    </ClInclude>
-    <ClInclude Include="mini\crypto\big_integer.h">
       <Filter>Header Files\mini\crypto</Filter>
     </ClInclude>
     <ClInclude Include="mini\string_ref.h">
@@ -400,6 +385,9 @@
     </ClInclude>
     <ClInclude Include="mini\tor\parsers\onion_router_descriptor_parser.h">
       <Filter>Header Files\mini\tor\parsers</Filter>
+    </ClInclude>
+    <ClInclude Include="mini\crypto\dh1024.h">
+      <Filter>Header Files\mini\crypto</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

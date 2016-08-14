@@ -9,6 +9,7 @@ namespace mini::crypto {
 
 class aes;
 class sha1;
+class dh1024;
 class rsa;
 class random;
 
@@ -40,6 +41,11 @@ class provider
       void
       );
 
+    HCRYPTPROV
+    get_dh_handle(
+      void
+      );
+
     ptr<aes>
     create_aes(
       void
@@ -47,6 +53,11 @@ class provider
 
     ptr<sha1>
     create_sha1(
+      void
+      );
+
+    ptr<dh1024>
+    create_dh1024(
       void
       );
 
@@ -62,6 +73,7 @@ class provider
 
   private:
     HCRYPTPROV _provider_handle;
+    HCRYPTPROV _dh_provider_handle;
 };
 
 extern provider provider_factory;

@@ -70,21 +70,21 @@ circuit_node::create_onion_skin(
   )
 {
   return hybrid_encryption::encrypt(
-    _dh.get_public_key().to_bytes(),
+    _dh.get_public_key(),
     _onion_router->get_onion_key()
     );
 }
 
 void
 circuit_node::set_shared_secret(
-  const crypto::big_integer& peer_public,
+  const byte_buffer_ref peer_public,
   const byte_buffer_ref kh // derivative key data, for verification of derivation
   )
 {
   mini_assert(kh.get_size() == HASH_LEN)
 
-  crypto::big_integer shared_secret = _dh.get_shared_secret(peer_public);
-  auto key_material = derive_keys(shared_secret.to_bytes());
+  auto shared_secret = _dh.get_shared_secret(peer_public);
+  auto key_material = derive_keys(shared_secret);
 
   if (memory::equal(key_material.get_buffer(), kh.get_buffer(), kh.get_size()))
   {

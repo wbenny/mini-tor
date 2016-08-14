@@ -2,6 +2,7 @@
 
 #include <mini/crypto/aes.h>
 #include <mini/crypto/sha1.h>
+#include <mini/crypto/dh1024.h>
 #include <mini/crypto/rsa.h>
 #include <mini/crypto/random.h>
 
@@ -35,6 +36,13 @@ provider::init(
     MS_ENH_RSA_AES_PROV,
     PROV_RSA_AES,
     CRYPT_VERIFYCONTEXT);
+
+  CryptAcquireContext(
+    &_dh_provider_handle,
+    NULL,
+    MS_ENH_DSS_DH_PROV,
+    PROV_DSS_DH,
+    CRYPT_VERIFYCONTEXT);
 }
 
 void
@@ -43,9 +51,13 @@ provider::destroy(
   )
 {
   CryptReleaseContext(
+    _dh_provider_handle,
+    0);
+  _dh_provider_handle = 0;
+
+  CryptReleaseContext(
     _provider_handle,
     0);
-
   _provider_handle = 0;
 }
 
@@ -55,6 +67,14 @@ provider::get_handle(
   )
 {
   return _provider_handle;
+}
+
+HCRYPTPROV
+provider::get_dh_handle(
+  void
+  )
+{
+  return _dh_provider_handle;
 }
 
 ptr<aes>
@@ -71,6 +91,14 @@ provider::create_sha1(
   )
 {
   return new sha1(this);
+}
+
+ptr<dh1024>
+provider::create_dh1024(
+  void
+  )
+{
+  return new dh1024(this);
 }
 
 ptr<rsa>

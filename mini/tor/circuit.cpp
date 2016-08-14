@@ -388,7 +388,7 @@ circuit::rendezvous_introduce(
     handshake_buffer.write(static_cast<payload_size_type>(introducee->get_onion_key().get_size()));
     handshake_buffer.write(introducee->get_onion_key());
     handshake_buffer.write(rendezvous_cookie);
-    handshake_buffer.write(rendezvous_circuit->_extend_node->get_key_agreement().get_public_key().to_bytes());
+    handshake_buffer.write(rendezvous_circuit->_extend_node->get_key_agreement().get_public_key());
 
     auto handshake_encrypted = hybrid_encryption::encrypt(
       handshake_bytes,

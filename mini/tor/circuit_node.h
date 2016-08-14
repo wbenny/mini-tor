@@ -39,7 +39,7 @@ class circuit_node
 
     void
     set_shared_secret(
-      const crypto::big_integer& peer_public,
+      const byte_buffer_ref peer_public,
       const byte_buffer_ref kh
       );
 

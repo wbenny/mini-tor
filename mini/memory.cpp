@@ -39,6 +39,25 @@ copy(
 }
 
 void*
+reverse_copy(
+  void* destination,
+  const void* source,
+  size_t size
+  )
+{
+  byte_type* destination_bytes = reinterpret_cast<byte_type*>(destination);
+  const byte_type* source_bytes = reinterpret_cast<const byte_type*>(source);
+
+  for (size_t i = 0; i < size; i++)
+  {
+    destination_bytes[size - 1 - i] = source_bytes[i];
+  }
+
+  return destination;
+}
+
+
+void*
 move(
   void* destination,
   const void* source,

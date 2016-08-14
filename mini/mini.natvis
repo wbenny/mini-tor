@@ -112,22 +112,6 @@
   </Type>
 
   <!--
-    mini::crypto
-    -->
-
-  <!-- mini::crypto::big_integer -->
-  <Type Name="mini::crypto::big_integer">
-    <DisplayString>{{ size={_impl->size * 4} }}</DisplayString>
-    <Expand>
-      <Item Name="[size]" ExcludeView="simple">_impl->size * 4</Item>
-      <ArrayItems>
-        <Size>_impl->size</Size>
-        <ValuePointer>_impl->comps</ValuePointer>
-      </ArrayItems>
-    </Expand>
-  </Type>
-
-  <!--
     mini::tor
     -->
 
