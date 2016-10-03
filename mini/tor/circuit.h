@@ -85,6 +85,11 @@ class circuit
       void
       ) const;
 
+    bool
+    is_ready(
+      void
+      ) const;
+
     tor_stream*
     get_stream_by_id(
       tor_stream_id_type stream_id
@@ -261,9 +266,10 @@ class circuit
       state new_state
       );
 
-    void
+    threading::wait_result
     wait_for_state(
-      state desired_state
+      state desired_state,
+      timeout_type timeout = 30000
       );
 
     tor_socket& _tor_socket;

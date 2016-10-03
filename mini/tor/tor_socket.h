@@ -105,9 +105,10 @@ class tor_socket
       state new_state
       );
 
-    void
+    threading::wait_result
     wait_for_state(
-      state desired_state
+      state desired_state,
+      timeout_type timeout = 30000
       );
 
     void

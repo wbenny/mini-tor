@@ -111,8 +111,15 @@ circuit::create_stream(
   {
     send_relay_cell(stream_id, cell_command::relay_begin, relay_data_bytes);
   }
-  wait_for_state(state::ready);
-  mini_debug("circuit::create_stream() [url: %s, stream: %u, status: created]", host_port.get_buffer(), stream_id);
+
+  if (mini_wait_success(wait_for_state(state::ready)))
+  {
+    mini_debug("circuit::create_stream() [url: %s, stream: %u, status: created]", host_port.get_buffer(), stream_id);
+  }
+  else
+  {
+    mini_error("circuit::create_stream() [is_ready() == false]");
+  }
 
   //
   // if the circuit has been destroyed,
@@ -120,9 +127,9 @@ circuit::create_stream(
   // so we don't need to delete it here.
   //
 
-  return is_destroyed()
-    ? nullptr
-    : stream;
+  return is_ready()
+    ? stream
+    : nullptr;
 }
 
 tor_stream*
@@ -153,8 +160,15 @@ circuit::create_dir_stream(
   {
     send_relay_cell(stream_id, cell_command::relay_begin_dir);
   }
-  wait_for_state(state::ready);
-  mini_debug("circuit::create_dir_stream() [stream: %u, state: connected]", stream_id);
+
+  if (mini_wait_success(wait_for_state(state::ready)))
+  {
+    mini_debug("circuit::create_dir_stream() [stream: %u, state: connected]", stream_id);
+  }
+  else
+  {
+    mini_error("circuit::create_dir_stream() [is_ready() == false]");
+  }
 
   //
   // if the circuit has been destroyed,
@@ -162,9 +176,9 @@ circuit::create_dir_stream(
   // so we don't need to delete it here.
   //
 
-  return is_destroyed()
-    ? nullptr
-    : stream;
+  return is_ready()
+    ? stream
+    : nullptr;
 }
 
 void
@@ -183,14 +197,21 @@ circuit::create(
       _extend_node->create_onion_skin()
     ));
   }
-  wait_for_state(state::ready);
-  mini_debug("circuit::create() [or: %s, state: created]", first_onion_router->get_name().get_buffer());
+
+  if (mini_wait_success(wait_for_state(state::ready)))
+  {
+    mini_debug("circuit::create() [or: %s, state: created]", first_onion_router->get_name().get_buffer());
+  }
+  else
+  {
+    mini_error("circuit::create() [or: %s, state: destroyed]", first_onion_router->get_name().get_buffer());
+  }
 }
 
 void
 circuit::extend(
   onion_router* next_onion_router
-  )
+)
 {
   mini_debug("circuit::extend() [or: %s, state: extending]", next_onion_router->get_name().get_buffer());
   set_state(state::extending);
@@ -225,8 +246,14 @@ circuit::extend(
       cell_command::relay_early,
       _extend_node);
   }
-  wait_for_state(state::ready);
-  mini_debug("circuit::extend() [or: %s, state: extended]", next_onion_router->get_name().get_buffer());
+  if (mini_wait_success(wait_for_state(state::ready)))
+  {
+    mini_debug("circuit::extend() [or: %s, state: extended]", next_onion_router->get_name().get_buffer());
+  }
+  else
+  {
+    mini_error("circuit::extend() [or: %s, state: destroyed]", next_onion_router->get_name().get_buffer());
+  }
 }
 
 void
@@ -251,6 +278,14 @@ circuit::is_destroyed(
   ) const
 {
   return get_state() == state::destroyed;
+}
+
+bool
+circuit::is_ready(
+  void
+  ) const
+{
+  return get_state() == state::ready;
 }
 
 tor_stream*
@@ -313,8 +348,15 @@ circuit::rendezvous_establish(
       cell_command::relay_command_establish_rendezvous,
       rendezvous_cookie);
   }
-  wait_for_state(state::rendezvous_established);
-  mini_debug("circuit::rendezvous_establish() [circuit: %u, state: established]", _circuit_id);
+
+  if (mini_wait_success(wait_for_state(state::rendezvous_established)))
+  {
+    mini_debug("circuit::rendezvous_establish() [circuit: %u, state: established]", _circuit_id);
+  }
+  else
+  {
+    mini_error("circuit::rendezvous_establish() [circuit: %u, is_rendezvous_established() == false]", _circuit_id);
+  }
 }
 
 bool
@@ -409,11 +451,30 @@ circuit::rendezvous_introduce(
       cell_command::relay_command_introduce1,
       relay_payload_bytes);
   }
-  wait_for_state(state::rendezvous_introduced);
-  mini_debug("circuit::rendezvous_introduce() [or: %s, state: introduced]", introduction_point->get_name().get_buffer());
 
-  rendezvous_circuit->wait_for_state(state::rendezvous_completed);
-  mini_debug("circuit::rendezvous_introduce() [or: %s, state: completed]", introduction_point->get_name().get_buffer());
+  if (mini_wait_success(wait_for_state(state::rendezvous_introduced)))
+  {
+    mini_debug("circuit::rendezvous_introduce() [or: %s, state: introduced]", introduction_point->get_name().get_buffer());
+  }
+  else
+  {
+    mini_error("circuit::rendezvous_introduce() [or: %s, is_rendezvous_introduced() == false]", introduction_point->get_name().get_buffer());
+
+    //
+    // we cannot expect the rendezvous will be completed.
+    //
+
+    return;
+  }
+
+  if (mini_wait_success(rendezvous_circuit->wait_for_state(state::rendezvous_completed)))
+  {
+    mini_debug("circuit::rendezvous_introduce() [or: %s, state: completed]", introduction_point->get_name().get_buffer());
+  }
+  else
+  {
+    mini_error("circuit::rendezvous_introduce() [or: %s, is_rendezvous_completed() == false]", introduction_point->get_name().get_buffer());
+  }
 }
 
 bool
@@ -889,12 +950,13 @@ circuit::set_state(
   }
 }
 
-void
+threading::wait_result
 circuit::wait_for_state(
-  state desired_state
+  state desired_state,
+  timeout_type timeout
   )
 {
-  _state.wait_for_value(desired_state);
+  return _state.wait_for_value(desired_state, timeout);
 }
 
 }

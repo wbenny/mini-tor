@@ -177,12 +177,13 @@ tor_stream::set_state(
   }
 }
 
-void
+threading::wait_result
 tor_stream::wait_for_state(
-  state desired_state
+  state desired_state,
+  timeout_type timeout
   )
 {
-  _state.wait_for_value(desired_state);
+  return _state.wait_for_value(desired_state, timeout);
 }
 
 void

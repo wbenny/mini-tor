@@ -102,7 +102,7 @@ event::index_from_wait_result(
 {
   return
     result == wait_result::timeout   ? -1 :
-    result == wait_result::error     ? -1 :
+    result == wait_result::failed    ? -1 :
     result  > wait_result::abandoned ? (static_cast<int>(result) - static_cast<int>(wait_result::abandoned)) :
     static_cast<int>(result) - static_cast<int>(wait_result::success);
 }

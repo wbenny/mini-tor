@@ -79,6 +79,10 @@ tor_socket::connect(
   // start the receive loop.
   //
   _recv_cell_loop_thread.start();
+
+  //
+  // this shouldn't fail unless the creation of the thread fails.
+  //
   wait_for_state(state::ready);
 }
 
@@ -304,12 +308,13 @@ tor_socket::set_state(
   _state.set_value(new_state);
 }
 
-void
+threading::wait_result
 tor_socket::wait_for_state(
-  state desired_state
+  state desired_state,
+  timeout_type timeout
   )
 {
-  _state.wait_for_value(desired_state);
+  return _state.wait_for_value(desired_state, timeout);
 }
 
 void

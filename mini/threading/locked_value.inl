@@ -2,6 +2,7 @@
 #include "locked_value.h"
 
 #include <mini/time.h>
+#include <mini/logger.h>
 
 namespace mini::threading {
 
@@ -85,7 +86,7 @@ locked_value<T>::wait_for_value(
       //
       if (event::index_from_wait_result(result) == 1)
       {
-        break;
+        return wait_result::failed;
       }
 
       //
@@ -95,6 +96,11 @@ locked_value<T>::wait_for_value(
       {
         timestamp_type elapsed_milliseconds = time::timestamp() - start_timestamp;
         remaining_timeout = timeout - elapsed_milliseconds;
+
+        if (remaining_timeout <= 0)
+        {
+          return wait_result::timeout;
+        }
       }
     }
   }
