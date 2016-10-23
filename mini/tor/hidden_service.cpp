@@ -131,7 +131,7 @@ hidden_service::find_responsible_directories(
 
   auto directory_list = _consensus.get_onion_routers_by_criteria({
     {}, {}, {},
-    onion_router::status_flag::hsdir | onion_router::status_flag::v2dir
+    onion_router::status_flag::hsdir
   });
 
   //
@@ -147,8 +147,8 @@ hidden_service::find_responsible_directories(
       directory_list.end(),
       descriptor_id_hex,
       [](onion_router* lhs, const string_ref rhs) -> bool {
-      return lhs->get_identity_fingerprint().compare(rhs) < 0;
-    }
+        return lhs->get_identity_fingerprint().compare(rhs) < 0;
+      }
     );
 
     auto index = algorithm::distance(directory_list.begin(), directory_list_iterator) + 1;
@@ -205,7 +205,7 @@ hidden_service::fetch_hidden_service_descriptor(
 
     directory_circuit->extend(responsible_directory);
 
-    if (directory_circuit->is_destroyed())
+    if (!directory_circuit->is_ready())
     {
       mini_warning("\tError while extending the directory circuit");
       continue;
@@ -317,7 +317,7 @@ hidden_service::introduce(
 
     introduce_circuit->extend(introduction_point);
 
-    if (introduce_circuit->is_destroyed())
+    if (!introduce_circuit->is_ready())
     {
       mini_warning("\tError while extending the introduce circuit");
       continue;
