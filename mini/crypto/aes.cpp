@@ -4,6 +4,7 @@
 //
 // inspired by:
 //   - https://github.com/t6x/reaver-wps-fork-t6x/blob/master/src/crypto/crypto_cryptoapi.c
+//   - https://modexp.wordpress.com/2016/03/10/windows-ctr-mode-with-crypto-api/
 //
 
 namespace mini::crypto {
@@ -177,21 +178,12 @@ aes::increment_counter(
   void
   )
 {
-  int carry = 1;
   for (int i = _key_size - 1; i >= 0; i--)
   {
-    int x = _counter[i] + carry;
-
-    if (x > 0xff)
+    if (++_counter[i])
     {
-      carry = 1;
+      break;
     }
-    else
-    {
-      carry = 0;
-    }
-
-    _counter[i] = static_cast<byte_type>(x);
   }
 }
 
