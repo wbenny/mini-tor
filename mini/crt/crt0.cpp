@@ -66,7 +66,7 @@ extern __declspec(allocate(".CRT$XCA")) _PVFV __xc_a[];
 extern __declspec(allocate(".CRT$XCZ")) _PVFV __xc_z[];
 
 static void __cdecl
-  _initterm(
+_initterm(
   _PVFV* const first,
   _PVFV* const last
   );
