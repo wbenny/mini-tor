@@ -41,7 +41,7 @@ extern __declspec(allocate(".CRT$XIA")) _PIFV __xi_a[];
 extern __declspec(allocate(".CRT$XIZ")) _PIFV __xi_z[];
 
 static int __cdecl
-  _initterm_e(
+_initterm_e(
   _PIFV* const first,
   _PIFV* const last
   );
