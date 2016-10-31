@@ -1,27 +1,25 @@
-LIBRARY msvcrt.dll
-
 EXPORTS
-  malloc=msvcrt.malloc
-  calloc=msvcrt.calloc
-  realloc=msvcrt.realloc
-  free=msvcrt.free
-  memmove=msvcrt.memmove
-  strstr=msvcrt.strstr
-  exit=msvcrt.exit
-  atexit=msvcrt.atexit
-  abort=msvcrt.abort
-  memchr=msvcrt.memchr
-  memcmp=msvcrt.memcmp
-  memcpy=msvcrt.memcpy
-  memset=msvcrt.memset
-  printf=msvcrt.printf
-  scanf=msvcrt.scanf
-  sscanf=msvcrt.sscanf
-  sprintf=msvcrt.sprintf
-  vprintf=msvcrt.vprintf
+  malloc
+  calloc
+  realloc
+  free
+  memmove
+  strstr
+  exit
+  atexit
+  abort
+  memchr
+  memcmp
+  memcpy
+  memset
+  printf
+  scanf
+  sscanf
+  sprintf
+  vprintf
 
-  wcslen=msvcrt.wcslen
-  wcstombs=msvcrt.wcstombs
+  wcslen
+  wcstombs
 
-  _EH_prolog=msvcrt._EH_prolog
-  __CxxFrameHandler3=msvcrt.__CxxFrameHandler3
+  _EH_prolog
+  __CxxFrameHandler3
