@@ -1,4 +1,6 @@
 #pragma once
+#include "common.h"
+
 #include <mini/common.h>
 #include <mini/time.h>
 
@@ -70,7 +72,7 @@ class thread
       void
       );
 
-    void
+    wait_result
     join(
       timeout_type timeout = wait_infinite
       );
@@ -82,7 +84,12 @@ class thread
     id
     get_id(
       void
-      );
+      ) const;
+
+    bool
+    is_running(
+      void
+      ) const;
 
     //
     // static methods.

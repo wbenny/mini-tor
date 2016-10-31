@@ -389,6 +389,9 @@
     <ClInclude Include="mini\crypto\dh1024.h">
       <Filter>Header Files\mini\crypto</Filter>
     </ClInclude>
+    <ClInclude Include="mini\threading\common.h">
+      <Filter>Header Files\mini\threading</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="mini\collections\list.inl">

@@ -508,6 +508,7 @@
     <ClInclude Include="mini\string.h" />
     <ClInclude Include="mini\string_hash.h" />
     <ClInclude Include="mini\string_ref.h" />
+    <ClInclude Include="mini\threading\common.h" />
     <ClInclude Include="mini\threading\event.h" />
     <ClInclude Include="mini\threading\locked_value.h" />
     <ClInclude Include="mini\threading\mutex.h" />

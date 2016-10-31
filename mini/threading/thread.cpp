@@ -31,7 +31,11 @@ native_thread_dispatcher(
 thread::thread(
   void
   )
-  : _thread_handle(INVALID_HANDLE_VALUE)
+  //
+  // it's quite important to not use the INVALID_HANDLE_VALUE constant,
+  // because the value is same as "current thread" pseudo-handle.
+  //
+  : _thread_handle(0)
   , _thread_id(0)
 {
 
@@ -87,6 +91,14 @@ thread::start(
   void
   )
 {
+  if (_thread_id != 0)
+  {
+    //
+    // thread is already running.
+    //
+    return;
+  }
+
   _thread_handle = CreateThread(
     NULL,                               // default security attributes
     0,                                  // use default stack size
@@ -101,24 +113,32 @@ thread::stop(
   void
   )
 {
-  if (_thread_handle != INVALID_HANDLE_VALUE)
+  if (_thread_handle == 0)
   {
-    TerminateThread(_thread_handle, 0);
-    CloseHandle(_thread_handle);
-
-    _thread_handle = INVALID_HANDLE_VALUE;
+    //
+    // thread is not running or is already terminated.
+    //
+    return;
   }
+
+  // bool is_terminated = WaitForSingleObject(_thread_handle, 0) == WAIT_OBJECT_0;
+
+  TerminateThread(_thread_handle, 0);
+  CloseHandle(_thread_handle);
+
+  _thread_handle = 0;
+  _thread_id = 0;
 }
 
-void
+wait_result
 thread::join(
   timeout_type timeout
   )
 {
-  WaitForSingleObject(
+  return static_cast<wait_result>(WaitForSingleObject(
     _thread_handle,
     (DWORD)timeout
-    );
+    ));
 }
 
 //
@@ -128,9 +148,19 @@ thread::join(
 thread::id
 thread::get_id(
   void
-  )
+  ) const
 {
-  return (id)GetCurrentThreadId();
+  return _thread_id;
+}
+
+bool
+thread::is_running(
+  void
+  ) const
+{
+  return
+    _thread_id != 0 &&
+    WaitForSingleObject(_thread_handle, 0) == WAIT_TIMEOUT;
 }
 
 //
