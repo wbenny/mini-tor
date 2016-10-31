@@ -152,20 +152,21 @@ class tor_client
 
         mini_info("Creating onion stream...");
         stream = _circuit->create_onion_stream(onion, port);
-
-        if (stream)
-        {
-          mini_info("Created...");
-        }
-        else
-        {
-          mini_error("Error while creating the onion stream");
-          return mini::string();
-        }
       }
       else
       {
+        mini_info("Creating stream...");
         stream = _circuit->create_stream(host, port);
+      }
+
+      if (stream)
+      {
+        mini_info("Created...");
+      }
+      else
+      {
+        mini_error("Error while creating the onion stream");
+        return mini::string();
       }
 
       mini_info("Sending request...");
