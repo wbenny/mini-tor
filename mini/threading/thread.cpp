@@ -33,7 +33,7 @@ thread::thread(
   )
   //
   // it's quite important to not use the INVALID_HANDLE_VALUE constant,
-  // because the value is same as "current thread" pseudo-handle.
+  // because the value is same as "current process" pseudo-handle.
   //
   : _thread_handle(0)
   , _thread_id(0)
