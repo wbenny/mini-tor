@@ -1,0 +1,19 @@
+version: 0.1.{build}
+skip_tags: true
+configuration: Release_Small
+platform: x86
+before_build:
+- cmd: curl -L -o upx.zip http://upx.sourceforge.net/download/upx391w.zip && 7z e upx.zip *.exe -r
+build:
+  project: mini-tor.sln
+  parallel: true
+  verbosity: minimal
+artifacts:
+- path: bin\x86\$(Configuration)\*.exe
+  name: mini-tor
+deploy:
+- provider: GitHub
+  tag: v$(appveyor_build_version)
+  auth_token:
+    secure: bBXezT+UC8HSipR8wUFj1RrOPgsFjRvJxoBERczc7dJuFH08RhqfPuuJcvpQQsCR
+  prerelease: false
