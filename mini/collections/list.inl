@@ -673,6 +673,7 @@ list<T, ALLOCATOR_TYPE>::clear(
   void
   )
 {
+  _allocator.destroy_range(_first, _last);
   _last = _first;
 }
 
