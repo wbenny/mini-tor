@@ -116,7 +116,7 @@ class tor_client
 
       if (router)
       {
-        extend_to(onion_router_name);
+        extend_to(router);
       }
     }
 
