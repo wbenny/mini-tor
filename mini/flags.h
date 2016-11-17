@@ -10,7 +10,7 @@ class flags final
 
   public:
     typedef T enum_type;
-    typename typedef std::underlying_type<T>::type underlying_type;
+    typedef typename std::underlying_type<T>::type underlying_type;
 
     flags(empty = 0) : i(0) {}
     flags(T f) : i(static_cast<underlying_type>(f)) {}
