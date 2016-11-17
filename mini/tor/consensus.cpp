@@ -55,7 +55,6 @@ static constexpr stack_buffer<authority_onion_router, 9> default_authority_list 
   authority_onion_router( "longclaw"  , "199.254.238.52"  ,  443 ,   80 /* , { 0x74, 0xA9, 0x10, 0x64, 0x6B, 0xCE, 0xEF, 0xBC, 0xD2, 0xE8, 0x74, 0xFC, 0x1D, 0xC9, 0x97, 0x43, 0x0F, 0x96, 0x81, 0x45 } */ ),
 };
 
-
 consensus::consensus(
   const string_ref cached_consensus_path,
   bool force_download
@@ -92,12 +91,19 @@ consensus::create(
   while (!have_valid_consensus)
   {
     consensus_content = force_download
-      ? download_from_random_authority("/tor/status-vote/current/consensus")
+      ? download_from_random_router("/tor/status-vote/current/consensus", true)
       : io::file::read_to_string(cached_consensus_path);
 
-    parse_consensus(consensus_content);
+    //
+    // assume newly downloaded consensus as valid.
+    //
+    const bool reject_invalid = !force_download;
+    parse_consensus(consensus_content, reject_invalid);
 
-    have_valid_consensus = _valid_until >= time::now();
+    //
+    // consider force_download-ed consensus as valid.
+    //
+    have_valid_consensus = force_download || (_valid_until >= time::now());
 
     //
     // if the consensus is invalid, we have to download it anyway.
@@ -126,14 +132,6 @@ consensus::destroy(
   {
     delete onion_router.second;
   }
-}
-
-string
-consensus::get_onion_router_descriptor(
-  const string_ref identity_fingerprint
-  )
-{
-  return download_from_random_authority("/tor/server/fp/" + identity_fingerprint);
 }
 
 onion_router*
@@ -218,25 +216,121 @@ consensus::get_random_onion_router_by_criteria(
 {
   auto routers = get_onion_routers_by_criteria(criteria);
 
+  const size_type random_index = crypto::random_device->get_random(routers.get_size());
+
   return !routers.is_empty()
-    ? routers[0]
+    ? routers[random_index]
     : nullptr;
 }
 
 string
-consensus::download_from_random_authority(
-  const string_ref path
+consensus::get_onion_router_descriptor(
+  const string_ref identity_fingerprint
+  )
+{
+  return download_from_random_router("/tor/server/fp/" + identity_fingerprint);
+}
+
+//
+// directories
+//
+
+tor::onion_router::status_flags
+consensus::get_allowed_dir_flags(
+  void
+  ) const
+{
+  return _allowed_dir_flags;
+}
+
+void
+consensus::set_allowed_dir_flags(
+  tor::onion_router::status_flags allowed_dir_flags
+  )
+{
+  _allowed_dir_flags = allowed_dir_flags;
+}
+
+const collections::list<uint16_t>&
+consensus::get_allowed_dir_ports(
+  void
+  ) const
+{
+  return _allowed_dir_ports;
+}
+
+void
+consensus::set_allowed_dir_ports(
+  const collections::list<uint16_t>& allowed_dir_ports
+  )
+{
+  _allowed_dir_ports = allowed_dir_ports;
+}
+
+size_t
+consensus::get_max_try_count(
+  void
+  ) const
+{
+  return _max_try_count;
+}
+
+void
+consensus::set_max_try_count(
+  size_t max_try_count
+  )
+{
+  _max_try_count = max_try_count;
+}
+
+string
+consensus::download_from_random_router(
+  const string_ref path,
+  bool only_authorities
+  )
+{
+  size_t try_count = 0;
+  string result;
+
+  do
+  {
+    result = download_from_random_router_impl(path, only_authorities);
+  } while (++try_count < _max_try_count && result.is_empty());
+
+  return result;
+}
+
+string
+consensus::download_from_random_router_impl(
+  const string_ref path,
+  bool only_authorities
   )
 {
   net::ip_address ip;
   uint16_t port;
 
-  auto authority = default_authority_list[
-    mini::crypto::random_device->get_random(default_authority_list.get_size())
-  ];
+  //
+  // if the onion router map is empty,
+  // we're stuck to authorities anyway.
+  //
+  if (only_authorities || _onion_router_map.is_empty())
+  {
+    const size_type random_index = crypto::random_device->get_random(default_authority_list.get_size());
 
-  ip = authority.ip;
-  port = authority.dir_port;
+    auto authority = default_authority_list[random_index];
+
+    ip = authority.ip;
+    port = authority.dir_port;
+  }
+  else
+  {
+    auto router = get_random_onion_router_by_criteria({
+      _allowed_dir_ports, {}, {}, _allowed_dir_flags
+    });
+
+    ip = router->get_ip_address();
+    port = router->get_dir_port();
+  }
 
   mini_debug(
     "consensus::download_from_random_authority() [path: http://%s:%u%s]",
@@ -249,7 +343,8 @@ consensus::download_from_random_authority(
 
 void
 consensus::parse_consensus(
-  const string_ref consensus_content
+  const string_ref consensus_content,
+  bool reject_invalid
   )
 {
   //
@@ -261,7 +356,7 @@ consensus::parse_consensus(
   // parse the consensus document.
   //
   consensus_parser parser;
-  parser.parse(*this, consensus_content);
+  parser.parse(*this, consensus_content, reject_invalid);
 }
 
 }
