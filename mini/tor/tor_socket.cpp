@@ -11,7 +11,6 @@ tor_socket::tor_socket(
   onion_router* onion_router
   )
   : _onion_router(onion_router)
-  , _recv_cell_loop_thread([this]() { recv_cell_loop(); })
 {
   if (onion_router != nullptr)
   {
@@ -78,7 +77,10 @@ tor_socket::connect(
   //
   // start the receive loop.
   //
-  _recv_cell_loop_thread.start();
+  _recv_cell_loop_thread.reset(new threading::thread_function(
+    [this]() { recv_cell_loop(); }));
+
+  _recv_cell_loop_thread->start();
 
   //
   // this shouldn't fail unless the creation of the thread fails.
@@ -297,7 +299,12 @@ tor_socket::set_state(
     // of the state.
     //
     _socket.reset();
-    _recv_cell_loop_thread.join();
+    _recv_cell_loop_thread->join();
+
+    //
+    // terminate the thread.
+    //
+    _recv_cell_loop_thread.reset();
 
     //
     // set back the protocol version to 3.

@@ -31,7 +31,7 @@ class thread
 
     thread(
       void
-      );
+      ) = default;
 
     thread(
       thread&& other
@@ -87,7 +87,7 @@ class thread
       ) const;
 
     bool
-    is_running(
+    is_alive(
       void
       ) const;
 
@@ -121,8 +121,13 @@ class thread
       thread* thread_instance
       );
 
-    HANDLE _thread_handle;
-    DWORD _thread_id;
+    //
+    // it's quite important to not use the INVALID_HANDLE_VALUE constant,
+    // because the value is same as "current process" pseudo-handle.
+    //
+    HANDLE _thread_handle = 0;
+    DWORD _thread_id = 0;
+    bool _has_been_terminated = false;
 };
 
 void

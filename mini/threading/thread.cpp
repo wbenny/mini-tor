@@ -29,22 +29,8 @@ native_thread_dispatcher(
 //
 
 thread::thread(
-  void
-  )
-  //
-  // it's quite important to not use the INVALID_HANDLE_VALUE constant,
-  // because the value is same as "current process" pseudo-handle.
-  //
-  : _thread_handle(0)
-  , _thread_id(0)
-{
-
-}
-
-thread::thread(
   thread&& other
   )
-  : thread()
 {
   swap(other);
 }
@@ -91,10 +77,18 @@ thread::start(
   void
   )
 {
-  if (_thread_id != 0)
+  if (_thread_handle != 0)
   {
     //
     // thread is already running.
+    //
+    return;
+  }
+
+  if (_has_been_terminated)
+  {
+    //
+    // do not start terminated thread again.
     //
     return;
   }
@@ -121,13 +115,12 @@ thread::stop(
     return;
   }
 
-  // bool is_terminated = WaitForSingleObject(_thread_handle, 0) == WAIT_OBJECT_0;
-
   TerminateThread(_thread_handle, 0);
   CloseHandle(_thread_handle);
 
   _thread_handle = 0;
   _thread_id = 0;
+  _has_been_terminated = true;
 }
 
 wait_result
@@ -154,12 +147,12 @@ thread::get_id(
 }
 
 bool
-thread::is_running(
+thread::is_alive(
   void
   ) const
 {
   return
-    _thread_id != 0 &&
+    _thread_handle != 0 &&
     WaitForSingleObject(_thread_handle, 0) == WAIT_TIMEOUT;
 }
 

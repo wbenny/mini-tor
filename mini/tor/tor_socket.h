@@ -147,10 +147,11 @@ class tor_socket
       );
 
     ptr<net::ssl_socket> _socket;
+    ptr<threading::thread_function> _recv_cell_loop_thread;
+
     onion_router* _onion_router = nullptr;
     uint32_t _protocol_version = protocol_version_initial;
 
-    threading::thread_function _recv_cell_loop_thread;
     collections::pair_list<circuit_id_type, circuit*> _circuit_map;
     threading::locked_value<state> _state = state::closed;
 };

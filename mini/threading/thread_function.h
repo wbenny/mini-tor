@@ -29,7 +29,9 @@ class thread_function
 
   private:
     void
-    thread_procedure() override
+    thread_procedure(
+      void
+      ) override
     {
       _functor();
     }
