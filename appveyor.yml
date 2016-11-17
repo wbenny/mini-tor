@@ -1,4 +1,7 @@
 version: 0.1.{build}
+branches:
+  only:
+  - master
 skip_tags: true
 configuration: Release_Small
 platform: x86
