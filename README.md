@@ -2,7 +2,7 @@
 
 # mini-tor
 
-mini-tor is a proof-of-concept utility for accessing internet content and hidden service content **(.onion)** via tor routers. this utility is aiming for as smallest size as possible (currently ~50kb, compressed with UPX ~24kb), which is achieved by using Microsoft CryptoAPI instead of embedding OpenSSL.
+mini-tor is a proof-of-concept utility for accessing internet content and hidden service content **(.onion)** via tor routers. this utility is aiming for as smallest size as possible (currently ~40kb, compressed with kkrunchy ~17kb), which is achieved by using Microsoft CryptoAPI instead of embedding OpenSSL.
 
 ### Usage
 
