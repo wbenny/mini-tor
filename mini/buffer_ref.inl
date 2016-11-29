@@ -1,5 +1,7 @@
 #include "byte_buffer_ref.h"
 
+#include <mini/memory.h>
+
 namespace mini {
 
 //
@@ -23,7 +25,7 @@ template <
 >
 constexpr buffer_ref<T>::buffer_ref(
   std::nullptr_t
-  ) : buffer_ref()
+  ) : buffer_ref<T>()
 {
 
 }
@@ -261,7 +263,7 @@ template <
 >
 buffer_ref<T>
 buffer_ref<T>::operator+(
-  size_t rhs
+  size_type rhs
   ) const
 {
   buffer_ref<T> result = *this;
@@ -275,7 +277,7 @@ template <
 >
 buffer_ref<T>
 buffer_ref<T>::operator-(
-  size_t rhs
+  size_type rhs
   ) const
 {
   buffer_ref<T> result = *this;
@@ -326,6 +328,33 @@ buffer_ref<T>::copy_to(
     : size;
 
   memory::copy(other._begin, _begin, size);
+}
+
+template <
+  typename T
+>
+void
+buffer_ref<T>::copy_to_unsafe(
+  T* other
+  ) const
+{
+  memory::copy(other, _begin, get_size());
+}
+
+template <
+  typename T
+>
+void
+buffer_ref<T>::reverse_copy_to(
+  mutable_buffer_ref<T> other,
+  size_type size
+  ) const
+{
+  size = size == (size_type)-1
+    ? min(get_size(), other.get_size())
+    : size;
+
+  memory::reverse_copy(other._begin, _begin, size);
 }
 
 template <
@@ -387,8 +416,8 @@ mutable_buffer_ref<T>::mutable_buffer_ref(
   ITERATOR_TYPE end
   )
 {
-  _begin = (T*)begin;
-  _end = (T*)end;
+  this->_begin = (T*)begin;
+  this->_end = (T*)end;
 }
 
 template <
@@ -402,8 +431,8 @@ mutable_buffer_ref<T>::mutable_buffer_ref(
   U (&array)[N]
   )
 {
-  _begin = (T*)array;
-  _end = (T*)array + N;
+  this->_begin = (T*)array;
+  this->_end = (T*)array + N;
 }
 
 //
@@ -432,7 +461,7 @@ mutable_buffer_ref<T>::operator=(
   const mutable_buffer_ref& other
   )
 {
-  buffer_ref::operator=(other);
+  buffer_ref<T>::operator=(other);
 
   return *this;
 }
@@ -445,7 +474,7 @@ mutable_buffer_ref<T>::operator=(
   mutable_buffer_ref&& other
   )
 {
-  buffer_ref::operator=(std::move(other));
+  buffer_ref<T>::operator=(std::move(other));
 
   return *this;
 }
@@ -462,7 +491,7 @@ mutable_buffer_ref<T>::swap(
   mutable_buffer_ref& other
   )
 {
-  buffer_ref::swap(other);
+  buffer_ref<T>::swap(other);
 }
 
 //
@@ -488,18 +517,18 @@ mutable_buffer_ref<T>::at(
   size_type index
   )
 {
-  return _begin[index];
+  return this->_begin[index];
 }
 
 template <
   typename T
 >
-typename buffer_ref<T>::value_type*
+typename mutable_buffer_ref<T>::value_type*
 mutable_buffer_ref<T>::get_buffer(
   void
   )
 {
-  return _begin;
+  return this->_begin;
 }
 
 //
@@ -514,7 +543,7 @@ mutable_buffer_ref<T>::begin(
   void
   )
 {
-  return _begin;
+  return this->_begin;
 }
 
 template <
@@ -525,7 +554,7 @@ mutable_buffer_ref<T>::end(
   void
   )
 {
-  return _end;
+  return this->_end;
 }
 
 //
@@ -540,7 +569,7 @@ mutable_buffer_ref<T>::operator++(
   void
   )
 {
-  return ++_begin;
+  return ++this->_begin;
 }
 
 template <
@@ -551,7 +580,7 @@ mutable_buffer_ref<T>::operator++(
   int
   )
 {
-  return _begin++;
+  return this->_begin++;
 }
 
 template <
@@ -562,7 +591,7 @@ mutable_buffer_ref<T>::operator--(
   void
   )
 {
-  return --_begin;
+  return --this->_begin;
 }
 
 template <
@@ -573,7 +602,7 @@ mutable_buffer_ref<T>::operator--(
   int
   )
 {
-  return _begin--;
+  return this->_begin--;
 }
 
 
@@ -589,7 +618,7 @@ mutable_buffer_ref<T>::zero_buffer(
   void
   )
 {
-  memset(_begin, 0, get_size());
+  memset(this->_begin, 0, this->get_size());
   return *this;
 }
 
@@ -598,11 +627,24 @@ template <
 >
 mutable_buffer_ref<T>&
 mutable_buffer_ref<T>::copy_from(
-  const buffer_ref other
+  const buffer_ref<T> other
+  )
+{
+  size_type size_to_copy = min(this->get_size(), other.get_size());
+  memory::copy(this->_begin, other._begin, size_to_copy);
+  return *this;
+}
+
+template <
+  typename T
+>
+mutable_buffer_ref<T>&
+mutable_buffer_ref<T>::reverse_copy_from(
+  const buffer_ref<T> other
   )
 {
   size_type size_to_copy = min(get_size(), other.get_size());
-  memory::copy(_begin, other._begin, size_to_copy);
+  memory::reverse_copy(_begin, other._begin, size_to_copy);
   return *this;
 }
 
@@ -616,10 +658,10 @@ mutable_buffer_ref<T>::slice(
   )
 {
   end = end == (size_type)-1
-    ? _end
+    ? this->get_size()
     : end;
 
-  return buffer_ref(_begin + begin, _begin + end);
+  return mutable_buffer_ref<T>(this->_begin + begin, this->_begin + end);
 }
 
 }

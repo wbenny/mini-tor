@@ -11,16 +11,6 @@ class tcp_socket
   : public io::stream
 {
   public:
-    static void
-    global_init(
-      void
-      );
-
-    static void
-    global_destroy(
-      void
-      );
-
     tcp_socket(
       void
       );
@@ -58,7 +48,7 @@ class tcp_socket
       return _port;
     }
 
-    void
+    bool
     connect(
       const string_ref host,
       uint16_t port
@@ -84,19 +74,19 @@ class tcp_socket
       void
       ) const override;
 
-    size_t
+    size_type
     read(
       void* buffer,
-      size_t size
+      size_type size
       ) override;
 
-    size_t
+    size_type
     write(
       const void* buffer,
-      size_t size
+      size_type size
       ) override;
 
-    size_t
+    size_type
     seek(
       intptr_t offset,
       seek_origin origin = seek_origin::current
@@ -107,12 +97,12 @@ class tcp_socket
       void
       ) override;
 
-    size_t
+    size_type
     get_size(
       void
       ) const override;
 
-    size_t
+    size_type
     get_position(
       void
       ) const override;
@@ -129,8 +119,8 @@ class tcp_socket
     string _host;
     ip_address _ip;
 
-    SOCKET _socket;
-    uint16_t _port;
+    SOCKET _socket = INVALID_SOCKET;
+    uint16_t _port = 0;
 };
 
 }

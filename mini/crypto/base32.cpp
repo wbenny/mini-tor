@@ -1,4 +1,3 @@
-#pragma once
 #include "base32.h"
 
 #include <mini/stack_buffer.h>
@@ -13,13 +12,13 @@ namespace mini::crypto::base32 {
 // functions.
 //
 
-static size_t
+static size_type
 get_encode_length(
-  size_t bytes
+  size_type bytes
   )
 {
-  size_t bits   = bytes * 8;
-  size_t length = bits  / 5;
+  size_type bits   = bytes * 8;
+  size_type length = bits  / 5;
 
   if ((bits % 5) > 0)
   {
@@ -29,13 +28,13 @@ get_encode_length(
   return length;
 }
 
-static size_t
+static size_type
 get_decode_length(
-  size_t bytes
+  size_type bytes
   )
 {
-  size_t bits   = bytes * 5;
-  size_t length = bits  / 8;
+  size_type bits   = bytes * 5;
+  size_type length = bits  / 8;
 
   return length;
 }
@@ -104,18 +103,18 @@ encode(
   //
   // get quotient & remainder.
   //
-  size_t q = input.get_size() / 5;
-  size_t r = input.get_size() % 5;
+  size_type q = input.get_size() / 5;
+  size_type r = input.get_size() % 5;
 
   byte_type out_chunk_buffer[8];
-  for (size_t j = 0; j < q; j++)
+  for (size_type j = 0; j < q; j++)
   {
     encode_chunk(&input[j * 5], &out_chunk_buffer[0]);
     memmove(&output[j * 8], &out_chunk_buffer[0], sizeof(byte_type) * 8);
   }
 
   byte_type out_padding_buffer[5] = { 0 };
-  for (size_t i = 0; i < r; i++)
+  for (size_type i = 0; i < r; i++)
   {
     out_padding_buffer[i] = input[input.get_size() - r + i];
   }
@@ -136,18 +135,18 @@ decode(
   //
   // get quotient & remainder.
   //
-  size_t q = input.get_size() / 8;
-  size_t r = input.get_size() % 8;
+  size_type q = input.get_size() / 8;
+  size_type r = input.get_size() % 8;
 
   byte_type out_chunk_buffer[5];
-  for (size_t j = 0; j < q; j++)
+  for (size_type j = 0; j < q; j++)
   {
     decode_chunk((byte_type*)&input[j * 8], &out_chunk_buffer[0]);
     memmove(&output[j * 5], &out_chunk_buffer[0], sizeof(byte_type) * 5);
   }
 
   byte_type out_padding_buffer[8] = { 0 };
-  for (size_t i = 0; i < r; i++)
+  for (size_type i = 0; i < r; i++)
   {
     out_padding_buffer[i] = input[input.get_size() - r + i];
   }

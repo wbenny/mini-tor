@@ -1,6 +1,4 @@
 #pragma once
-#include "provider.h"
-
 #include <mini/byte_buffer.h>
 
 #include <windows.h>
@@ -12,12 +10,16 @@ namespace mini::crypto {
 
 class random
 {
+  MINI_MAKE_NONCOPYABLE(random);
+
   public:
-    MINI_MAKE_NONCOPYABLE(random);
+    random(
+      void
+      ) = default;
 
     byte_buffer
     get_random_bytes(
-      size_t byte_count
+      size_type byte_count
       );
 
     void
@@ -53,17 +55,8 @@ class random
     {
       return get_random<std::make_unsigned_t<T>>() % max;
     }
-
-  private:
-    friend class provider;
-
-    random(
-      provider* crypto_provider
-      );
-
-    provider* _provider;
 };
 
-extern ptr<random> random_device;
+extern random random_device;
 
 }

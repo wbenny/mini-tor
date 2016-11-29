@@ -32,9 +32,9 @@ class pair_list
       const TKEY& key
       );
 
-    template <
-      typename = std::enable_if_t<std::is_copy_constructible_v<TKEY> && std::is_copy_constructible_v<TVALUE>>
-    >
+    //
+    // both TKEY and TVALUE must be copy-constructible.
+    //
     pair<TKEY, TVALUE>&
     insert(
       const TKEY& key,
@@ -79,10 +79,11 @@ class pair_list
 
     void
     reserve(
-      size_t new_capacity
+      size_type new_capacity
       );
 
-    void clear(
+    void
+    clear(
       void
       );
 
@@ -141,12 +142,12 @@ class pair_list
       pair_list<TKEY, TVALUE>& other
       );
 
-    size_t
+    size_type
     get_size(
       void
       ) const;
 
-    size_t
+    size_type
     get_capacity(
       void
       ) const;

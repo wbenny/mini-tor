@@ -22,10 +22,10 @@ tor_stream::~tor_stream(
   close();
 }
 
-size_t
+size_type
 tor_stream::read(
   void* buffer,
-  size_t size
+  size_type size
   )
 {
   //
@@ -52,7 +52,7 @@ tor_stream::read(
   //
   // process data
   //
-  size_t size_to_copy;
+  size_type size_to_copy;
   mini_lock(_buffer_mutex)
   {
     size_to_copy = min(size, _buffer.get_size());
@@ -64,10 +64,10 @@ tor_stream::read(
   return size_to_copy;
 }
 
-size_t
+size_type
 tor_stream::write(
   const void* buffer,
-  size_t size
+  size_type size
   )
 {
   if (get_state() == state::destroyed)
@@ -87,12 +87,15 @@ tor_stream::write(
   return size;
 }
 
-size_t
+size_type
 tor_stream::seek(
   intptr_t offset,
   seek_origin origin
   )
 {
+  MINI_UNREFERENCED(offset);
+  MINI_UNREFERENCED(origin);
+
   return 0;
 }
 
@@ -104,7 +107,7 @@ tor_stream::flush(
   return;
 }
 
-size_t
+size_type
 tor_stream::get_size(
   void
   ) const
@@ -112,7 +115,7 @@ tor_stream::get_size(
   return 0;
 }
 
-size_t
+size_type
 tor_stream::get_position(
   void
   ) const

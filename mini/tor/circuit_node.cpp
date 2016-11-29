@@ -2,7 +2,6 @@
 #include "crypto/hybrid_encryption.h"
 
 #include <mini/logger.h>
-#include <mini/crypto/aes.h>
 #include <mini/crypto/sha1.h>
 
 namespace mini::tor {
@@ -29,13 +28,12 @@ derive_keys(
 
 circuit_node::circuit_node(
   circuit* circuit,
-  onion_router* or,
+  onion_router* router,
   circuit_node_type node_type
   )
   : _circuit(circuit)
   , _type(node_type)
-  , _onion_router(or)
-  , _dh(node_type == circuit_node_type::introduction_point ? 128 : DH_SEC_LEN)
+  , _onion_router(router)
 {
 
 }
@@ -46,6 +44,14 @@ circuit_node::get_circuit(
   )
 {
   return _circuit;
+}
+
+circuit_node_type
+circuit_node::get_circuit_node_type(
+  void
+  ) const
+{
+  return _type;
 }
 
 onion_router*

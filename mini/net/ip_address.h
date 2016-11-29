@@ -1,5 +1,6 @@
 #pragma once
 #include <mini/string.h>
+#include <mini/ctl.h>
 
 #include <winsock2.h>
 
@@ -59,7 +60,7 @@ class ip_address
       const char* value
       )
     {
-      return ip_address(ip_to_int_chunk(value));
+      return ip_address(ip_string_to_int(value));
     }
 
     static constexpr uint32_t
@@ -67,17 +68,21 @@ class ip_address
       const char* value
       )
     {
-      return ip_to_int_chunk(value);
+      return ip_string_to_int(value);
     }
 
     string
-    to_string() const
+    to_string(
+      void
+      ) const
     {
       return string(inet_ntoa(to_in_addr()));
     }
 
     in_addr
-    to_in_addr() const
+    to_in_addr(
+      void
+      ) const
     {
       in_addr result;
       result.S_un.S_addr = _ip;
@@ -86,54 +91,24 @@ class ip_address
     }
 
     constexpr uint32_t
-    to_int() const
+    to_int(
+      void
+      ) const
     {
       return _ip;
     }
 
   private:
-    constexpr static bool
-    is_digit(
-      char c
-      )
-    {
-      return c <= '9' && c >= '0';
-    }
-
-    constexpr static uint32_t
-    stoi_impl(
-      const char* str,
-      int value = 0
-      )
-    {
-      return *str
-        ? is_digit(*str)
-          ? stoi_impl(str + 1, (*str - '0') + value * 10)
-          : value
-        : value;
-    }
-
-    constexpr static const char*
-    strchr(
-      const char* s,
-      int c
-      )
-    {
-      return *s == static_cast<char>(c) ? s
-        : !*s ? nullptr
-        : strchr(s + 1, c);
-    }
-
     static constexpr uint32_t
-    ip_to_int_chunk(
+    ip_string_to_int(
       const char* value
       )
     {
       return
-        stoi_impl(value) |
-        stoi_impl(strchr(value, '.') + 1) << 8 |
-        stoi_impl(strchr(strchr(value, '.') + 1, '.') + 1) << 16 |
-        stoi_impl(strchr(strchr(strchr(value, '.') + 1, '.') + 1, '.') + 1) << 24;
+        static_cast<uint32_t>(ctl::atoi(value)) |
+        static_cast<uint32_t>(ctl::atoi(ctl::strchr(value, '.') + 1)) << 8 |
+        static_cast<uint32_t>(ctl::atoi(ctl::strchr(ctl::strchr(value, '.') + 1, '.') + 1)) << 16 |
+        static_cast<uint32_t>(ctl::atoi(ctl::strchr(ctl::strchr(ctl::strchr(value, '.') + 1, '.') + 1, '.') + 1)) << 24;
     }
 
     uint32_t _ip = 0;

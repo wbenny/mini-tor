@@ -1,4 +1,3 @@
-#pragma once
 #include "relay_cell.h"
 #include "circuit_node.h"
 #include "circuit.h"
@@ -10,21 +9,24 @@ namespace mini::tor {
 
 relay_cell::relay_cell(
   circuit_node* node,
-  const cell& cell
+  const cell& c
   )
-  : cell(cell)
+  : cell(c)
   , _circuit_node(node)
 {
-  io::memory_stream  payload_stream(cell.get_payload());
+  io::memory_stream  payload_stream(c.get_payload());
   io::stream_wrapper payload_buffer(payload_stream, endianness::big_endian);
 
-  cell_command       relay_command = payload_buffer.read<cell_command>();
-  uint16_t           recognized    = payload_buffer.read<uint16_t>();
-  tor_stream_id_type stream_id     = payload_buffer.read<tor_stream_id_type>();
-  uint32_t           digest        = payload_buffer.read<uint32_t>();
-  payload_size_type  payload_size  = payload_buffer.read<payload_size_type>();
+  cell_command       relay_command  = payload_buffer.read<cell_command>();
+  uint16_t           recognized     = payload_buffer.read<uint16_t>();
+  tor_stream_id_type stream_id      = payload_buffer.read<tor_stream_id_type>();
+  uint32_t           digest         = payload_buffer.read<uint32_t>();
+  payload_size_type  payload_length = payload_buffer.read<payload_size_type>();
 
-  byte_buffer payload(payload_size);
+  MINI_UNREFERENCED(recognized);
+  MINI_UNREFERENCED(digest);
+
+  byte_buffer payload(payload_length);
   payload_buffer.read(payload);
 
   _relay_command = relay_command;

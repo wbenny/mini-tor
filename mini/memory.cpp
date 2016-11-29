@@ -39,6 +39,22 @@ copy(
 }
 
 void*
+reverse(
+  void* destination,
+  size_t size
+  )
+{
+  byte_type* destination_bytes = reinterpret_cast<byte_type*>(destination);
+
+  for (size_t i = 0; i < (size / 2); i++)
+  {
+    swap(destination_bytes[i], destination_bytes[size - 1 - i]);
+  }
+
+  return destination;
+}
+
+void*
 reverse_copy(
   void* destination,
   const void* source,
@@ -126,6 +142,16 @@ find(
   }
 
   return nullptr;
+}
+
+void*
+set(
+  void* destination,
+  int value,
+  size_t size
+  )
+{
+  return memset(destination, value, size);
 }
 
 void*

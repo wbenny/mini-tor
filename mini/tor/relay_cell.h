@@ -11,7 +11,7 @@ class relay_cell
   : public cell
 {
   public:
-    static constexpr size_t payload_data_size = cell::payload_size - 11;
+    static constexpr size_type payload_data_size = cell::payload_size - 11;
 
     relay_cell(
       void
@@ -20,7 +20,7 @@ class relay_cell
     relay_cell(
       circuit_node* node,
       const cell& cell
-    );
+      );
 
     relay_cell(
       circuit_id_type circuit_id,

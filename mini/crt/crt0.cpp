@@ -503,7 +503,7 @@ operator new[](
 void __cdecl
 operator delete(
   void* pointer
-  )
+  ) noexcept
 {
   free(pointer);
 }
@@ -512,7 +512,7 @@ void __cdecl
 operator delete(
   void* pointer,
   size_t
-  )
+  ) noexcept
 {
   free(pointer);
 }
@@ -520,7 +520,16 @@ operator delete(
 void __cdecl
 operator delete[](
   void* pointer
-  )
+  ) noexcept
+{
+  free(pointer);
+}
+
+void __cdecl
+operator delete[](
+  void* pointer,
+  size_t
+  ) noexcept
 {
   free(pointer);
 }

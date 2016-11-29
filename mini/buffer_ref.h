@@ -179,12 +179,12 @@ class buffer_ref
 
     buffer_ref<T>
     operator+(
-      size_t rhs
+      size_type rhs
       ) const;
 
     buffer_ref<T>
     operator-(
-      size_t rhs
+      size_type rhs
       ) const;
 
     //
@@ -203,6 +203,17 @@ class buffer_ref
 
     void
     copy_to(
+      mutable_buffer_ref<T> other,
+      size_type size = (size_type)-1
+      ) const;
+
+    void
+    copy_to_unsafe(
+      T* other
+      ) const;
+
+    void
+    reverse_copy_to(
       mutable_buffer_ref<T> other,
       size_type size = (size_type)-1
       ) const;
@@ -394,7 +405,12 @@ class mutable_buffer_ref
 
     mutable_buffer_ref&
     copy_from(
-      const buffer_ref other
+      const buffer_ref<T> other
+      );
+
+    mutable_buffer_ref&
+    reverse_copy_from(
+      const buffer_ref<T> other
       );
 
     mutable_buffer_ref

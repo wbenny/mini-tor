@@ -73,12 +73,12 @@ class cell
     //        CELL_LEN(v) = 512    if v is less than 4;
     //                    = 514    otherwise.
     //
-    static constexpr size_t size = 514;
+    static constexpr size_type size = 514;
 
     //
     // PAYLOAD_LEN -- The longest allowable cell payload, in bytes. (509)
     //
-    static constexpr size_t payload_size = 509;
+    static constexpr size_type payload_size = 509;
 
     cell(
       void

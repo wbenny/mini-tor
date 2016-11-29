@@ -41,6 +41,8 @@ _purecall(void);
 
 #pragma region CRT standard functions
 
+#ifndef MINI_MSVCRT_LIB
+
 #pragma region stdio.h
 
 #pragma endregion
@@ -173,6 +175,8 @@ strstr(
 
 #pragma endregion
 
+#endif
+
 #pragma endregion
 
 }
@@ -194,18 +198,24 @@ operator new[](
 void __cdecl
 operator delete(
   void* pointer
-  );
+  ) noexcept;
 
 void __cdecl
 operator delete(
   void* pointer,
   size_t
-  );
+  ) noexcept;
 
 void __cdecl
 operator delete[](
   void* pointer
-  );
+  ) noexcept;
+
+void __cdecl
+operator delete[](
+  void* pointer,
+  size_t
+  ) noexcept;
 
 #pragma endregion
 

@@ -283,6 +283,23 @@ list<T, ALLOCATOR_TYPE>::get_buffer(
   return _first;
 }
 
+template <
+  typename T,
+  typename ALLOCATOR_TYPE
+>
+buffer_ref<T>
+list<T, ALLOCATOR_TYPE>::slice(
+  size_type begin,
+  size_type end
+  ) const
+{
+  end = end == (size_type)-1
+    ? get_size()
+    : end;
+
+  return buffer_ref<T>(_first + begin, _first + end);
+}
+
 //
 // iterators.
 //
@@ -394,6 +411,23 @@ template <
   typename T,
   typename ALLOCATOR_TYPE
 >
+void
+list<T, ALLOCATOR_TYPE>::resize_unsafe(
+  size_type new_size
+  )
+{
+  if (new_size > get_capacity())
+  {
+    reserve(max(new_size, (get_size() * 3) / 2));
+  }
+
+  _last = _first + new_size;
+}
+
+template <
+  typename T,
+  typename ALLOCATOR_TYPE
+>
 typename list<T, ALLOCATOR_TYPE>::size_type
 list<T, ALLOCATOR_TYPE>::get_capacity(
   void
@@ -493,9 +527,6 @@ template <
   typename T,
   typename ALLOCATOR_TYPE
 >
-template<
-  typename
->
 void
 list<T, ALLOCATOR_TYPE>::add_many(
   const buffer_ref<T> items
@@ -504,9 +535,11 @@ list<T, ALLOCATOR_TYPE>::add_many(
   size_type new_size = get_size() + items.get_size();
   reserve_to_at_least(new_size);
 
+  //
+  // TODO:
+  // fix for non-POD types.
+  //
   memory::copy(&_first[get_size()], items.get_buffer(), items.get_size() * sizeof(T));
-
-  //_allocator.construct_range(_first + get_size(), _first + new_size, T());
 
   _last = _first + new_size;
 }
@@ -571,9 +604,6 @@ template <
   typename T,
   typename ALLOCATOR_TYPE
 >
-template<
-  typename
->
 void
 list<T, ALLOCATOR_TYPE>::insert_many(
   const buffer_ref<T> items,
@@ -583,9 +613,11 @@ list<T, ALLOCATOR_TYPE>::insert_many(
   size_type new_size = index + items.get_size();
   reserve_to_at_least(new_size);
 
+  //
+  // TODO:
+  // fix for non-POD types.
+  //
   memory::copy(&_first[index], items.get_buffer(), items.get_size());
-
-  //_allocator.construct_range(_first + get_size(), _first + new_size, T());
 
   _last = _first + new_size;
 }
@@ -604,6 +636,61 @@ list<T, ALLOCATOR_TYPE>::remove(
   if (index != not_found)
   {
     remove_at(index);
+  }
+}
+
+// 0 0 0 0 0 0
+//   X X
+template <
+  typename T,
+  typename ALLOCATOR_TYPE
+>
+void
+list<T, ALLOCATOR_TYPE>::remove_range(
+  size_type from_offset,
+  size_type count
+  )
+{
+  if (is_empty())
+  {
+    return;
+  }
+
+  const size_type max_count = get_size() - 1;
+
+  if (count == (size_type)-1)
+  {
+    count = max_count;
+  }
+
+  //
+  // special case #1
+  // removing all items
+  //
+  if (from_offset == 0 && count == max_count)
+  {
+    clear();
+  }
+  //
+  // special case #2
+  // removing items from any location to the end
+  //
+  else if (count == max_count)
+  {
+    resize_unsafe(get_size() - count);
+  }
+  //
+  // everything else:
+  // move buffer & resize
+  //
+  else
+  {
+    memory::move(
+      _first + from_offset,
+      _first + from_offset + count,
+      get_size() - count - from_offset);
+
+    resize_unsafe(get_size() - count);
   }
 }
 
@@ -685,9 +772,6 @@ template <
   typename T,
   typename ALLOCATOR_TYPE
 >
-template <
-  typename
->
 list<T, ALLOCATOR_TYPE>::operator buffer_ref<T>(
   void
   ) const
@@ -699,36 +783,11 @@ template <
   typename T,
   typename ALLOCATOR_TYPE
 >
-template <
-  typename
->
 list<T, ALLOCATOR_TYPE>::operator mutable_buffer_ref<T>(
   void
   )
 {
   return mutable_buffer_ref<T>(_first, _last);
-}
-
-template <
-  typename T,
-  typename ALLOCATOR_TYPE
->
-list<T, ALLOCATOR_TYPE>::operator byte_buffer_ref(
-  void
-  ) const
-{
-  return byte_buffer_ref((byte_type*)_first, _last);
-}
-
-template <
-  typename T,
-  typename ALLOCATOR_TYPE
->
-list<T, ALLOCATOR_TYPE>::operator mutable_byte_buffer_ref(
-  void
-  )
-{
-  return mutable_byte_buffer_ref((byte_type*)_first, _last);
 }
 
 //

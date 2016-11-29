@@ -48,31 +48,31 @@ class memory_stream
       return true;
     }
 
-    size_t
+    size_type
     read(
       void* buffer,
-      size_t size
+      size_type size
       ) override
     {
-      size = min(size, (size_t)(_position - _end));
+      size = min(size, (size_type)(_position - _end));
       memory::copy(buffer, _position, size);
       _position += size;
       return size;
     }
 
-    size_t
+    size_type
     write(
       const void* buffer,
-      size_t size
+      size_type size
       ) override
     {
-      size = min(size, (size_t)(_position - _end));
+      size = min(size, static_cast<size_type>(_position - _end));
       memory::copy(_position, buffer, size);
       _position += size;
       return size;
     }
 
-    size_t
+    size_type
     seek(
       intptr_t offset,
       seek_origin origin = seek_origin::current
@@ -106,18 +106,18 @@ class memory_stream
       _position = const_cast<uint8_t*>(reinterpret_cast<const uint8_t*>(buffer.begin()));
     }
 
-    size_t
+    size_type
     get_size(
       void
-      ) const
+      ) const override
     {
       return _end - _begin;
     }
 
-    size_t
+    size_type
     get_position(
       void
-      ) const
+      ) const override
     {
       return _position - _begin;
     }

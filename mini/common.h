@@ -13,8 +13,44 @@
 # undef max
 #endif
 
-#define MINI_UNREACHABLE            \
-  __assume(0)
+#define MINI_UNREFERENCED(p)        \
+  (void)(p)
+
+//
+// ref: http://stackoverflow.com/a/19532607
+//
+#define MINI_UNREFERENCED_PARAMETER_PACK(p) \
+  MINI_UNREFERENCED_PARAMETER_PACK_impl{ p... }
+
+struct MINI_UNREFERENCED_PARAMETER_PACK_impl
+{
+  template <
+    typename... ARGS
+  >
+  MINI_UNREFERENCED_PARAMETER_PACK_impl(
+    const ARGS&...
+    )
+  {
+
+  }
+};
+
+//
+// this macro marks unreachable code
+//
+#if defined(__clang__)
+
+# define MINI_UNREACHABLE   __builtin_unreachable()
+
+#elif defined(_MSC_VER)
+
+# define MINI_UNREACHABLE   __assume(0)
+
+#else
+
+# define MINI_UNREACHABLE
+
+#endif
 
 #define MINI_MAKE_NONCOPYABLE(type) \
   type(                             \
@@ -36,11 +72,34 @@
 
 namespace mini {
 
-using byte_type = uint8_t;
-using size_type = size_t;
+using byte_type               = uint8_t;
+using size_type               = size_t;
 using pointer_difference_type = ptrdiff_t;
 
+struct little_endian_tag {};
+struct big_endian_tag    {};
+
+enum class endianness
+{
+  little_endian,
+  big_endian,
+};
+
+static constexpr endianness current_endianness = endianness::little_endian;
+
 static constexpr size_type size_type_max = static_cast<size_type>(-1);
+
+template <
+  typename T,
+  size_type N
+>
+constexpr size_type
+countof(
+  const T (&)[N]
+  )
+{
+  return N;
+}
 
 template <
   typename T
@@ -100,9 +159,9 @@ swap(
   T& rhs
   )
 {
-  T temp(lhs);
-  lhs = rhs;
-  rhs = temp;
+  T temp(std::move(lhs));
+  lhs = std::move(rhs);
+  rhs = std::move(temp);
 }
 
 template <
@@ -121,7 +180,7 @@ swap_endianness(
 
   source.u = u;
 
-  for (size_t i = 0; i < sizeof(T); i++)
+  for (size_type i = 0; i < sizeof(T); i++)
   {
     dest.u8[i] = source.u8[sizeof(T) - i - 1];
   }

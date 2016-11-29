@@ -21,12 +21,16 @@ namespace mini::threading {
 
 class mutex
 {
-  public:
-    MINI_MAKE_NONCOPYABLE(mutex);
+  MINI_MAKE_NONCOPYABLE(mutex);
 
+  public:
     mutex(
       void
       );
+
+    mutex(
+      mutex&& other
+      ) = default;
 
     ~mutex(
       void
@@ -48,8 +52,12 @@ class mutex
 
 class mutex_holder
 {
+  MINI_MAKE_NONCOPYABLE(mutex_holder);
+
   public:
-    MINI_MAKE_NONCOPYABLE(mutex_holder);
+    mutex_holder(
+      mutex_holder&& other
+      ) = default;
 
     mutex_holder(
       mutex& mutex
@@ -69,8 +77,12 @@ class mutex_holder
 
 class mutex_unholder
 {
+  MINI_MAKE_NONCOPYABLE(mutex_unholder);
+
   public:
-    MINI_MAKE_NONCOPYABLE(mutex_unholder);
+    mutex_unholder(
+      mutex_unholder&& other
+      ) = default;
 
     mutex_unholder(
       mutex& mutex

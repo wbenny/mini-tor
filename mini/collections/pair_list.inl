@@ -71,9 +71,6 @@ template <
   typename TKEY,
   typename TVALUE
 >
-template <
-  typename
->
 pair<TKEY, TVALUE>&
 pair_list<TKEY, TVALUE>::insert(
   const TKEY& key,
@@ -210,7 +207,7 @@ template <
 >
 void
 pair_list<TKEY, TVALUE>::reserve(
-  size_t new_capacity
+  size_type new_capacity
   )
 {
   return _buffer.reserve(new_capacity);
@@ -364,7 +361,7 @@ template <
   typename TKEY,
   typename TVALUE
 >
-size_t
+size_type
 pair_list<TKEY, TVALUE>::get_size(
   void
   ) const
@@ -376,7 +373,7 @@ template <
   typename TKEY,
   typename TVALUE
 >
-size_t
+size_type
 pair_list<TKEY, TVALUE>::get_capacity(
   void
   ) const

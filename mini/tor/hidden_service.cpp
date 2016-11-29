@@ -10,6 +10,7 @@
 #include <mini/io/stream_reader.h>
 #include <mini/io/stream_wrapper.h>
 #include <mini/tor/parsers/hidden_service_descriptor_parser.h>
+#include <mini/net/http.h>
 
 namespace mini::tor {
 
@@ -38,7 +39,7 @@ hidden_service::connect(
     //
     // create rendezvous cookie.
     //
-    crypto::provider_factory.create_random()->get_random_bytes(_rendezvous_cookie);
+    crypto::random_device.get_random_bytes(_rendezvous_cookie);
 
     //
     // establish rendezvous.
@@ -153,7 +154,7 @@ hidden_service::find_responsible_directories(
 
     auto index = algorithm::distance(directory_list.begin(), directory_list_iterator) + 1;
 
-    for (size_t i = 0; i < 3; i++)
+    for (size_type i = 0; i < 3; i++)
     {
       _responsible_directory_list.add(directory_list[(index + i) % directory_list.get_size()]);
     }
@@ -234,18 +235,30 @@ hidden_service::fetch_hidden_service_descriptor(
     //
     // request the hidden service descriptor.
     //
+    const string descriptor_path = string::format(
+      "/tor/rendezvous2/%s",
+      crypto::base32::encode(get_descriptor_id(replica)).get_buffer());
+
     mini_debug(
       "hidden_service::fetch_hidden_service_descriptor() [path: %s]",
-      ("/tor/rendezvous2/" + crypto::base32::encode(get_descriptor_id(replica))).get_buffer());
+      descriptor_path.get_buffer());
 
     mini_info("\tSending request for hidden service descriptor...");
-    string request = "GET /tor/rendezvous2/" + crypto::base32::encode(get_descriptor_id(replica)) + " HTTP/1.1\r\nHost: " + responsible_directory->get_ip_address().to_string() + "\r\n\r\n";
-    directory_stream->write(request.get_buffer(), request.get_size());
-    mini_info("\tRequest sent...");
 
-    mini_info("\tReceiving hidden service descriptor...");
-    io::stream_reader stream_reader(*directory_stream);
-    string hidden_service_descriptor = stream_reader.read_string_to_end();
+    const string hidden_service_descriptor =
+      net::http::client::get_on_stream(
+        *directory_stream,
+        responsible_directory->get_ip_address().to_string(),
+        responsible_directory->get_dir_port(),
+        descriptor_path);
+
+    //string request = "GET /tor/rendezvous2/" + crypto::base32::encode(get_descriptor_id(replica)) + " HTTP/1.1\r\nHost: " + responsible_directory->get_ip_address().to_string() + "\r\n\r\n";
+    //directory_stream->write(request.get_buffer(), request.get_size());
+    //mini_info("\tRequest sent...");
+    //
+    //mini_info("\tReceiving hidden service descriptor...");
+    //io::stream_reader stream_reader(*directory_stream);
+    //string hidden_service_descriptor = stream_reader.read_string_to_end();
     mini_info("\tHidden service descriptor received...");
 
     //
@@ -295,7 +308,7 @@ hidden_service::introduce(
       _socket.get_onion_router()->get_or_port());
 
     ptr<circuit> introduce_circuit = _socket.create_circuit();
-    
+
     if (!introduce_circuit)
     {
       //

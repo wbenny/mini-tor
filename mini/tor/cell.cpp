@@ -131,7 +131,7 @@ cell::get_bytes(
 
   if (protocol_version < 4)
   {
-    cell_buffer.write<circuit_id_v3_type>(_circuit_id);
+    cell_buffer.write<circuit_id_v3_type>(static_cast<circuit_id_v3_type>(_circuit_id));
   }
   else
   {

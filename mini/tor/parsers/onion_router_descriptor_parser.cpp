@@ -1,9 +1,10 @@
-#pragma once
 #include "onion_router_descriptor_parser.h"
 
 #include <mini/crypto/base64.h>
 
 namespace mini::tor {
+
+constexpr onion_router_descriptor_parser::control_word_list onion_router_descriptor_parser::control_words;
 
 void
 onion_router_descriptor_parser::parse(

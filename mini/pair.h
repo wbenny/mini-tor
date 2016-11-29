@@ -3,7 +3,10 @@
 
 namespace mini {
 
-template <typename T, typename U>
+template <
+  typename T,
+  typename U
+>
 struct pair
 {
   pair(

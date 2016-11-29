@@ -3,6 +3,31 @@
 #include <windows.h>
 #include <winternl.h>
 
+// struct tm
+// {
+//   int tm_sec;   // seconds after the minute - [0, 60] including leap second
+//   int tm_min;   // minutes after the hour - [0, 59]
+//   int tm_hour;  // hours since midnight - [0, 23]
+//   int tm_mday;  // day of the month - [1, 31]
+//   int tm_mon;   // months since January - [0, 11]
+//   int tm_year;  // years since 1900
+//   int tm_wday;  // days since Sunday - [0, 6]
+//   int tm_yday;  // days since January 1 - [0, 365]
+//   int tm_isdst; // daylight savings time flag
+// };
+
+extern "C"
+uint32_t __cdecl
+time(
+  uint32_t* _Time
+  );
+
+extern "C"
+uint32_t __cdecl
+mktime(
+  struct tm* timeptr
+  );
+
 namespace mini {
 
 //
@@ -38,28 +63,22 @@ time::parse(
   // must be in format "2016-06-14 01:00:00"
   //
 
-  SYSTEMTIME system_time = { 0 };
+  tm system_time = { 0 };
   sscanf(
     value.get_buffer(),
-    "%04hd-%02hd-%02hd %02hd:%02hd:%02hd",
-    &system_time.wYear,
-    &system_time.wMonth,
-    &system_time.wDay,
-    &system_time.wHour,
-    &system_time.wMinute,
-    &system_time.wSecond);
+    "%04d-%02d-%02d %02d:%02d:%02d",
+    &system_time.tm_year,
+    &system_time.tm_mon,
+    &system_time.tm_mday,
+    &system_time.tm_hour,
+    &system_time.tm_min,
+    &system_time.tm_sec);
 
-  LARGE_INTEGER file_time;
-  SystemTimeToFileTime(
-    &system_time,
-    (FILETIME*)&file_time
-    );
+  system_time.tm_year -=  1900;
+  system_time.tm_mon  -=     1;
+  system_time.tm_isdst =    -1;
 
-  time result;
-  RtlTimeToSecondsSince1970(
-    &file_time,
-    (ULONG*)&_timestamp
-    );
+  _timestamp = mktime(&system_time);
 }
 
 uint32_t
@@ -79,13 +98,7 @@ time::now(
   void
   )
 {
-  LARGE_INTEGER file_time;
-  GetSystemTimeAsFileTime((FILETIME*)&file_time);
-
-  time result;
-  RtlTimeToSecondsSince1970(&file_time, (ULONG*)&result._timestamp);
-
-  return result;
+  return ::time(nullptr);
 }
 
 timestamp_type

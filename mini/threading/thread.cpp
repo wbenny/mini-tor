@@ -1,4 +1,3 @@
-#pragma once
 #include "thread.h"
 
 namespace mini::threading {
@@ -36,7 +35,7 @@ thread::thread(
 }
 
 thread::thread(
-  current_thread_tag&
+  current_thread_tag
   )
   : _thread_handle(GetCurrentThread())
   , _thread_id(GetCurrentThreadId())

@@ -9,16 +9,16 @@ class stream
     //
     // this value is returned when a stream has been closed during read.
     //
-    static constexpr size_t closed = (size_t)0;
+    static constexpr size_type closed = (size_type)0;
 
     //
     // this value is returned when a stream has encountered an error.
     //
-    static constexpr size_t error  = (size_t)-1;
+    static constexpr size_type error  = (size_type)-1;
 
     static bool
     success(
-      size_t return_value
+      size_type return_value
       )
     {
       return
@@ -55,19 +55,19 @@ class stream
       void
       ) const = 0;
 
-    virtual size_t
+    virtual size_type
     read(
       void* buffer,
-      size_t size
+      size_type size
       ) = 0;
 
-    virtual size_t
+    virtual size_type
     write(
       const void* buffer,
-      size_t size
+      size_type size
       ) = 0;
 
-    virtual size_t
+    virtual size_type
     seek(
       intptr_t offset,
       seek_origin origin = seek_origin::current
@@ -78,15 +78,36 @@ class stream
       void
       ) = 0;
 
-    virtual size_t
+    virtual size_type
     get_size(
       void
       ) const = 0;
 
-    virtual size_t
+    virtual size_type
     get_position(
       void
       ) const = 0;
+
+
+    //
+    // easier manipulation
+    //
+
+    virtual size_type
+    read(
+      mutable_byte_buffer_ref buffer
+      )
+    {
+      return read(buffer.get_buffer(), buffer.get_size());
+    }
+
+    virtual size_type
+    write(
+      const byte_buffer_ref buffer
+      )
+    {
+      return write(buffer.get_buffer(), buffer.get_size());
+    }
 };
 
 }

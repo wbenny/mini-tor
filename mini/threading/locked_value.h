@@ -9,8 +9,12 @@ template <
 >
 class locked_value
 {
+  MINI_MAKE_NONCOPYABLE(locked_value);
+
   public:
-    MINI_MAKE_NONCOPYABLE(locked_value);
+    locked_value(
+      locked_value<T>&& other
+      ) = default;
 
     locked_value(
       const T& initial_value = T()

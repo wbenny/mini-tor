@@ -1,6 +1,5 @@
 #pragma once
-#include <mini/crypto/provider.h>
-#include <mini/crypto/dh1024.h>
+#include <mini/crypto/dh.h>
 
 namespace mini::tor {
 
@@ -16,13 +15,13 @@ namespace mini::tor {
 // As an optimization, implementations SHOULD choose DH private keys (x) of
 // 320 bits.
 //
-static constexpr size_t DH_SEC_LEN = 40;
+static constexpr size_type DH_SEC_LEN = 40;
 
 //
 //  DH_LEN -- the number of bytes used to represent a member of the
 //    Diffie-Hellman group.
 //
-static constexpr size_t DH_LEN = 128;
+static constexpr size_type DH_LEN = 128;
 
 //
 // For Diffie-Hellman, we use a generator (g) of 2.
@@ -51,7 +50,7 @@ class key_agreement
 {
   public:
     key_agreement(
-      size_t key_size = DH_SEC_LEN
+      void
       );
 
     byte_buffer
@@ -72,10 +71,13 @@ class key_agreement
   private:
     void
     generate_key_pair(
-      size_t key_size
+      void
       );
 
-    ptr<crypto::dh1024> _dh;
+    using dh1024 = crypto::dh<1024>;
+
+    dh1024::private_key _dh_private_key;
+
 };
 
 }

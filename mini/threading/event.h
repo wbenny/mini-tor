@@ -17,8 +17,12 @@ enum class reset_type : uint8_t
 
 class event
 {
+  MINI_MAKE_NONCOPYABLE(event);
+
   public:
-    MINI_MAKE_NONCOPYABLE(event);
+    event(
+      event&& other
+      ) = default;
 
     event(
       reset_type type = reset_type::manual_reset,

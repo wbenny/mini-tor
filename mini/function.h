@@ -2,6 +2,69 @@
 #include <mini/allocator.h>
 #include <type_traits>
 
+
+namespace mini {
+
+template <typename T> class Mem_Fn;
+
+template <typename Tp, typename Class>
+Mem_Fn <Tp Class::*>
+mem_fn(Tp Class::* pm) noexcept
+{
+  return Mem_Fn<Tp Class::*>(pm);
+}
+
+template <typename RetType, typename Class, typename... ArgTypes>
+class Mem_Fn<RetType(Class::*) (ArgTypes...)>
+{
+  using Functor = RetType(Class::*) (ArgTypes...);
+
+  public:
+    explicit Mem_Fn(Functor mf) : func_(mf) { }
+
+    // Handle lvalue reference to an object
+    template <typename... Args>
+      RetType operator()(Class& obj, Args&&... args)
+    {
+      return (obj.*func_)(std::forward<Args>(args)...);
+    }
+
+    // Handle Rvalue reference
+      template <typename... Args>
+      RetType operator()(Class&& obj, Args&&... args)
+    {
+      return (std::move(obj).*func_)(std::forward<Args>(args)...);
+    }
+
+    // Handle plain pointer to an object
+      template <typename... Args>
+      RetType operator()(Class* obj, Args&&... args)
+    {
+      return (obj->*func_)(std::forward<Args>(args)...);
+    }
+
+    // Handle reference wrapper
+    template <typename T, typename... Args,
+      typename std::enable_if<std::is_base_of<T, Class>::value>::type* = nullptr
+    >
+      RetType operator()(std::reference_wrapper<T> ref, Args&&... args)
+    {
+      return operator()(ref.get(), std::forward<Args>(args)...);
+    }
+
+    // Handle smart pointer
+    // Maybe sometime later...... :)
+
+
+  private:
+    // The member function pointer
+    Functor func_;
+};
+
+}
+
+//////////////////////////////////////////////////////////////////////////
+
 #define FUNC_NO_EXCEPTIONS
 #define FUNC_NO_RTTI
 
@@ -74,14 +137,14 @@ namespace detail
 		return std::forward<T>(func);
 	}
 	template<typename Result, typename Class, typename... Arguments>
-	auto to_functor(Result (Class::*func)(Arguments...)) -> decltype(std::mem_fn(func))
+	auto to_functor(Result (Class::*func)(Arguments...)) -> decltype(mem_fn(func))
 	{
-		return std::mem_fn(func);
+		return mem_fn(func);
 	}
 	template<typename Result, typename Class, typename... Arguments>
-	auto to_functor(Result (Class::*func)(Arguments...) const) -> decltype(std::mem_fn(func))
+	auto to_functor(Result (Class::*func)(Arguments...) const) -> decltype(smem_fn(func))
 	{
-		return std::mem_fn(func);
+		return mem_fn(func);
 	}
 
 	template<typename T>
@@ -399,7 +462,7 @@ public:
 		}
 		else
 		{
-			initialize(detail::to_functor(std::forward<T, functor))>(Allocator(allocator));
+			initialize(detail::to_functor(std::forward<T>(functor)), Allocator(allocator));
 		}
 	}
 	template<typename Allocator>
@@ -459,7 +522,7 @@ public:
 	template<typename T, typename Allocator>
 	void assign(T && functor, const Allocator & allocator) noexcept(detail::is_inplace_allocated<T, Allocator>::value)
 	{
-		function(std::allocator_arg, allocator, functor).swap(*this);
+		function(allocator_arg, allocator, functor).swap(*this);
 	}
 
 	void swap(function & other) noexcept

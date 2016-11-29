@@ -19,9 +19,9 @@ namespace detail {
 
 class thread
 {
-  public:
-    MINI_MAKE_NONCOPYABLE(thread);
+  MINI_MAKE_NONCOPYABLE(thread);
 
+  public:
     using id = uint32_t;
     struct current_thread_tag {};
 
@@ -38,14 +38,14 @@ class thread
       );
 
     thread(
-      current_thread_tag&
+      current_thread_tag
       );
 
     //
     // destructor.
     //
 
-    ~thread(
+    virtual ~thread(
       void
       );
 

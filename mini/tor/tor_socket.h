@@ -30,7 +30,7 @@ class tor_socket
 
     void
     connect(
-      onion_router* or
+      onion_router* router
       );
 
     void

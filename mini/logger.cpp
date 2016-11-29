@@ -34,16 +34,16 @@ logger::log_args(
 {
   if (l >= _level)
   {
-    SYSTEMTIME system_time;
-    GetSystemTime(&system_time);
+    SYSTEMTIME local_time;
+    GetLocalTime(&local_time);
 
     console::write_with_color(
       level_colors[(int)l],
       "[%02u:%02u:%02u.%03u] ",
-      system_time.wHour,
-      system_time.wMinute,
-      system_time.wSecond,
-      system_time.wMilliseconds);
+      local_time.wHour,
+      local_time.wMinute,
+      local_time.wSecond,
+      local_time.wMilliseconds);
 
     console::write_with_color_args(level_colors[(int)l], format, args);
   }

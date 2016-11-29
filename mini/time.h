@@ -17,7 +17,6 @@ static const timeout_type wait_infinite = (timeout_type)-1;
 
 using timestamp_type = uint32_t;
 
-
 class time
 {
   public:

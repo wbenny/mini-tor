@@ -213,7 +213,6 @@ string::resize(
   _buffer[get_size()] = 0;
 }
 
-
 typename string::size_type
 string::get_capacity(
   void
@@ -468,6 +467,30 @@ string::clear(
 {
   _buffer.clear();
   _buffer[0] = '\0';
+}
+
+
+//
+// static methods.
+//
+string
+string::format(
+  const string_ref format,
+  ...
+  )
+{
+  va_list args;
+  va_start(args, format);
+
+  int chars = vsnprintf(nullptr, 0, format.get_buffer(), args);
+
+  string result;
+  result.resize(chars);
+  vsnprintf(result.get_buffer(), result.get_size() + 1, format.get_buffer(), args);
+
+  va_end(args);
+
+  return result;
 }
 
 //

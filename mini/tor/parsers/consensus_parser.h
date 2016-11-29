@@ -35,9 +35,9 @@ struct consensus_parser
   };
 
   using preamble_control_word_list = stack_buffer<string_hash, 1>;
-  static constexpr preamble_control_word_list preamble_control_words = {
+  static constexpr preamble_control_word_list preamble_control_words = { {
     "valid-until",
-  };
+  } };
 
   //
   // router status entry.
@@ -53,14 +53,14 @@ struct consensus_parser
   };
 
   using router_status_entry = stack_buffer<char, 7>;
-  static constexpr router_status_entry router_status_entry_chars = {
+  static constexpr router_status_entry router_status_entry_chars = { {
     'r',
     'a',
     's',
     'v',
     'w',
     'p',
-  };
+  } };
 
   enum router_status_entry_r_type
   {
@@ -103,7 +103,7 @@ struct consensus_parser
   };
 
   using router_status_flags_type = stack_buffer<string_hash, 13>;
-  static constexpr router_status_flags_type router_status_flags = {
+  static constexpr router_status_flags_type router_status_flags = { {
     "Authority",
     "BadExit",
     "Exit",
@@ -117,7 +117,7 @@ struct consensus_parser
     "Unnamed",
     "Valid",
     "V2Dir",
-  };
+  } };
 
   //
   // directory footer.
@@ -128,9 +128,9 @@ struct consensus_parser
   };
 
   using directory_footer_control_word_list = stack_buffer<string_hash, 1>;
-  static constexpr directory_footer_control_word_list directory_footer_control_words = {
+  static constexpr directory_footer_control_word_list directory_footer_control_words = { {
     "directory-footer",
-  };
+  } };
 
   //
   // implementation.

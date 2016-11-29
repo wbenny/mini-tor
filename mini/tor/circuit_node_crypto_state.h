@@ -10,15 +10,15 @@ namespace mini::tor {
 //
 // sha1 hash size.
 //
-static constexpr size_t HASH_LEN = 20;
+static constexpr size_type HASH_LEN = 20;
 
 class relay_cell;
 
 class circuit_node_crypto_state
 {
-  public:
-    MINI_MAKE_NONCOPYABLE(circuit_node_crypto_state);
+  MINI_MAKE_NONCOPYABLE(circuit_node_crypto_state);
 
+  public:
     circuit_node_crypto_state(
       const byte_buffer_ref key_material
       );
@@ -38,11 +38,13 @@ class circuit_node_crypto_state
       );
 
   private:
-    ptr<crypto::aes> _forward_cipher;
-    ptr<crypto::aes> _backward_cipher;
+    using aes128_t = crypto::aes_ctr<128>;
 
-    ptr<crypto::sha1> _forward_digest;
-    ptr<crypto::sha1> _backward_digest;
+    aes128_t _forward_cipher;
+    aes128_t _backward_cipher;
+
+    crypto::sha1 _forward_digest;
+    crypto::sha1 _backward_digest;
 };
 
 }

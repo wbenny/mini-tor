@@ -8,7 +8,7 @@ namespace mini {
 
 template <
   typename T,
-  size_t N
+  size_type N
 >
 void
 stack_buffer<T, N>::swap(
@@ -24,7 +24,7 @@ stack_buffer<T, N>::swap(
 
 template <
   typename T,
-  size_t N
+  size_type N
 >
 typename stack_buffer<T, N>::reference
 stack_buffer<T, N>::operator[](
@@ -36,7 +36,7 @@ stack_buffer<T, N>::operator[](
 
 template <
   typename T,
-  size_t N
+  size_type N
 >
 constexpr typename stack_buffer<T, N>::const_reference
 stack_buffer<T, N>::operator[](
@@ -48,7 +48,7 @@ stack_buffer<T, N>::operator[](
 
 template <
   typename T,
-  size_t N
+  size_type N
 >
 typename stack_buffer<T, N>::reference
 stack_buffer<T, N>::at(
@@ -60,7 +60,7 @@ stack_buffer<T, N>::at(
 
 template <
   typename T,
-  size_t N
+  size_type N
 >
 constexpr typename stack_buffer<T, N>::const_reference
 stack_buffer<T, N>::at(
@@ -72,7 +72,7 @@ stack_buffer<T, N>::at(
 
 template <
   typename T,
-  size_t N
+  size_type N
 >
 typename stack_buffer<T, N>::value_type*
 stack_buffer<T, N>::get_buffer(
@@ -84,7 +84,7 @@ stack_buffer<T, N>::get_buffer(
 
 template <
   typename T,
-  size_t N
+  size_type N
 >
 const typename stack_buffer<T, N>::value_type*
 stack_buffer<T, N>::get_buffer(
@@ -100,7 +100,7 @@ stack_buffer<T, N>::get_buffer(
 
 template <
   typename T,
-  size_t N
+  size_type N
 >
 typename stack_buffer<T, N>::iterator
 stack_buffer<T, N>::begin(
@@ -112,7 +112,7 @@ stack_buffer<T, N>::begin(
 
 template <
   typename T,
-  size_t N
+  size_type N
 >
 typename stack_buffer<T, N>::const_iterator
 stack_buffer<T, N>::begin(
@@ -124,7 +124,7 @@ stack_buffer<T, N>::begin(
 
 template <
   typename T,
-  size_t N
+  size_type N
 >
 typename stack_buffer<T, N>::iterator
 stack_buffer<T, N>::end(
@@ -136,7 +136,7 @@ stack_buffer<T, N>::end(
 
 template <
   typename T,
-  size_t N
+  size_type N
 >
 typename stack_buffer<T, N>::const_iterator
 stack_buffer<T, N>::end(
@@ -152,12 +152,12 @@ stack_buffer<T, N>::end(
 
 template <
   typename T,
-  size_t N
+  size_type N
 >
 constexpr size_type
 stack_buffer<T, N>::index_of(
   const T& item,
-  size_type from_offset = 0
+  size_type from_offset
   ) const
 {
   return
@@ -174,7 +174,7 @@ stack_buffer<T, N>::index_of(
 
 template <
   typename T,
-  size_t N
+  size_type N
 >
 constexpr typename stack_buffer<T, N>::size_type
 stack_buffer<T, N>::get_size(
@@ -186,7 +186,7 @@ stack_buffer<T, N>::get_size(
 
 template <
   typename T,
-  size_t N
+  size_type N
 >
 stack_buffer<T, N>::operator buffer_ref<T>(
   void
@@ -197,7 +197,7 @@ stack_buffer<T, N>::operator buffer_ref<T>(
 
 template <
   typename T,
-  size_t N
+  size_type N
 >
 stack_buffer<T, N>::operator mutable_buffer_ref<T>(
   void

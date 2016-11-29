@@ -92,14 +92,14 @@ class consensus
       const collections::list<uint16_t>& allowed_dir_ports
       );
 
-    size_t
+    size_type
     get_max_try_count(
       void
       ) const;
 
     void
     set_max_try_count(
-      size_t max_try_count
+      size_type max_try_count
       );
 
     string
@@ -130,7 +130,7 @@ class consensus
       onion_router::status_flag::v2dir;
 
     collections::list<uint16_t> _allowed_dir_ports;
-    size_t _max_try_count = 3;
+    size_type _max_try_count = 3;
 
     collections::pair_list<string, onion_router*> _onion_router_map;
     time _valid_until;

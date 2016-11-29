@@ -27,7 +27,7 @@ tor_socket::~tor_socket(
 
 void
 tor_socket::connect(
-  onion_router* or
+  onion_router* router
   )
 {
   //
@@ -40,7 +40,7 @@ tor_socket::connect(
 
   set_state(state::connecting);
 
-  _onion_router = or;
+  _onion_router = router;
 
   _socket.reset(new net::ssl_socket(
     _onion_router->get_ip_address().to_string().get_buffer(),
@@ -165,7 +165,7 @@ tor_socket::send_cell(
 {
   if (is_connected())
   {
-    byte_buffer cell_content = cell.get_bytes(_protocol_version);
+    byte_buffer cell_content = cell.get_bytes(static_cast<protocol_version_type>(_protocol_version));
     _socket->write(cell_content.get_buffer(), cell_content.get_size());
   }
 }
@@ -235,7 +235,7 @@ tor_socket::get_protocol_version(
   void
   ) const
 {
-  return _protocol_version;
+  return static_cast<protocol_version_type>(_protocol_version);
 }
 
 onion_router*
@@ -350,7 +350,7 @@ tor_socket::recv_versions(
   io::stream_wrapper versions_buffer(versions_stream, endianness::big_endian);
 
   for (
-    size_t i = 0;
+    size_type i = 0;
     i < versions_cell.get_payload().get_size();
     i += sizeof(protocol_version_type)
     )

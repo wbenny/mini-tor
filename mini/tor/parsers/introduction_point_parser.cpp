@@ -1,4 +1,3 @@
-#pragma once
 #include "introduction_point_parser.h"
 
 #include <mini/crypto/base16.h>
@@ -6,6 +5,8 @@
 #include <mini/crypto/base64.h>
 
 namespace mini::tor {
+
+constexpr introduction_point_parser::control_word_list introduction_point_parser::control_words;
 
 void
 introduction_point_parser::parse(

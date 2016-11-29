@@ -1,6 +1,7 @@
 #pragma once
+#include <mini/common.h>
+
 #include <type_traits>
-#include <memory>
 
 namespace mini {
 
@@ -24,10 +25,10 @@ class ptr
 
     ptr(
       void
-      );
+      ) = default;
 
     ptr(
-      ptr&& other
+      ptr<T>&& other
       );
 
     /*explicit*/ ptr(
@@ -46,14 +47,14 @@ class ptr
     // assign operators.
     //
 
-    ptr&
-    operator=(
-      pointer p
-      );
+    // ptr<T>&
+    // operator=(
+    //   pointer p
+    //   );
 
-    ptr&
+    ptr<T>&
     operator=(
-      ptr&& other
+      ptr<T>&& other
       );
 
     //
@@ -62,12 +63,12 @@ class ptr
 
     T*
     operator+(
-      size_t rhs
+      size_type rhs
       );
 
     T*
     operator-(
-      size_t rhs
+      size_type rhs
       );
 
     //
@@ -76,7 +77,7 @@ class ptr
 
     void
     swap(
-      ptr& other
+      ptr<T>& other
       );
 
     //
@@ -123,7 +124,7 @@ class ptr
 
     T&
     operator[](
-      size_t index
+      size_type index
       ) const;
 
     // friend bool
@@ -139,7 +140,7 @@ class ptr
     //   );
 
   private:
-    pointer _raw_pointer;
+    pointer _raw_pointer = nullptr;
 };
 
 template <

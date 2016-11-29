@@ -32,11 +32,11 @@ struct hidden_service_descriptor_parser
   };
 
   using control_word_list = stack_buffer<string_hash, 3>;
-  static constexpr control_word_list control_words = {
+  static constexpr control_word_list control_words = { {
     "introduction-points",
     "-----BEGIN MESSAGE-----",
     "-----END MESSAGE-----",
-  };
+  } };
 
   void
   parse(

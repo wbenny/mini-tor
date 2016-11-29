@@ -25,9 +25,9 @@ namespace mini::tor {
 struct authority_onion_router
 {
   constexpr authority_onion_router(
-    const char* name, // ignored
+    const char* /* name */, // ignored
     const char* ip,
-    uint16_t or_port, // ignored
+    uint16_t /* or_port */, // ignored
     uint16_t dir_port
     )
     : ip(net::ip_address::from_string(ip))
@@ -43,7 +43,7 @@ struct authority_onion_router
 //
 // list of directory authority routers.
 //
-static constexpr stack_buffer<authority_onion_router, 9> default_authority_list = {
+static constexpr stack_buffer<authority_onion_router, 9> default_authority_list = { {
   authority_onion_router( "moria1"    , "128.31.0.39"     , 9101 , 9131 /* , { 0x96, 0x95, 0xDF, 0xC3, 0x5F, 0xFE, 0xB8, 0x61, 0x32, 0x9B, 0x9F, 0x1A, 0xB0, 0x4C, 0x46, 0x39, 0x70, 0x20, 0xCE, 0x31 } */ ),
   authority_onion_router( "tor26"     , "86.59.21.38"     ,  443 ,   80 /* , { 0x84, 0x7B, 0x1F, 0x85, 0x03, 0x44, 0xD7, 0x87, 0x64, 0x91, 0xA5, 0x48, 0x92, 0xF9, 0x04, 0x93, 0x4E, 0x4E, 0xB8, 0x5D } */ ),
   authority_onion_router( "dizum"     , "194.109.206.212" ,  443 ,   80 /* , { 0x7E, 0xA6, 0xEA, 0xD6, 0xFD, 0x83, 0x08, 0x3C, 0x53, 0x8F, 0x44, 0x03, 0x8B, 0xBF, 0xA0, 0x77, 0x58, 0x7D, 0xD7, 0x55 } */ ),
@@ -53,7 +53,7 @@ static constexpr stack_buffer<authority_onion_router, 9> default_authority_list 
   authority_onion_router( "maatuska"  , "171.25.193.9"    ,   80 ,  443 /* , { 0xBD, 0x6A, 0x82, 0x92, 0x55, 0xCB, 0x08, 0xE6, 0x6F, 0xBE, 0x7D, 0x37, 0x48, 0x36, 0x35, 0x86, 0xE4, 0x6B, 0x38, 0x10 } */ ),
   authority_onion_router( "Faravahar" , "154.35.175.225"  ,  443 ,   80 /* , { 0xCF, 0x6D, 0x0A, 0xAF, 0xB3, 0x85, 0xBE, 0x71, 0xB8, 0xE1, 0x11, 0xFC, 0x5C, 0xFF, 0x4B, 0x47, 0x92, 0x37, 0x33, 0xBC } */ ),
   authority_onion_router( "longclaw"  , "199.254.238.52"  ,  443 ,   80 /* , { 0x74, 0xA9, 0x10, 0x64, 0x6B, 0xCE, 0xEF, 0xBC, 0xD2, 0xE8, 0x74, 0xFC, 0x1D, 0xC9, 0x97, 0x43, 0x0F, 0x96, 0x81, 0x45 } */ ),
-};
+} };
 
 consensus::consensus(
   const string_ref cached_consensus_path,
@@ -216,7 +216,7 @@ consensus::get_random_onion_router_by_criteria(
 {
   auto routers = get_onion_routers_by_criteria(criteria);
 
-  const size_type random_index = crypto::random_device->get_random(routers.get_size());
+  const size_type random_index = crypto::random_device.get_random(routers.get_size());
 
   return !routers.is_empty()
     ? routers[random_index]
@@ -267,7 +267,7 @@ consensus::set_allowed_dir_ports(
   _allowed_dir_ports = allowed_dir_ports;
 }
 
-size_t
+size_type
 consensus::get_max_try_count(
   void
   ) const
@@ -277,7 +277,7 @@ consensus::get_max_try_count(
 
 void
 consensus::set_max_try_count(
-  size_t max_try_count
+  size_type max_try_count
   )
 {
   _max_try_count = max_try_count;
@@ -289,7 +289,7 @@ consensus::download_from_random_router(
   bool only_authorities
   )
 {
-  size_t try_count = 0;
+  size_type try_count = 0;
   string result;
 
   do
@@ -315,7 +315,7 @@ consensus::download_from_random_router_impl(
   //
   if (only_authorities || _onion_router_map.is_empty())
   {
-    const size_type random_index = crypto::random_device->get_random(default_authority_list.get_size());
+    const size_type random_index = crypto::random_device.get_random(default_authority_list.get_size());
 
     auto authority = default_authority_list[random_index];
 

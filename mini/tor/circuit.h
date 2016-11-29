@@ -38,7 +38,7 @@ class circuit
       void
       ) const;
 
-    size_t
+    size_type
     get_circuit_node_list_size(
       void
       ) const;
@@ -126,7 +126,7 @@ class circuit
 
     circuit_node*
     create_circuit_node(
-      onion_router* or,
+      onion_router* router,
       circuit_node_type type = circuit_node_type::normal
       );
 
@@ -161,14 +161,19 @@ class circuit
       relay_cell& cell
       );
 
+    cell&
+    encrypt(
+      relay_cell&& cell
+      );
+
     relay_cell
     decrypt(
-      cell& c
+      cell& cell
       );
 
     void
     send_cell(
-      cell& cell
+      const cell& cell
       );
 
     void

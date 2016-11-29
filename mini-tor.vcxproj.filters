@@ -73,6 +73,21 @@
     <Filter Include="Source Files\mini\tor\parsers">
       <UniqueIdentifier>{cd47b506-5842-4bd6-918e-146fd28194fe}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\mini\crypto\detail">
+      <UniqueIdentifier>{395de0dc-4806-4be0-b526-bb8b964cdfcf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\mini\crypto\detail">
+      <UniqueIdentifier>{d813828b-ad3b-4598-9a45-d6459a18fa3d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\mini\net\detail">
+      <UniqueIdentifier>{fd5f7949-940b-42fa-8aa7-b032460b4def}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\mini\net\detail">
+      <UniqueIdentifier>{786419f3-0b97-40f1-9c58-3f8711ef7bdc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\mini\ctl">
+      <UniqueIdentifier>{3b508145-044e-4fc0-bf97-b96f11f256e7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -84,22 +99,10 @@
     <ClCompile Include="mini\net\http.cpp">
       <Filter>Source Files\mini\net</Filter>
     </ClCompile>
-    <ClCompile Include="mini\net\ssl_socket.cpp">
-      <Filter>Source Files\mini\net</Filter>
-    </ClCompile>
     <ClCompile Include="mini\net\tcp_socket.cpp">
       <Filter>Source Files\mini\net</Filter>
     </ClCompile>
-    <ClCompile Include="mini\crypto\aes.cpp">
-      <Filter>Source Files\mini\crypto</Filter>
-    </ClCompile>
     <ClCompile Include="mini\crypto\provider.cpp">
-      <Filter>Source Files\mini\crypto</Filter>
-    </ClCompile>
-    <ClCompile Include="mini\crypto\sha1.cpp">
-      <Filter>Source Files\mini\crypto</Filter>
-    </ClCompile>
-    <ClCompile Include="mini\crypto\rsa.cpp">
       <Filter>Source Files\mini\crypto</Filter>
     </ClCompile>
     <ClCompile Include="mini\crypto\base64.cpp">
@@ -119,9 +122,6 @@
     </ClCompile>
     <ClCompile Include="mini\threading\mutex.cpp">
       <Filter>Source Files\mini\threading</Filter>
-    </ClCompile>
-    <ClCompile Include="mini\crt\thread_safe_statics.cpp">
-      <Filter>Source Files\mini\crt</Filter>
     </ClCompile>
     <ClCompile Include="mini\tor\cell.cpp">
       <Filter>Source Files\mini\tor</Filter>
@@ -195,11 +195,20 @@
     <ClCompile Include="mini\tor\parsers\onion_router_descriptor_parser.cpp">
       <Filter>Source Files\mini\tor\parsers</Filter>
     </ClCompile>
-    <ClCompile Include="mini\crt\excpt.cpp">
-      <Filter>Source Files\mini\crt</Filter>
+    <ClCompile Include="mini\io\file.cpp">
+      <Filter>Source Files\mini\io</Filter>
     </ClCompile>
-    <ClCompile Include="mini\crypto\dh1024.cpp">
+    <ClCompile Include="mini\crypto\hash_base.cpp">
       <Filter>Source Files\mini\crypto</Filter>
+    </ClCompile>
+    <ClCompile Include="mini\net\ssl_socket.cpp">
+      <Filter>Source Files\mini\net</Filter>
+    </ClCompile>
+    <ClCompile Include="mini\crypto\detail\base_encode.cpp">
+      <Filter>Source Files\mini\crypto\detail</Filter>
+    </ClCompile>
+    <ClCompile Include="mini\net\detail\ssl_context.cpp">
+      <Filter>Source Files\mini\net\detail</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -212,19 +221,10 @@
     <ClInclude Include="mini\net\http.h">
       <Filter>Header Files\mini\net</Filter>
     </ClInclude>
-    <ClInclude Include="mini\net\ssl_socket.h">
-      <Filter>Header Files\mini\net</Filter>
-    </ClInclude>
     <ClInclude Include="mini\net\tcp_socket.h">
       <Filter>Header Files\mini\net</Filter>
     </ClInclude>
-    <ClInclude Include="mini\crypto\rsa.h">
-      <Filter>Header Files\mini\crypto</Filter>
-    </ClInclude>
     <ClInclude Include="mini\crypto\sha1.h">
-      <Filter>Header Files\mini\crypto</Filter>
-    </ClInclude>
-    <ClInclude Include="mini\crypto\aes.h">
       <Filter>Header Files\mini\crypto</Filter>
     </ClInclude>
     <ClInclude Include="mini\crypto\provider.h">
@@ -386,11 +386,47 @@
     <ClInclude Include="mini\tor\parsers\onion_router_descriptor_parser.h">
       <Filter>Header Files\mini\tor\parsers</Filter>
     </ClInclude>
-    <ClInclude Include="mini\crypto\dh1024.h">
-      <Filter>Header Files\mini\crypto</Filter>
-    </ClInclude>
     <ClInclude Include="mini\threading\common.h">
       <Filter>Header Files\mini\threading</Filter>
+    </ClInclude>
+    <ClInclude Include="mini\crypto\key.h">
+      <Filter>Header Files\mini\crypto</Filter>
+    </ClInclude>
+    <ClInclude Include="mini\crypto\aes.h">
+      <Filter>Header Files\mini\crypto</Filter>
+    </ClInclude>
+    <ClInclude Include="mini\crypto\dh.h">
+      <Filter>Header Files\mini\crypto</Filter>
+    </ClInclude>
+    <ClInclude Include="mini\crypto\rsa.h">
+      <Filter>Header Files\mini\crypto</Filter>
+    </ClInclude>
+    <ClInclude Include="mini\crypto\hash_base.h">
+      <Filter>Header Files\mini\crypto</Filter>
+    </ClInclude>
+    <ClInclude Include="mini\crypto\hash_template_base.h">
+      <Filter>Header Files\mini\crypto</Filter>
+    </ClInclude>
+    <ClInclude Include="mini\net\ssl_socket.h">
+      <Filter>Header Files\mini\net</Filter>
+    </ClInclude>
+    <ClInclude Include="mini\crypto\detail\base_encode.h">
+      <Filter>Header Files\mini\crypto\detail</Filter>
+    </ClInclude>
+    <ClInclude Include="mini\net\detail\ssl_context.h">
+      <Filter>Header Files\mini\net\detail</Filter>
+    </ClInclude>
+    <ClInclude Include="mini\ctl\cstdlib.h">
+      <Filter>Header Files\mini\ctl</Filter>
+    </ClInclude>
+    <ClInclude Include="mini\ctl\cstring.h">
+      <Filter>Header Files\mini\ctl</Filter>
+    </ClInclude>
+    <ClInclude Include="mini\ctl\cctype.h">
+      <Filter>Header Files\mini\ctl</Filter>
+    </ClInclude>
+    <ClInclude Include="mini\ctl.h">
+      <Filter>Header Files\mini</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -412,6 +448,18 @@
     <None Include="mini\threading\locked_value.inl">
       <Filter>Source Files\mini\threading</Filter>
     </None>
+    <None Include="mini\crypto\aes.inl">
+      <Filter>Source Files\mini\crypto</Filter>
+    </None>
+    <None Include="mini\crypto\dh.inl">
+      <Filter>Source Files\mini\crypto</Filter>
+    </None>
+    <None Include="mini\crypto\rsa.inl">
+      <Filter>Source Files\mini\crypto</Filter>
+    </None>
+    <None Include="mini\crypto\hash_template_base.inl">
+      <Filter>Source Files\mini\crypto</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Natvis Include="mini\mini.natvis">
@@ -422,13 +470,5 @@
     <CustomBuild Include="mini\crt\msvcrt.def">
       <Filter>Source Files\mini\crt</Filter>
     </CustomBuild>
-  </ItemGroup>
-  <ItemGroup>
-    <MASM Include="mini\crt\excpt32.asm">
-      <Filter>Source Files\mini\crt</Filter>
-    </MASM>
-    <MASM Include="mini\crt\excpt64.asm">
-      <Filter>Source Files\mini\crt</Filter>
-    </MASM>
   </ItemGroup>
 </Project>

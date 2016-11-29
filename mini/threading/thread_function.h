@@ -8,9 +8,9 @@ namespace mini::threading {
 class thread_function
   : public thread
 {
-  public:
-    MINI_MAKE_NONCOPYABLE(thread_function);
+  MINI_MAKE_NONCOPYABLE(thread_function);
 
+  public:
     thread_function(
       const function<void()>& functor
       )

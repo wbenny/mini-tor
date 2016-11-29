@@ -52,7 +52,7 @@ circuit::get_circuit_node_list(
   return _node_list;
 }
 
-size_t
+size_type
 circuit::get_circuit_node_list_size(
   void
   ) const
@@ -75,12 +75,6 @@ circuit::create_stream(
   )
 {
   //
-  // convert port number to the string.
-  //
-  string port_string;
-  port_string.from_int(port);
-
-  //
   // tor-spec.txt
   // 6.2.
   //
@@ -90,13 +84,12 @@ circuit::create_stream(
   // ADDRPORT is made of ADDRESS | ':' | PORT | [00]
   //
 
-  byte_buffer relay_data_bytes(host.get_size() + 1 + port_string.get_size() + 1);
+  const string host_port = string::format("%s:%hi", host.get_buffer(), port);
+
+  byte_buffer relay_data_bytes(host_port.get_size() + 1);
   io::memory_stream relay_data_stream(relay_data_bytes);
   io::stream_wrapper relay_data_buffer(relay_data_stream, endianness::big_endian);
-
-  const string host_port = host + ":" + port_string;
   relay_data_buffer.write(host_port);
-  relay_data_buffer.write('\0');
 
   //
   // send RELAY_BEGIN cell.
@@ -139,7 +132,7 @@ circuit::create_onion_stream(
   )
 {
   hidden_service hidden_service_connector(this, onion);
-  
+
   return hidden_service_connector.connect()
     ? create_stream(onion, port)
     : nullptr;
@@ -268,6 +261,12 @@ circuit::destroy(
 
   mini_debug("circuit::destroy()");
 
+  if (_extend_node)
+  {
+    delete _extend_node;
+    _extend_node = nullptr;
+  }
+
   close_streams();
   _tor_socket.remove_circuit(this);
 }
@@ -326,11 +325,11 @@ circuit::close_streams(
 
 circuit_node*
 circuit::create_circuit_node(
-  onion_router* or,
+  onion_router* router,
   circuit_node_type type
   )
 {
-  return new circuit_node(this, or, type);
+  return new circuit_node(this, router, type);
 }
 
 void
@@ -498,6 +497,14 @@ circuit::encrypt(
   relay_cell& cell
   )
 {
+  return encrypt(std::move(cell));
+}
+
+cell&
+circuit::encrypt(
+  relay_cell&& cell
+  )
+{
   for (int i = (int)_node_list.get_size() - 1; i >= 0; i--)
   {
     _node_list[i]->encrypt_forward_cell(cell);
@@ -524,7 +531,7 @@ circuit::decrypt(
 
 void
 circuit::send_cell(
-  cell& cell
+  const cell& cell
   )
 {
   _tor_socket.send_cell(cell);
@@ -582,9 +589,9 @@ circuit::send_relay_data_cell(
   const byte_buffer_ref buffer
   )
 {
-  for (size_t i = 0; i < round_up_to_multiple(buffer.get_size(), relay_cell::payload_data_size); i += relay_cell::payload_data_size)
+  for (size_type i = 0; i < round_up_to_multiple(buffer.get_size(), relay_cell::payload_data_size); i += relay_cell::payload_data_size)
   {
-    const size_t data_size = min(buffer.get_size() - i, relay_cell::payload_data_size);
+    const size_type data_size = min(buffer.get_size() - i, relay_cell::payload_data_size);
 
     get_final_circuit_node()->decrement_package_window();
 
@@ -755,9 +762,6 @@ circuit::handle_created_cell(
   {
     mini_error("circuit::handle_created_cell() extend node [ %s ] has invalid crypto state", _extend_node->get_onion_router()->get_name());
 
-    delete _extend_node;
-    _extend_node = nullptr;
-
     destroy();
   }
 }
@@ -767,6 +771,8 @@ circuit::handle_destroyed_cell(
   cell& cell
   )
 {
+  MINI_UNREFERENCED(cell);
+
   destroy();
 }
 
@@ -795,9 +801,6 @@ circuit::handle_relay_extended_cell(
   else
   {
     mini_error("circuit::handle_created_cell() extend node [ %s ] has invalid crypto state", _extend_node->get_onion_router()->get_name());
-
-    delete _extend_node;
-    _extend_node = nullptr;
 
     destroy();
   }
@@ -891,6 +894,8 @@ circuit::handle_relay_truncated_cell(
   // RELAY_TRUNCATED cell towards the OP; the node farther from the OP
   // should send a DESTROY cell down the circuit.
   //
+
+  MINI_UNREFERENCED(cell);
 
   mini_error("circuit::handle_relay_truncated_cell() destroying circuit");
   destroy();

@@ -1,5 +1,7 @@
 #include "ptr.h"
 
+#include "common.h"
+
 namespace mini {
 
 //
@@ -10,20 +12,8 @@ template <
   typename T
 >
 ptr<T>::ptr(
-  void
+  ptr<T>&& other
   )
-  : _raw_pointer(nullptr)
-{
-
-}
-
-template <
-  typename T
->
-ptr<T>::ptr(
-  ptr&& other
-  )
-  : _raw_pointer(nullptr)
 {
   swap(other);
 }
@@ -57,25 +47,25 @@ ptr<T>::~ptr(
 // assign operators.
 //
 
+// template <
+//   typename T
+// >
+// ptr<T>&
+// ptr<T>::operator=(
+//   pointer p
+//   )
+// {
+//   reset(p);
+//
+//   return *this;
+// }
+
 template <
   typename T
 >
 ptr<T>&
 ptr<T>::operator=(
-  pointer p
-  )
-{
-  reset(p);
-
-  return *this;
-}
-
-template <
-  typename T
->
-ptr<T>&
-ptr<T>::operator=(
-  ptr&& other
+  ptr<T>&& other
   )
 {
   swap(other);
@@ -87,13 +77,12 @@ ptr<T>::operator=(
 // pointer arithmetic.
 //
 
-
 template <
   typename T
 >
 T*
 ptr<T>::operator+(
-  size_t rhs
+  size_type rhs
   )
 {
   return _raw_pointer + rhs;
@@ -104,12 +93,11 @@ template <
 >
 T*
 ptr<T>::operator-(
-  size_t rhs
+  size_type rhs
   )
 {
   return _raw_pointer - rhs;
 }
-
 
 //
 // swap.
@@ -120,7 +108,7 @@ template <
 >
 void
 ptr<T>::swap(
-  ptr& other
+  ptr<T>& other
   )
 {
   mini::swap(_raw_pointer, other._raw_pointer);
@@ -149,7 +137,7 @@ template <
 >
 void
 ptr<T>::reset(
-  pointer p = nullptr
+  pointer p
   )
 {
   if (_raw_pointer && p != _raw_pointer)
@@ -223,7 +211,7 @@ template <
 >
 T&
 ptr<T>::operator[](
-  size_t index
+  size_type index
   ) const
 {
   return _raw_pointer[index];

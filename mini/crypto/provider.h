@@ -1,5 +1,4 @@
 #pragma once
-#include <mini/ptr.h>
 #include <mini/common.h>
 
 #include <windows.h>
@@ -7,17 +6,14 @@
 
 namespace mini::crypto {
 
-class aes;
-class sha1;
-class dh1024;
-class rsa;
-class random;
+struct provider_rsa_aes_tag {};
+struct provider_dh_tag {};
 
 class provider
 {
-  public:
-    MINI_MAKE_NONCOPYABLE(provider);
+  MINI_MAKE_NONCOPYABLE(provider);
 
+  public:
     provider(
       void
       );
@@ -26,6 +22,17 @@ class provider
       void
       );
 
+    HCRYPTPROV
+    get_rsa_aes_handle(
+      void
+      );
+
+    HCRYPTPROV
+    get_dh_handle(
+      void
+      );
+
+  private:
     void
     init(
       void
@@ -36,44 +43,8 @@ class provider
       void
       );
 
-    HCRYPTPROV
-    get_handle(
-      void
-      );
-
-    HCRYPTPROV
-    get_dh_handle(
-      void
-      );
-
-    ptr<aes>
-    create_aes(
-      void
-      );
-
-    ptr<sha1>
-    create_sha1(
-      void
-      );
-
-    ptr<dh1024>
-    create_dh1024(
-      void
-      );
-
-    ptr<rsa>
-    create_rsa(
-      void
-      );
-
-    ptr<random>
-    create_random(
-      void
-      );
-
-  private:
-    HCRYPTPROV _provider_handle;
-    HCRYPTPROV _dh_provider_handle;
+    HCRYPTPROV _provider_rsa_aes_handle = 0;
+    HCRYPTPROV _provider_dh_handle      = 0;
 };
 
 extern provider provider_factory;

@@ -1,4 +1,3 @@
-#pragma once
 #include "console.h"
 
 #include <mini/threading/mutex.h>

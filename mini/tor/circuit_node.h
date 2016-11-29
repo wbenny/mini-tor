@@ -3,6 +3,7 @@
 #include "crypto/key_agreement.h"
 
 #include <mini/threading/mutex.h>
+#include <mini/ptr.h>
 
 namespace mini::tor {
 
@@ -13,7 +14,7 @@ class circuit_node
   public:
     circuit_node(
       circuit* circuit,
-      onion_router* or,
+      onion_router* router,
       circuit_node_type node_type = circuit_node_type::normal
       );
 
@@ -21,6 +22,11 @@ class circuit_node
     get_circuit(
       void
       );
+
+    circuit_node_type
+    get_circuit_node_type(
+        void
+      ) const;
 
     onion_router*
     get_onion_router(
@@ -83,8 +89,8 @@ class circuit_node
       );
 
   private:
-    static constexpr size_t window_start = 1000;
-    static constexpr size_t window_increment = 100;
+    static constexpr size_type window_start = 1000;
+    static constexpr size_type window_increment = 100;
 
     circuit* _circuit;
     circuit_node_type _type;
@@ -93,8 +99,8 @@ class circuit_node
     ptr<circuit_node_crypto_state> _crypto_state;
     key_agreement _dh;
 
-    size_t _package_window = window_start;
-    size_t _deliver_window = window_start;
+    size_type _package_window = window_start;
+    size_type _deliver_window = window_start;
     threading::mutex _window_mutex;
 };
 

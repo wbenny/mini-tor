@@ -3,18 +3,6 @@
 
 #include <mini/byte_buffer.h>
 
-namespace mini {
-
-enum class endianness
-{
-  little_endian,
-  big_endian,
-};
-
-static constexpr endianness current_endianness = endianness::little_endian;
-
-}
-
 namespace mini::io {
 
 class stream_wrapper
@@ -40,7 +28,7 @@ class stream_wrapper
       )
     {
       T result = T();
-      size_t bytes_read = read(result);
+      read(result);
 
       return result;
     }
@@ -49,12 +37,12 @@ class stream_wrapper
       typename T,
       typename = std::enable_if_t<std::is_pod_v<T>>
     >
-    size_t
+    size_type
     read(
       T& result
       )
     {
-      size_t bytes_read = read_impl(&result, sizeof(result));
+      size_type bytes_read = read_impl(&result, sizeof(result));
 
       if (_endianness != current_endianness)
       {
@@ -66,10 +54,10 @@ class stream_wrapper
 
     template <
       typename T,
-      size_t N,
+      size_type N,
       typename = std::enable_if_t<std::is_pod_v<T>>
     >
-    size_t
+    size_type
     read(
       T (&result)[N]
       )
@@ -77,16 +65,16 @@ class stream_wrapper
       return read(result, N * sizeof(T));
     }
 
-    size_t
+    size_type
     read(
       void* buffer,
-      size_t size
+      size_type size
       )
     {
       return read_impl(buffer, size);
     }
 
-    size_t
+    size_type
     read(
       mutable_byte_buffer_ref buffer
       )
@@ -98,7 +86,7 @@ class stream_wrapper
       typename T,
       typename = std::enable_if_t<std::is_pod_v<T>>
     >
-    size_t
+    size_type
     write(
       const T& value
       )
@@ -113,7 +101,7 @@ class stream_wrapper
       return write_impl(&value_to_write, sizeof(value_to_write));
     }
 
-    size_t
+    size_type
     write(
       const byte_buffer_ref buffer
       )
@@ -146,16 +134,16 @@ class stream_wrapper
     }
 
   private:
-    size_t
+    size_type
     read_impl(
       void* buffer,
-      size_t size
+      size_type size
       )
     {
       byte_type* buffer_bytes = reinterpret_cast<byte_type*>(buffer);
 
-      size_t total_bytes_read = 0;
-      size_t bytes_read;
+      size_type total_bytes_read = 0;
+      size_type bytes_read;
       while (stream::success(bytes_read = _stream.read(buffer_bytes + total_bytes_read, size - total_bytes_read)))
       {
         total_bytes_read += bytes_read;
@@ -168,16 +156,16 @@ class stream_wrapper
       return total_bytes_read;
     }
 
-    size_t
+    size_type
     write_impl(
       const void* buffer,
-      size_t size
+      size_type size
       )
     {
       const byte_type* buffer_bytes = reinterpret_cast<const byte_type*>(buffer);
 
-      size_t total_bytes_written = 0;
-      size_t bytes_written;
+      size_type total_bytes_written = 0;
+      size_type bytes_written;
       while (stream::success(bytes_written = _stream.write(buffer_bytes + total_bytes_written, size - total_bytes_written)))
       {
         total_bytes_written += bytes_written;

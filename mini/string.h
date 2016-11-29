@@ -295,6 +295,16 @@ class string
       );
 
     //
+    // static methods
+    //
+
+    static string
+    format(
+      const string_ref format,
+      ...
+      );
+
+    //
     // conversion operators.
     //
 

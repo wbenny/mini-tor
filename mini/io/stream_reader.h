@@ -24,10 +24,10 @@ class stream_reader
     {
       byte_buffer result;
 
-      static constexpr size_t buffer_size = 4096;
+      static constexpr size_type buffer_size = 4096;
       byte_type buffer[buffer_size];
 
-      size_t bytes_read;
+      size_type bytes_read;
       while (stream::success(bytes_read = _stream.read(buffer, buffer_size)))
       {
         result.add_many(byte_buffer_ref(buffer, buffer + bytes_read));
@@ -43,10 +43,10 @@ class stream_reader
     {
       string result;
 
-      static constexpr size_t buffer_size = 4096;
+      static constexpr size_type buffer_size = 4096;
       char buffer[buffer_size];
 
-      size_t bytes_read;
+      size_type bytes_read;
       while (stream::success(bytes_read = _stream.read(buffer, buffer_size)))
       {
         result.append(buffer, bytes_read);

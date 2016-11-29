@@ -1,7 +1,8 @@
-#pragma once
 #include "hidden_service_descriptor_parser.h"
 
 namespace mini::tor {
+
+constexpr hidden_service_descriptor_parser::control_word_list hidden_service_descriptor_parser::control_words;
 
 void
 hidden_service_descriptor_parser::parse(

@@ -6,7 +6,7 @@ namespace mini {
 
 template <
   typename T,
-  size_t N
+  size_type N
 >
 class stack_buffer
 {
@@ -127,7 +127,7 @@ class stack_buffer
 };
 
 template <
-  size_t N
+  size_type N
 >
 using stack_byte_buffer = stack_buffer<byte_type, N>;
 

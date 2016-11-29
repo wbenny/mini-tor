@@ -1,4 +1,3 @@
-#pragma once
 #include "event.h"
 #include <mini/collections/list.h>
 

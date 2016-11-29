@@ -15,7 +15,7 @@ class string_ref
       );
 
     template <
-      size_t N
+      size_type N
     >
     constexpr string_ref(
       const char (&value)[N]
@@ -58,6 +58,12 @@ class string_ref
       const string_ref& rhs
       );
 
+    friend string
+    operator+(
+        const string_ref& lhs,
+        const string_ref& rhs
+        );
+
   private:
     char _internal_char_buffer[2];
 };
@@ -70,7 +76,7 @@ class mutable_string_ref
 
     operator string() const
     {
-      return string(begin(), get_size());
+      return string(this->begin(), this->get_size());
     }
 };
 

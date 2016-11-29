@@ -1,19 +1,11 @@
-#pragma once
 #include "random.h"
+#include "provider.h"
 
 namespace mini::crypto {
 
-random::random(
-  provider* crypto_provider
-  )
-  : _provider(crypto_provider)
-{
-
-}
-
 byte_buffer
 random::get_random_bytes(
-  size_t byte_count
+  size_type byte_count
   )
 {
   byte_buffer result(byte_count);
@@ -28,11 +20,11 @@ random::get_random_bytes(
   )
 {
   CryptGenRandom(
-    _provider->get_handle(),
-    (DWORD)output.get_size(),
+    provider_factory.get_rsa_aes_handle(),
+    static_cast<DWORD>(output.get_size()),
     output.get_buffer());
 }
 
-ptr<random> random_device = provider_factory.create_random();
+random random_device;
 
 }

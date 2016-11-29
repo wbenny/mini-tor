@@ -45,19 +45,19 @@ class tor_stream
       return false;
     }
 
-    size_t
+    size_type
     read(
       void* buffer,
-      size_t size
+      size_type size
       ) override;
 
-    size_t
+    size_type
     write(
       const void* buffer,
-      size_t size
+      size_type size
       ) override;
 
-    size_t
+    size_type
     seek(
       intptr_t offset,
       seek_origin origin = seek_origin::current
@@ -68,12 +68,12 @@ class tor_stream
       void
       ) override;
 
-    size_t
+    size_type
     get_size(
       void
       ) const override;
 
-    size_t
+    size_type
     get_position(
       void
       ) const override;
@@ -143,15 +143,15 @@ class tor_stream
       void
       );
 
-    static constexpr size_t window_start = 500;
-    static constexpr size_t window_increment = 50;
-    static constexpr size_t window_max_unflushed = 10;
+    static constexpr size_type window_start = 500;
+    static constexpr size_type window_increment = 50;
+    static constexpr size_type window_max_unflushed = 10;
 
     tor_stream_id_type _stream_id;
     circuit* _circuit;
 
-    size_t _deliver_window = window_start;
-    size_t _package_window = window_start;
+    size_type _deliver_window = window_start;
+    size_type _package_window = window_start;
     threading::mutex _window_mutex;
 
     byte_buffer _buffer;

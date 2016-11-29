@@ -141,6 +141,12 @@ class list
       void
       ) const;
 
+    buffer_ref<T>
+    slice(
+      size_type begin,
+      size_type end = (size_type)-1
+      ) const;
+
     //
     // iterators.
     //
@@ -183,6 +189,11 @@ class list
     resize(
       size_type new_size,
       const_reference item = value_type()
+      );
+
+    void
+    resize_unsafe(
+      size_type new_size
       );
 
     size_type
@@ -229,9 +240,6 @@ class list
       value_type&& item
       );
 
-    template <
-      typename = std::enable_if_t<std::is_pod_v<T>>
-    >
     void
     add_many(
       const buffer_ref<T> items
@@ -259,9 +267,6 @@ class list
       size_type index
       );
 
-    template <
-      typename = std::enable_if_t<std::is_pod_v<T>>
-    >
     void
     insert_many(
       const buffer_ref<T> items,
@@ -271,6 +276,12 @@ class list
     void
     remove(
       const value_type& item
+      );
+
+    void
+    remove_range(
+      size_type from_offset,
+      size_type count = (size_type)-1
       );
 
     void
@@ -297,25 +308,11 @@ class list
     // conversion operators.
     //
 
-    template <
-      typename = std::enable_if_t<!std::is_same_v<T, byte_type>>
-    >
     operator buffer_ref<T>(
       void
       ) const;
 
-    template <
-      typename = std::enable_if_t<!std::is_same_v<T, byte_type>>
-    >
     operator mutable_buffer_ref<T>(
-      void
-      );
-
-    operator byte_buffer_ref(
-      void
-      ) const;
-
-    operator mutable_byte_buffer_ref(
       void
       );
 

@@ -6,7 +6,7 @@ skip_tags: true
 configuration: Release_Small
 platform: x86
 before_build:
-- cmd: curl -L -o upx.zip http://upx.sourceforge.net/download/upx391w.zip && 7z e upx.zip *.exe -r
+- cmd: curl -L -o kkrunchy.zip http://www.farbrausch.de/~fg/kkrunchy/kkrunchy_023a2.zip && 7z e kkrunchy.zip *.exe -r
 build:
   project: mini-tor.sln
   parallel: true

@@ -1,4 +1,3 @@
-#pragma once
 #include "string_ref.h"
 
 namespace mini {
@@ -13,7 +12,7 @@ string_ref::string_ref(
 }
 
 template <
-  size_t N
+  size_type N
 >
 constexpr string_ref::string_ref(
   const char (&value)[N]
@@ -82,6 +81,15 @@ operator!=(
   )
 {
   return !(lhs == rhs);
+}
+
+string
+operator+(
+  const string_ref& lhs,
+  const string_ref& rhs
+  )
+{
+  return string(lhs) + string(rhs);
 }
 
 }

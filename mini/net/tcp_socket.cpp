@@ -2,37 +2,48 @@
 
 namespace mini::net {
 
-static WSADATA g_wsa_data = { 0 };
+static WSADATA wsa_data = { 0 };
 
-void
-tcp_socket::global_init(
+static void __cdecl
+tcp_socket_global_init(
+  void
+  );
+
+static void __cdecl
+tcp_socket_global_destroy(
+  void
+  );
+
+void __cdecl
+tcp_socket_global_init(
   void
   )
 {
-  if (!g_wsa_data.wVersion)
+  if (!wsa_data.wVersion)
   {
-    WSAStartup(MAKEWORD(2, 2), &g_wsa_data);
+    WSAStartup(MAKEWORD(2, 2), &wsa_data);
+    atexit(tcp_socket_global_destroy);
   }
 }
 
-void
-tcp_socket::global_destroy(
+void __cdecl
+tcp_socket_global_destroy(
   void
   )
 {
-  if (g_wsa_data.wVersion)
+  if (wsa_data.wVersion)
   {
     WSACleanup();
   }
 }
 
+//////////////////////////////////////////////////////////////////////////
+
 tcp_socket::tcp_socket(
   void
   )
-  : _socket(INVALID_SOCKET)
-  , _port(0)
 {
-  global_init();
+  tcp_socket_global_init();
 }
 
 tcp_socket::tcp_socket(
@@ -51,7 +62,7 @@ tcp_socket::~tcp_socket(
   close();
 }
 
-void
+bool
 tcp_socket::connect(
   const string_ref host,
   uint16_t port
@@ -68,16 +79,16 @@ tcp_socket::connect(
 
   if ((_socket = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP)) == SOCKET_ERROR)
   {
-    return;
+    return false;
   }
 
   if ((::connect(_socket, (sockaddr*)&sin, sizeof(sin))) == SOCKET_ERROR)
   {
-    closesocket(_socket);
-    return;
+    close();
+    return false;
   }
 
-  return;
+  return true;
 }
 
 void
@@ -112,10 +123,10 @@ tcp_socket::can_seek(
   return false;
 }
 
-size_t
+size_type
 tcp_socket::read(
   void* buffer,
-  size_t size
+  size_type size
   )
 {
   //
@@ -126,7 +137,7 @@ tcp_socket::read(
     return 0;
   }
 
-  size_t result = (size_t)recv(_socket, (char*)buffer, (int)size, 0);
+  size_type result = (size_type)recv(_socket, (char*)buffer, (int)size, 0);
 
   //
   // close & invalidate socket when we've received 0 bytes.
@@ -147,10 +158,10 @@ tcp_socket::read(
   return result;
 }
 
-size_t
+size_type
 tcp_socket::write(
   const void* buffer,
-  size_t size
+  size_type size
   )
 {
   //
@@ -161,7 +172,7 @@ tcp_socket::write(
     return 0;
   }
 
-  size_t result = (size_t)send(_socket, (const char*)buffer, (int)size, 0);
+  size_type result = (size_type)send(_socket, (const char*)buffer, (int)size, 0);
 
   //
   // invalidate socket when we've encountered an error.
@@ -174,12 +185,15 @@ tcp_socket::write(
   return result;
 }
 
-size_t
+size_type
 tcp_socket::seek(
   intptr_t offset,
   seek_origin origin
   )
 {
+  MINI_UNREFERENCED(offset);
+  MINI_UNREFERENCED(origin);
+
   return 0;
 }
 
@@ -191,7 +205,7 @@ tcp_socket::flush(
   return;
 }
 
-size_t
+size_type
 tcp_socket::get_size(
   void
   ) const
@@ -199,7 +213,7 @@ tcp_socket::get_size(
   return 0;
 }
 
-size_t
+size_type
 tcp_socket::get_position(
   void
   ) const

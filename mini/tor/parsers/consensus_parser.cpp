@@ -1,7 +1,11 @@
-#pragma once
 #include "consensus_parser.h"
 
 namespace mini::tor {
+
+constexpr consensus_parser::preamble_control_word_list          consensus_parser::preamble_control_words;
+constexpr consensus_parser::router_status_entry                 consensus_parser::router_status_entry_chars;
+constexpr consensus_parser::router_status_flags_type            consensus_parser::router_status_flags;
+constexpr consensus_parser::directory_footer_control_word_list  consensus_parser::directory_footer_control_words;
 
 onion_router::status_flags
 consensus_parser::string_to_status_flags(

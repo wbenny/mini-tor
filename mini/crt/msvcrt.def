@@ -1,25 +1,61 @@
 EXPORTS
+
+;
+; cstdio
+;
+
+  printf
+  sprintf
+  snprintf
+  vprintf
+  vsnprintf
+
+  scanf
+  sscanf
+
+;
+; cstdlib
+;
+
   malloc
   calloc
   realloc
   free
-  memmove
-  strstr
+
+  abort
   exit
   atexit
-  abort
+
+;
+; cstring
+;
+
+  strstr
+  strlen
+
+  memset
   memchr
   memcmp
   memcpy
-  memset
-  printf
-  scanf
-  sscanf
-  sprintf
-  vprintf
+  memmove
+
+;
+; cwchar
+;
 
   wcslen
   wcstombs
+
+;
+; ctime
+;
+
+  time
+  mktime
+
+;
+; CRT
+;
 
   _EH_prolog
   __CxxFrameHandler3

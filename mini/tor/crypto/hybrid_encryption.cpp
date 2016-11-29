@@ -12,12 +12,18 @@ encrypt(
   const byte_buffer_ref public_key
   )
 {
+  using rsa1024 = crypto::rsa<1024>;
+  using aes128_ctr = crypto::aes_ctr<128>;
+
   if (data.get_size() < PK_DATA_LEN)
   {
-    return crypto::rsa::public_encrypt(data, public_key);
+    return rsa1024::public_encrypt(
+      rsa1024::public_key::make_from_der(public_key),
+      data,
+      rsa1024::encryption_padding::oaep_sha1);
   }
 
-  byte_buffer random_key = crypto::provider_factory.create_random()->get_random_bytes(KEY_LEN);
+  byte_buffer random_key = crypto::random_device.get_random_bytes(KEY_LEN);
 
   //
   // RSA( K | M1 ) --> C1
@@ -28,13 +34,16 @@ encrypt(
   k_and_m1.add_many(random_key);
   k_and_m1.add_many(data.slice(0, PK_DATA_LEN_WITH_KEY));
 
-  auto c1 = crypto::rsa::public_encrypt(k_and_m1, public_key);
+  auto c1 = rsa1024::public_encrypt(
+    rsa1024::public_key::make_from_der(public_key),
+    k_and_m1,
+    rsa1024::encryption_padding::oaep_sha1);
 
   //
   // AES_CTR(M2)  --> C2
   //
   byte_buffer_ref m2 = data.slice(PK_DATA_LEN_WITH_KEY);
-  auto c2 = crypto::aes::crypt(crypto::aes::mode::mode_ctr, crypto::aes::key_size::key_size_128, random_key, m2);
+  auto c2 = aes128_ctr::crypt(aes128_ctr::key(random_key), m2);
 
   //
   // C1 | C2

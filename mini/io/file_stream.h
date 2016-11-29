@@ -50,8 +50,8 @@ class file_stream
       )
       : _file_handle(INVALID_HANDLE_VALUE)
       , _access((file_access)0)
-      , _share((file_share)0)
       , _mode((file_mode)0)
+      , _share((file_share)0)
       , _options((file_options)0)
     {
 
@@ -172,10 +172,10 @@ class file_stream
       return true;
     }
 
-    size_t
+    size_type
     read(
       void* buffer,
-      size_t size
+      size_type size
       ) override
     {
       DWORD bytes_read;
@@ -189,10 +189,10 @@ class file_stream
       return bytes_read;
     }
 
-    size_t
+    size_type
     write(
       const void* buffer,
-      size_t size
+      size_type size
       ) override
     {
       DWORD bytes_written;
@@ -205,7 +205,7 @@ class file_stream
       return bytes_written;
     }
 
-    size_t
+    size_type
     seek(
       intptr_t offset,
       seek_origin origin = seek_origin::current
@@ -230,7 +230,7 @@ class file_stream
       FlushFileBuffers(_file_handle);
     }
 
-    size_t
+    size_type
     get_size(
       void
       ) const override
@@ -240,7 +240,7 @@ class file_stream
         NULL);
     }
 
-    size_t
+    size_type
     get_position(
       void
       ) const override

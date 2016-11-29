@@ -25,23 +25,19 @@ circuit_node_crypto_state::circuit_node_crypto_state(
 
   stack_byte_buffer<20> df;
   key_material_buffer.read(df);
-  _forward_digest = crypto::provider_factory.create_sha1();
-  _forward_digest->update(df);
+  _forward_digest.update(df);
 
   stack_byte_buffer<20> db;
   key_material_buffer.read(db);
-  _backward_digest = crypto::provider_factory.create_sha1();
-  _backward_digest->update(db);
+  _backward_digest.update(db);
 
   stack_byte_buffer<16> kf;
   key_material_buffer.read(kf);
-  _forward_cipher = crypto::provider_factory.create_aes();
-  _forward_cipher->init(crypto::aes::mode::mode_ctr, crypto::aes::key_size::key_size_128, kf);
+  _forward_cipher.init(aes128_t::key(kf));
 
   stack_byte_buffer<16> kb;
   key_material_buffer.read(kb);
-  _backward_cipher = crypto::provider_factory.create_aes();
-  _backward_cipher->init(crypto::aes::mode::mode_ctr, crypto::aes::key_size::key_size_128, kb);
+  _backward_cipher.init(aes128_t::key(kb));
 }
 
 void
@@ -66,8 +62,8 @@ circuit_node_crypto_state::encrypt_forward_cell(
     //
     // update digest field in the payload
     //
-    _forward_digest->update(relay_payload_bytes);
-    auto digest = _forward_digest->duplicate()->get();
+    _forward_digest.update(relay_payload_bytes);
+    auto digest = _forward_digest.duplicate().get();
     memory::copy(&relay_payload_bytes[5], &digest[0], sizeof(uint32_t));
   }
   else
@@ -78,7 +74,7 @@ circuit_node_crypto_state::encrypt_forward_cell(
   //
   // encrypt the payload
   //
-  auto encrypted_payload = _forward_cipher->update(relay_payload_bytes, false);
+  auto encrypted_payload = _forward_cipher.update(relay_payload_bytes);
   mini_assert(encrypted_payload.get_size() == cell::payload_size);
 
   //
@@ -93,7 +89,7 @@ circuit_node_crypto_state::decrypt_backward_cell(
   )
 {
   mini_assert(cell.get_payload().get_size() == cell::payload_size);
-  auto decrypted_payload = _backward_cipher->update(cell.get_payload(), false);
+  auto decrypted_payload = _backward_cipher.update(cell.get_payload());
 
   mini_assert(decrypted_payload.get_size() == cell::payload_size);
   cell.set_payload(decrypted_payload);
@@ -112,14 +108,14 @@ circuit_node_crypto_state::decrypt_backward_cell(
     stack_byte_buffer<sizeof(uint32_t)> payload_digest;
     memory::copy(payload_digest.get_buffer(), cell.get_payload().get_buffer() + 5, sizeof(uint32_t));
 
-    auto backward_digest_clone = _backward_digest->duplicate();
-    backward_digest_clone->update(payload_without_digest);
+    auto backward_digest_clone = _backward_digest.duplicate();
+    backward_digest_clone.update(payload_without_digest);
 
-    auto digest = backward_digest_clone->get();
+    auto digest = backward_digest_clone.get();
 
     if (memory::equal(payload_digest.get_buffer(), &digest[0], sizeof(payload_digest)))
     {
-      _backward_digest->update(payload_without_digest);
+      _backward_digest.update(payload_without_digest);
 
       return true;
     }

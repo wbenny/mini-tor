@@ -1,3 +1,4 @@
+
 #include <mini/logger.h>
 #include <mini/console.h>
 #include <mini/crypto/random.h>
@@ -7,6 +8,7 @@
 #include <mini/tor/consensus.h>
 #include <mini/tor/tor_socket.h>
 #include <mini/tor/tor_stream.h>
+#include <mini/net/http.h>
 
 #define MINI_TOR_USE_CONSENSUS_CACHE 1
 
@@ -37,7 +39,7 @@ class tor_client
         {}, or_ports, _forbidden_onion_routers, flags
       });
 
-      auto random_router = routers[mini::crypto::random_device->get_random(routers.get_size())];
+      auto random_router = routers[mini::crypto::random_device.get_random(routers.get_size())];
 
       if (random_router)
       {
@@ -170,30 +172,31 @@ class tor_client
       }
 
       mini_info("Sending request...");
-      mini::string req = "GET " + path + " HTTP/1.0\r\nHost: " + host + "\r\n\r\n";
-      stream->write(req.get_buffer(), req.get_size());
-      mini_info("Request sent...");
-
-      mini_info("Receiving response...");
-      mini::io::stream_reader sr(*stream);
-      result = sr.read_string_to_end();
+      result = mini::net::http::client::get_on_stream(*stream, host, port, path);
+      //mini::string req = "GET " + path + " HTTP/1.0\r\nHost: " + host + "\r\n\r\n";
+      //stream->write(req.get_buffer(), req.get_size());
+      //mini_info("Request sent...");
+      //
+      //mini_info("Receiving response...");
+      //mini::io::stream_reader sr(*stream);
+      //result = sr.read_string_to_end();
       mini_info("Response received...");
 
       delete stream;
 
-      auto header_position = result.index_of("\r\n\r\n");
-      if (header_position != mini::string::not_found)
-      {
-        header_position += 4;
-
-        mini::string header = result.substring(0, header_position);
-        result = result.substring(header_position);
-      }
+      //auto header_position = result.index_of("\r\n\r\n");
+      //if (header_position != mini::string::not_found)
+      //{
+      //  header_position += 4;
+      //
+      //  mini::string header = result.substring(0, header_position);
+      //  result = result.substring(header_position);
+      //}
 
       return result;
     }
 
-    size_t
+    mini::size_type
     get_hop_count(
       void
       )
@@ -277,7 +280,7 @@ main(
   //
   // fetch the page.
   //
-  static constexpr size_t hops = 2;
+  static constexpr mini::size_type hops = 2;
   static_assert(hops >= 2, "There must be at least 2 hops in the circuit");
   static_assert(hops <= 9, "There must be at most 9 hops in the circuit");
 
@@ -343,3 +346,5 @@ connect_again:
 
   return 0;
 }
+
+// */

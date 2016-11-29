@@ -1,4 +1,3 @@
-#pragma once
 #include "mutex.h"
 
 namespace mini::threading {

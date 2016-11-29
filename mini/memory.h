@@ -29,6 +29,12 @@ copy(
   );
 
 void*
+reverse(
+  void* destination,
+  size_t size
+  );
+
+void*
 reverse_copy(
   void* destination,
   const void* source,
@@ -62,6 +68,13 @@ find(
   size_t haystack_size,
   const void *needle,
   size_t needle_size
+  );
+
+void*
+set(
+  void* destination,
+  int value,
+  size_t size
   );
 
 void*

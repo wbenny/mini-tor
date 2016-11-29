@@ -11,6 +11,12 @@ assert(
   int line
   )
 {
+#ifndef _DEBUG
+  MINI_UNREFERENCED(expression_str);
+  MINI_UNREFERENCED(filename);
+  MINI_UNREFERENCED(line);
+#endif
+
   if (!expression)
   {
     mini_error("!! assertion failed !! %s at %s:%i)", expression_str, filename, line);
