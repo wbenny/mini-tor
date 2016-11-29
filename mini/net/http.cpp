@@ -6,11 +6,28 @@
 namespace mini::net::http::client {
 
 string
-get_on_stream(
-  io::stream& sock,
+get(
   const string_ref host,
   uint16_t port,
   const string_ref path
+  )
+{
+  tcp_socket sock;
+
+  if (sock.connect(host, port))
+  {
+    return get(host, port, path, sock);
+  }
+
+  return string();
+}
+
+string
+get(
+  const string_ref host,
+  uint16_t port,
+  const string_ref path,
+  io::stream& sock
   )
 {
   MINI_UNREFERENCED(port);
@@ -31,21 +48,5 @@ get_on_stream(
   return result;
 }
 
-string
-get(
-  const string_ref host,
-  uint16_t port,
-  const string_ref path
-  )
-{
-  tcp_socket sock(host, port);
-
-  if (sock.is_connected())
-  {
-    return get_on_stream(sock, host, port, path);
-  }
-
-  return string();
-}
 
 }

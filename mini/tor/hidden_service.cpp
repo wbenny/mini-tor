@@ -246,19 +246,12 @@ hidden_service::fetch_hidden_service_descriptor(
     mini_info("\tSending request for hidden service descriptor...");
 
     const string hidden_service_descriptor =
-      net::http::client::get_on_stream(
-        *directory_stream,
+      net::http::client::get(
         responsible_directory->get_ip_address().to_string(),
         responsible_directory->get_dir_port(),
-        descriptor_path);
+        descriptor_path,
+        *directory_stream);
 
-    //string request = "GET /tor/rendezvous2/" + crypto::base32::encode(get_descriptor_id(replica)) + " HTTP/1.1\r\nHost: " + responsible_directory->get_ip_address().to_string() + "\r\n\r\n";
-    //directory_stream->write(request.get_buffer(), request.get_size());
-    //mini_info("\tRequest sent...");
-    //
-    //mini_info("\tReceiving hidden service descriptor...");
-    //io::stream_reader stream_reader(*directory_stream);
-    //string hidden_service_descriptor = stream_reader.read_string_to_end();
     mini_info("\tHidden service descriptor received...");
 
     //

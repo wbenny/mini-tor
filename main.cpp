@@ -1,4 +1,3 @@
-
 #include <mini/logger.h>
 #include <mini/console.h>
 #include <mini/crypto/random.h>
@@ -19,7 +18,7 @@ class tor_client
       void
       )
     {
-
+      _consensus.set_allowed_dir_ports({ 80, 443 });
     }
 
     ~tor_client(
@@ -172,26 +171,10 @@ class tor_client
       }
 
       mini_info("Sending request...");
-      result = mini::net::http::client::get_on_stream(*stream, host, port, path);
-      //mini::string req = "GET " + path + " HTTP/1.0\r\nHost: " + host + "\r\n\r\n";
-      //stream->write(req.get_buffer(), req.get_size());
-      //mini_info("Request sent...");
-      //
-      //mini_info("Receiving response...");
-      //mini::io::stream_reader sr(*stream);
-      //result = sr.read_string_to_end();
+      result = mini::net::http::client::get(host, port, path, *stream);
       mini_info("Response received...");
 
       delete stream;
-
-      //auto header_position = result.index_of("\r\n\r\n");
-      //if (header_position != mini::string::not_found)
-      //{
-      //  header_position += 4;
-      //
-      //  mini::string header = result.substring(0, header_position);
-      //  result = result.substring(header_position);
-      //}
 
       return result;
     }
