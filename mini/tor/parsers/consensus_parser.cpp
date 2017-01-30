@@ -74,14 +74,13 @@ consensus_parser::parse(
       case document_location::router_status_entry:
         {
           //
-          // check if the control word has at least one letter.
+          // we currently support only single letter status entries.
+          // check if the control word has exactly one letter.
           //
-          if (splitted_line[0].get_size() < 1)
+          if (splitted_line[0].get_size() != 1)
           {
             break;
           }
-
-          mini_assert(splitted_line[0].get_size() == 1);
 
           switch (splitted_line[0][0])
           {

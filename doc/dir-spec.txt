@@ -516,7 +516,7 @@
 
        A curve25519 public key used for the ntor circuit extended
        handshake.  It's the standard encoding of the OR's curve25519
-       public key, encoded in base 64.  The trailing = sign may be
+       public key, encoded in base 64.  The trailing '=' sign MAY be
        omitted from the base64 encoding.  The key MUST be accepted
        for at least 1 week after any new key is published in a
        subsequent descriptor.
@@ -730,6 +730,32 @@
 
        Present if the router accepts "tunneled" directory requests using a
        BEGIN_DIR cell over the router's OR port.
+
+   "proto" SP Entries NL
+
+       [At most one.]
+
+       Entries =
+       Entries = Entry
+       Entries = Entry SP Entries
+
+       Entry = Keyword "=" Values
+
+       Values = Value
+       Values = Value "," Values
+
+       Value = Int
+       Value = Int "-" Int
+
+       Int = NON_ZERO_DIGIT
+       Int = Int DIGIT
+
+       Each 'Entry' in the "proto" line indicates that the Tor relay supports
+       one or more versions of the protocol in question.  Entries should be
+       sorted by keyword.  Values should be numerically ascending within each
+       entry.  (This implies that there should be no overlapping ranges.)
+       Ranges should be represented as compactly as possible. Ints must be no
+       more than 2^32 - 1.
 
 2.1.2. Extra-info document format
 
@@ -1284,7 +1310,7 @@
 
    At a future date, authorities will begin rejecting all
    descriptors whose RSA key was previously accompanied by an
-   Ed25519 key, if the descriptor does not list and Ed25519 key.
+   Ed25519 key, if the descriptor does not list an Ed25519 key.
 
    At a future date, authorities will begin rejecting all descriptors
    that do not list an Ed25519 key.
@@ -1369,15 +1395,16 @@
 
      "p" SP ("accept" / "reject") SP PortList NL
 
-        [At most once]
+        [Exactly once.]
 
-        The exit-policy summary as specified in sections 3.4.1 and 3.8.2.  A
-        missing "p" line is equivalent to "p reject 1-65535".
+        The exit-policy summary as specified in sections 3.4.1 and 3.8.2.
 
         [With microdescriptors, clients don't learn exact exit policies:
         clients can only guess whether a relay accepts their request, try the
         BEGIN request, and might get end-reason-exit-policy if they guessed
         wrong, in which case they'll have to try elsewhere.]
+
+        [In consensus methods before 5, this line was omitted.]
 
      "p6" SP ("accept" / "reject") SP PortList NL
 
@@ -1424,6 +1451,11 @@
         Implementations MUST ignore "id" lines with unrecognized
         key-types in place of "rsa1024" or "ed25519"
 
+     "pr" SP Entries NL
+
+        [At most once.]
+
+        The "proto" element as specified in section 2.1.1.
 
    (Note that with microdescriptors, clients do not learn the RSA identity of
    their routers: they only learn a hash of the RSA identity key.  This is
@@ -1471,8 +1503,8 @@
 
    Also, once an authority receives a vote from another authority, it
    examines it for new descriptors and fetches them from that authority.
-   This may the only way for an authority to hear about relays that didn't
-   publish their descriptor to all authorities, and while it's too late
+   This may be the only way for an authority to hear about relays that didn't
+   publish their descriptor to all authorities, and, while it's too late
    for the authority to include relays in its current vote, it can include
    them in its next vote.  See section 3.6 below for details.
 
@@ -1494,7 +1526,7 @@
    Some items appear only in votes, and some items appear only in
    consensuses.  Unless specified, items occur in both.
 
-   The preamble contains the following items.  They MUST occur in the
+   The preamble contains the following items.  They SHOULD occur in the
    order given here:
 
     "network-status-version" SP version NL
@@ -1542,50 +1574,6 @@
         The start of the Interval for this vote.  Before this time, the
         consensus document produced from this vote should not be used.
         See section 1.4 for voting timeline information.
-
-    "flag-thresholds" SP Thresholds NL
-
-         [At most once for votes; does not occur in consensuses.]
-
-         A space-separated list of the internal performance thresholds
-         that the directory authority had at the moment it was forming
-         a vote.
-
-         The metaformat is:
-            Thresholds = Threshold | Threshold SP Thresholds
-            Threshold = ThresholdKey '=' ThresholdVal
-            ThresholdKey = (KeywordChar | "_") +
-            ThresholdVal = [0-9]+("."[0-9]+)? "%"?
-
-         Commonly used Thresholds at this point include:
-
-         "stable-uptime" -- Uptime (in seconds) required for a relay
-                            to be marked as stable.
-
-         "stable-mtbf" -- MTBF (in seconds) required for a relay to be
-                          marked as stable.
-
-         "enough-mtbf" -- Whether we have measured enough MTBF to look
-                          at stable-mtbf instead of stable-uptime.
-
-         "fast-speed" -- Bandwidth (in bytes per second) required for
-                         a relay to be marked as fast.
-
-         "guard-wfu" -- WFU (in seconds) required for a relay to be
-                        marked as guard.
-
-         "guard-tk" -- Weighted Time Known (in seconds) required for a
-                       relay to be marked as guard.
-
-         "guard-bw-inc-exits" -- If exits can be guards, then all guards
-                                 must have a bandwidth this high.
-
-         "guard-bw-exc-exits" -- If exits can't be guards, then all guards
-                                 must have a bandwidth this high.
-
-         "ignoring-advertised-bws" -- 1 if we have enough measured bandwidths
-                                 that we'll ignore the advertised bandwidth
-                                 claims of routers without measured bandwidth.
 
     "fresh-until" SP YYYY-MM-DD SP HH:MM:SS NL
 
@@ -1664,73 +1652,70 @@
         enough votes were counted for the consensus for an authoritative
         opinion to have been formed about their status.
 
-    "shared-rand-participate" NL
+    "flag-thresholds" SP Thresholds NL
 
-        [At most once for votes; does not occur in consensuses.]
+         [At most once for votes; does not occur in consensuses.]
 
-        Denotes that the directory authority supports and can participate in the
-        shared random protocol.
+         A space-separated list of the internal performance thresholds
+         that the directory authority had at the moment it was forming
+         a vote.
 
-    "shared-rand-commit" SP Version SP AlgName SP Identity SP Commit [SP Reveal] NL
+         The metaformat is:
+            Thresholds = Threshold | Threshold SP Thresholds
+            Threshold = ThresholdKey '=' ThresholdVal
+            ThresholdKey = (KeywordChar | "_") +
+            ThresholdVal = [0-9]+("."[0-9]+)? "%"?
 
-        [Any number for votes; does not occur in consensuses.]
+         Commonly used Thresholds at this point include:
 
-        Version ::= An integer greater or equal to 0.
-        AlgName ::= 1*(ALPHA / DIGIT / "_" / "-")
-        Identity ::= 40 * HEXDIG
-        Commit ::= Base64-encoded-data
-        Reveal ::= Base64-encoded-data
+         "stable-uptime" -- Uptime (in seconds) required for a relay
+                            to be marked as stable.
 
-        Denotes a directory authority commit for the shared randomness
-        protocol, containing the commitment value and potentially also the
-        reveal value. See sections [COMMITREVEAL] and [VALIDATEVALUES] of
-        proposal 250 on how to generate and validate these values.
+         "stable-mtbf" -- MTBF (in seconds) required for a relay to be
+                          marked as stable.
 
-        Version is the current shared randomness protocol version. AlgName is
-        the hash algorithm that is used (e.g. "sha3-256") and Identity is the
-        authority's SHA1 v3 identity fingerprint. Commit is the encoded
-        commitment value in base64. Reveal is optional and if it's set, it
-        contains the reveal value in base64.
+         "enough-mtbf" -- Whether we have measured enough MTBF to look
+                          at stable-mtbf instead of stable-uptime.
 
-        If a vote contains multiple commits from the same authority, the
-        receiver MUST only consider the first commit listed.
+         "fast-speed" -- Bandwidth (in bytes per second) required for
+                         a relay to be marked as fast.
 
-    "shared-rand-previous-value" SP NumReveals SP Value NL
+         "guard-wfu" -- WFU (in seconds) required for a relay to be
+                        marked as guard.
 
-        [At most once.]
+         "guard-tk" -- Weighted Time Known (in seconds) required for a
+                       relay to be marked as guard.
 
-        NumReveals ::= An integer greater or equal to 0.
-        Value ::= Base64-encoded-data
+         "guard-bw-inc-exits" -- If exits can be guards, then all guards
+                                 must have a bandwidth this high.
 
-        The shared random value that was generated during the second-to-last
-        shared randomness protocol run. For example, if this document was
-        created on the 5th of November, this field carries the shared random
-        value generated during the protocol run of the 3rd of November.
+         "guard-bw-exc-exits" -- If exits can't be guards, then all guards
+                                 must have a bandwidth this high.
 
-        See section [SRCALC] of proposal 250 for instructions on how to compute
-        this value, and see section [CONS] for why we include old shared random
-        values in votes and consensus.
+         "ignoring-advertised-bws" -- 1 if we have enough measured bandwidths
+                                 that we'll ignore the advertised bandwidth
+                                 claims of routers without measured bandwidth.
 
-        Value is the actual shared random value encoded in base64. NumReveals
-        is the number of commits used to generate this SRV.
+    "recommended-client-protocols" SP Entries NL
+    "recommended-relay-protocols" SP Entries NL
+    "required-client-protocols" SP Entries NL
+    "required-relay-protocols" SP Entries NL
 
-    "shared-rand-current-value" SP NumReveals SP Value NL
+        [At most once for each.]
 
-        [At most once.]
+        The "proto" element as specified in section 2.1.1.
 
-        NumReveals ::= An integer greater or equal to 0.
-        Value ::= Base64-encoded-data
+        To vote on these entries, a protocol/version combination is included
+        only if it is listed by a majority of the voters.
 
-        The shared random value that was generated during the latest shared
-        randomness protocol run. For example, if this document was created on
-        the 5th of November, this field carries the shared random value
-        generated during the protocol run of the 4th of November
+        These lines should be voted on.  A majority of votes is sufficient to
+        make a protocol un-supported. and should require a supermajority of
+        authorities (2/3) to make a protocol required.  The required protocols
+        should not be torrc-configurable, but rather should be hardwired in
+        the Tor code.
 
-        See section [SRCALC] of proposal 250 for instructions on how to compute
-        this value given the active commits.
-
-        Value is the actual shared random value encoded in base64. NumReveals
-        is the number of commits used to generate this SRV.
+        The tor-spec.txt section 9 details how a relay and a client should
+        behave when they encounter these lines in the consensus.
 
     "params" SP [Parameters] NL
 
@@ -1869,6 +1854,43 @@
         the shared randomness protocol).
         Min: 1. Max: INT32_MAX. Default: 2/3 of the total number of dirauth.
 
+    "shared-rand-previous-value" SP NumReveals SP Value NL
+
+        [At most once]
+
+        NumReveals ::= An integer greater or equal to 0.
+        Value ::= Base64-encoded-data
+
+        The shared random value that was generated during the second-to-last
+        shared randomness protocol run. For example, if this document was
+        created on the 5th of November, this field carries the shared random
+        value generated during the protocol run of the 3rd of November.
+
+        See section [SRCALC] of srv-spec.txt for instructions on how to compute
+        this value, and see section [CONS] for why we include old shared random
+        values in votes and consensus.
+
+        Value is the actual shared random value encoded in base64. NumReveals
+        is the number of commits used to generate this SRV.
+
+    "shared-rand-current-value" SP NumReveals SP Value NL
+
+        [At most once]
+
+        NumReveals ::= An integer greater or equal to 0.
+        Value ::= Base64-encoded-data
+
+        The shared random value that was generated during the latest shared
+        randomness protocol run. For example, if this document was created on
+        the 5th of November, this field carries the shared random value
+        generated during the protocol run of the 4th of November
+
+        See section [SRCALC] of srv-spec.txt for instructions on how to compute
+        this value given the active commits.
+
+        Value is the actual shared random value encoded in base64. NumReveals
+        is the number of commits used to generate this SRV.
+
    The authority section of a vote contains the following items, followed
    in turn by the authority's current key certificate:
 
@@ -1885,7 +1907,7 @@
 
     "contact" SP string NL
 
-        [Exactly once.]
+        [Exactly once]
 
         An arbitrary string describing how to contact the directory
         server's administrator.  Administrators should include at least an
@@ -1902,6 +1924,49 @@
         (Generally, this would only happen because of a security
         vulnerability that affected multiple authorities, like the
         Debian OpenSSL RNG bug of May 2008.)
+
+    "shared-rand-participate" NL
+
+        [At most once]
+
+        Denotes that the directory authority supports and can participate in the
+        shared random protocol.
+
+    "shared-rand-commit" SP Version SP AlgName SP Identity SP Commit [SP Reveal] NL
+
+        [Any number of times]
+
+        Version ::= An integer greater or equal to 0.
+        AlgName ::= 1*(ALPHA / DIGIT / "_" / "-")
+        Identity ::= 40 * HEXDIG
+        Commit ::= Base64-encoded-data
+        Reveal ::= Base64-encoded-data
+
+        Denotes a directory authority commit for the shared randomness
+        protocol, containing the commitment value and potentially also the
+        reveal value. See sections [COMMITREVEAL] and [VALIDATEVALUES] of
+        srv-spec.txt on how to generate and validate these values.
+
+        Version is the current shared randomness protocol version. AlgName is
+        the hash algorithm that is used (e.g. "sha3-256") and Identity is the
+        authority's SHA1 v3 identity fingerprint. Commit is the encoded
+        commitment value in base64. Reveal is optional and if it's set, it
+        contains the reveal value in base64.
+
+        If a vote contains multiple commits from the same authority, the
+        receiver MUST only consider the first commit listed.
+
+    "shared-rand-previous-value" SP NumReveals SP Value NL
+
+        [At most once]
+
+        See shared-rand-previous-value description above.
+
+    "shared-rand-current-value" SP NumReveals SP Value NL
+
+        [At most once]
+
+        See shared-rand-current-value decription above.
 
    The authority section of a consensus contains groups the following items,
    in the order given, with one group for each authority that contributed to
@@ -2008,6 +2073,19 @@
         Directory authorities SHOULD omit version strings they receive from
         descriptors if they would cause "v" lines to be over 128 characters
         long.
+
+    "pr" SP Entries NL
+
+        [At most once.]
+
+        The "proto" family element as specified in section 2.1.1.
+
+        During voting, authorities copy these lines immediately below the "v"
+        lines. When a descriptor does not contain a "proto" entry, the
+        authorities should reconstruct it using the approach described below
+        in section D. They are included in the consensus using the same rules
+        as currently used for "v" lines, if a sufficiently late consensus
+        method is in use.
 
     "w" SP "Bandwidth=" INT [SP "Measured=" INT] [SP "Unmeasured=1"] NL
 
@@ -2483,6 +2561,18 @@
         * If consensus method 23 or later is used, authorities include
           shared randomness protocol data on their votes and consensus.
 
+        * If consensus-method 24 or later is in use, then routers that
+          do not have the Valid flag are not listed at all.
+
+        * If consensus-method 25 or later is in use, then we vote
+          on recommended-protocols and required-protocols lines in the
+          consensus.  We also include protocols lines in routerstatus
+          entries.
+
+        * If consensus-method 26 or later is in use, then we initialize
+          bandwith weights to 1 in our calculations, to avoid
+          division-by-zero errors on unusual networks.
+
      The signatures at the end of a consensus document are sorted in
      ascending order by identity digest.
 
@@ -2560,6 +2650,10 @@
      "20" -- Adds GuardFraction information to microdescriptors.
      "21" -- Adds Ed25519 keys to microdescriptors.
      "22" -- Instantiates Ed25519 voting algorithm correctly.
+     "23" -- Adds shared randomness protocol data.
+     "24" -- No longer lists routers that are not Valid in the consensus.
+     "25" -- Vote on recommended-protocols and required-protocols.
+     "26" -- Initialize bandwidth weights to 1 to avoid division-by-zero.
 
    Before generating a consensus, an authority must decide which consensus
    method to use.  To do this, it looks for the highest version number
@@ -2568,9 +2662,11 @@
    method that it supports (which will probably not result in a sufficiently
    signed consensus).
 
-   All authorities MUST support method 13; authorities SHOULD support more
-   recent methods as well.  Authorities SHOULD NOT support or advertise
-   support for any method before 13.
+   All authorities MUST support method 13; authorities SHOULD support
+   more recent methods as well.  Authorities SHOULD NOT support or
+   advertise support for any method before 13.  Clients MAY assume that
+   they will never see a current valid signed consensus for any method
+   before method 13.
 
    (The consensuses generated by new methods must be parsable by
    implementations that only understand the old methods, and must not cause
@@ -2606,6 +2702,12 @@ The following methods have incorrect implementations; authorities SHOULD
 
   Let weight_scale = 10000
 
+  Starting with consensus method 26, G, M, E, and D are initialized to 1 and
+  T to 4. Prior consensus methods initialize them all to 0. With this change,
+  test tor networks that are small or new are much more likely to produce
+  bandwidth-weights in their consensus. The extra bandwidth has a negligible
+  impact on the bandwidth weights in the public tor network.
+
   Let G be the total bandwidth for Guard-flagged nodes.
   Let M be the total bandwidth for non-flagged nodes.
   Let E be the total bandwidth for Exit-flagged nodes.
@@ -2627,9 +2729,9 @@ The following methods have incorrect implementations; authorities SHOULD
 
       Wgg*G + Wgd*D == M + Wmd*D + Wme*E + Wmg*G  (guard bw = middle bw)
       Wgg*G + Wgd*D == Wee*E + Wed*D              (guard bw = exit bw)
-      Wed*D + Wmd*D + Wgd*D == D                  (aka: Wed+Wmd+Wdg = 1)
-      Wmg*G + Wgg*G == G                          (aka: Wgg = 1-Wmg)
-      Wme*E + Wee*E == E                          (aka: Wee = 1-Wme)
+      Wed*D + Wmd*D + Wgd*D == D              (aka: Wed+Wmd+Wdg = weight_scale)
+      Wmg*G + Wgg*G == G                      (aka: Wgg = weight_scale-Wmg)
+      Wme*E + Wee*E == E                      (aka: Wee = weight_scale-Wme)
 
   We are short 2 constraints with the above set. The remaining constraints
   come from examining different cases of network load. The following
@@ -2676,8 +2778,8 @@ The following methods have incorrect implementations; authorities SHOULD
       In this case, if M <= T/3, we have enough bandwidth to try to achieve
       a balancing condition.
 
-      Add constraints Wgg = 1, Wmd == Wgd to maximize bandwidth in the guard
-      position while still allowing exits to be used as middle nodes:
+      Add constraints Wgg = weight_scale, Wmd == Wgd to maximize bandwidth in
+      the guard position while still allowing exits to be used as middle nodes:
 
         Wee = (weight_scale*(E - G + M))/E
         Wed = (weight_scale*(D - 2*E + 4*G - 2*M))/(3*D)
@@ -2688,8 +2790,8 @@ The following methods have incorrect implementations; authorities SHOULD
         Wgd = (weight_scale - Wed)/2
 
       If this system ends up with any values out of range (ie negative, or
-      above weight_scale), use the constraints Wgg == 1 and Wee == 1, since
-      both those positions are scarce:
+      above weight_scale), use the constraints Wgg == weight_scale and Wee ==
+      weight_scale, since both those positions are scarce:
 
          Wgg = weight_scale
          Wee = weight_scale
@@ -2728,7 +2830,7 @@ The following methods have incorrect implementations; authorities SHOULD
 
     Subcase b: (S+D) >= T/3
       if G=S:
-        Add constraints Wgg = 1, Wmd == Wed to maximize bandwidth
+        Add constraints Wgg = weight_scale, Wmd == Wed to maximize bandwidth
         in the guard position, while still allowing exits to be
         used as middle nodes:
           Wgg = weight_scale
@@ -2739,7 +2841,7 @@ The following methods have incorrect implementations; authorities SHOULD
           Wmd = (weight_scale - Wgd)/2
           Wed = (weight_scale - Wgd)/2
       if E=S:
-        Add constraints Wee == 1, Wmd == Wgd to maximize bandwidth
+        Add constraints Wee == weight_scale, Wmd == Wgd to maximize bandwidth
         in the exit position:
           Wee = weight_scale;
           Wed = (weight_scale*(D - 2*E + G + M))/(3*D);
@@ -3375,6 +3477,9 @@ B. General-use HTTP URLs
    The most recent v3 consensus should be available at:
       http://<hostname>/tor/status-vote/current/consensus.z
 
+   Similarly, the v3 microdescriptor consensus should be available at:
+      http://<hostname>/tor/status-vote/current/consensus-microdesc.z
+
    Starting with Tor version 0.2.1.1-alpha is also available at:
       http://<hostname>/tor/status-vote/current/consensus/<F1>+<F2>+<F3>.z
 
@@ -3481,9 +3586,6 @@ B. General-use HTTP URLs
    fingerprints.  Servers MUST accept both upper and lower case fingerprints
    in requests.
 
-   [XXX Add new URLs for microdescriptors, consensus flavors, and
-   microdescriptor consensus. -KL]
-
 C. Converting a curve25519 public key to an ed25519 public key
 
    Given a curve25519 x-coordinate (u), we can get the y coordinate
@@ -3505,3 +3607,19 @@ C. Converting a curve25519 public key to an ed25519 public key
    feed it to the ed25519 public key generation algorithm, and see
    what the sign is.
 
+D. Inferring missing proto lines.
+
+   The directory authorities no longer allow versions of Tor before
+   0.2.4.18-rc.  But right now, there is no version of Tor in the consensus
+   before 0.2.4.19.  Therefore, we should disallow versions of Tor earlier
+   than 0.2.4.19, so that we can have the protocol list for all current Tor
+   versions include:
+
+     Cons=1-2 Desc=1-2 DirCache=1 HSDir=1 HSIntro=3 HSRend=1-2 Link=1-4
+     LinkAuth=1 Microdesc=1-2 Relay=1-2
+
+   For Desc, Tor versions before 0.2.7.stable should be taken to have Desc=1
+   and versions 0.2.7.stable or later should have Desc=1-2.
+
+   For Microdesc and Cons, Tor versions before 0.2.7.stable should be taken to
+   support version 1; 0.2.7.stable and later should have 1-2.
