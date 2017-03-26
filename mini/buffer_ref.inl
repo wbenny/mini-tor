@@ -643,8 +643,8 @@ mutable_buffer_ref<T>::reverse_copy_from(
   const buffer_ref<T> other
   )
 {
-  size_type size_to_copy = min(get_size(), other.get_size());
-  memory::reverse_copy(_begin, other._begin, size_to_copy);
+  size_type size_to_copy = min(this->get_size(), other.get_size());
+  memory::reverse_copy(this->_begin, other._begin, size_to_copy);
   return *this;
 }
 

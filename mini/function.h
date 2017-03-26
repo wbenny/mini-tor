@@ -522,7 +522,7 @@ public:
 	template<typename T, typename Allocator>
 	void assign(T && functor, const Allocator & allocator) noexcept(detail::is_inplace_allocated<T, Allocator>::value)
 	{
-		function(allocator_arg, allocator, functor).swap(*this);
+		function(allocator_argument_type{}, allocator, functor).swap(*this);
 	}
 
 	void swap(function & other) noexcept

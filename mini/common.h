@@ -4,6 +4,7 @@
 #include <cstdint>
 #include <cstddef>
 #include <cstdarg>
+#include <utility>
 
 #ifdef min
 # undef min

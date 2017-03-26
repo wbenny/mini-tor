@@ -1,30 +1,54 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio 15
+VisualStudioVersion = 15.0.26228.9
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "mini-tor", "mini-tor.vcxproj", "{6A9A9A93-E77E-44E3-B36E-2336A7EE9770}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug_Clang|x64 = Debug_Clang|x64
+		Debug_Clang|x86 = Debug_Clang|x86
 		Debug|x64 = Debug|x64
 		Debug|x86 = Debug|x86
+		Release_Clang|x64 = Release_Clang|x64
+		Release_Clang|x86 = Release_Clang|x86
+		Release_Small_Clang|x64 = Release_Small_Clang|x64
+		Release_Small_Clang|x86 = Release_Small_Clang|x86
 		Release_Small|x64 = Release_Small|x64
 		Release_Small|x86 = Release_Small|x86
+		Release_STL_Clang|x64 = Release_STL_Clang|x64
+		Release_STL_Clang|x86 = Release_STL_Clang|x86
 		Release_STL|x64 = Release_STL|x64
 		Release_STL|x86 = Release_STL|x86
 		Release|x64 = Release|x64
 		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{6A9A9A93-E77E-44E3-B36E-2336A7EE9770}.Debug_Clang|x64.ActiveCfg = Debug_Clang|x64
+		{6A9A9A93-E77E-44E3-B36E-2336A7EE9770}.Debug_Clang|x64.Build.0 = Debug_Clang|x64
+		{6A9A9A93-E77E-44E3-B36E-2336A7EE9770}.Debug_Clang|x86.ActiveCfg = Debug_Clang|Win32
+		{6A9A9A93-E77E-44E3-B36E-2336A7EE9770}.Debug_Clang|x86.Build.0 = Debug_Clang|Win32
 		{6A9A9A93-E77E-44E3-B36E-2336A7EE9770}.Debug|x64.ActiveCfg = Debug|x64
 		{6A9A9A93-E77E-44E3-B36E-2336A7EE9770}.Debug|x64.Build.0 = Debug|x64
 		{6A9A9A93-E77E-44E3-B36E-2336A7EE9770}.Debug|x86.ActiveCfg = Debug|Win32
 		{6A9A9A93-E77E-44E3-B36E-2336A7EE9770}.Debug|x86.Build.0 = Debug|Win32
+		{6A9A9A93-E77E-44E3-B36E-2336A7EE9770}.Release_Clang|x64.ActiveCfg = Release_Clang|x64
+		{6A9A9A93-E77E-44E3-B36E-2336A7EE9770}.Release_Clang|x64.Build.0 = Release_Clang|x64
+		{6A9A9A93-E77E-44E3-B36E-2336A7EE9770}.Release_Clang|x86.ActiveCfg = Release_Clang|Win32
+		{6A9A9A93-E77E-44E3-B36E-2336A7EE9770}.Release_Clang|x86.Build.0 = Release_Clang|Win32
+		{6A9A9A93-E77E-44E3-B36E-2336A7EE9770}.Release_Small_Clang|x64.ActiveCfg = Release_Small_Clang|x64
+		{6A9A9A93-E77E-44E3-B36E-2336A7EE9770}.Release_Small_Clang|x64.Build.0 = Release_Small_Clang|x64
+		{6A9A9A93-E77E-44E3-B36E-2336A7EE9770}.Release_Small_Clang|x86.ActiveCfg = Release_Small_Clang|Win32
+		{6A9A9A93-E77E-44E3-B36E-2336A7EE9770}.Release_Small_Clang|x86.Build.0 = Release_Small_Clang|Win32
 		{6A9A9A93-E77E-44E3-B36E-2336A7EE9770}.Release_Small|x64.ActiveCfg = Release_Small|x64
 		{6A9A9A93-E77E-44E3-B36E-2336A7EE9770}.Release_Small|x64.Build.0 = Release_Small|x64
 		{6A9A9A93-E77E-44E3-B36E-2336A7EE9770}.Release_Small|x86.ActiveCfg = Release_Small|Win32
 		{6A9A9A93-E77E-44E3-B36E-2336A7EE9770}.Release_Small|x86.Build.0 = Release_Small|Win32
+		{6A9A9A93-E77E-44E3-B36E-2336A7EE9770}.Release_STL_Clang|x64.ActiveCfg = Release_STL_Clang|x64
+		{6A9A9A93-E77E-44E3-B36E-2336A7EE9770}.Release_STL_Clang|x64.Build.0 = Release_STL_Clang|x64
+		{6A9A9A93-E77E-44E3-B36E-2336A7EE9770}.Release_STL_Clang|x86.ActiveCfg = Release_STL_Clang|Win32
+		{6A9A9A93-E77E-44E3-B36E-2336A7EE9770}.Release_STL_Clang|x86.Build.0 = Release_STL_Clang|Win32
 		{6A9A9A93-E77E-44E3-B36E-2336A7EE9770}.Release_STL|x64.ActiveCfg = Release_STL|x64
 		{6A9A9A93-E77E-44E3-B36E-2336A7EE9770}.Release_STL|x64.Build.0 = Release_STL|x64
 		{6A9A9A93-E77E-44E3-B36E-2336A7EE9770}.Release_STL|x86.ActiveCfg = Release_STL|Win32

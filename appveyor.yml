@@ -3,6 +3,7 @@ branches:
   only:
   - master
 skip_tags: true
+image: Visual Studio 2017
 configuration: Release_Small
 platform: x86
 before_build:
