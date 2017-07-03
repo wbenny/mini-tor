@@ -1,5 +1,6 @@
 #pragma once
 #include <mini/common.h>
+#include <mini/byte_buffer_ref.h>
 
 namespace mini::io {
 

@@ -54,7 +54,7 @@ class memory_stream
       size_type size
       ) override
     {
-      size = min(size, (size_type)(_position - _end));
+      size = min(size, (size_type)(_end - _position));
       memory::copy(buffer, _position, size);
       _position += size;
       return size;
@@ -66,7 +66,7 @@ class memory_stream
       size_type size
       ) override
     {
-      size = min(size, static_cast<size_type>(_position - _end));
+      size = min(size, static_cast<size_type>(_end - _position));
       memory::copy(_position, buffer, size);
       _position += size;
       return size;

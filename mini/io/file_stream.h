@@ -205,6 +205,9 @@ class file_stream
       return bytes_written;
     }
 
+    using stream::read;
+    using stream::write;
+
     size_type
     seek(
       intptr_t offset,

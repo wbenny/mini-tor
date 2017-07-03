@@ -80,7 +80,7 @@ aes<KEY_SIZE>::aes(
   typename aes::key&& aes_key
   )
 {
-  init(_mode, std::move(aes_key));
+  init(mode, std::move(aes_key));
 }
 
 template <
