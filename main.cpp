@@ -256,7 +256,7 @@ main(
     }
   }
 
-#if defined(_DEBUG)
+#if defined(MINI_CONFIG_DEBUG)
   mini::log.set_level(mini::logger::level::info);
 #endif
 
@@ -326,8 +326,5 @@ connect_again:
   mini_info("content size: %u bytes", content.get_size());
   mini_info("-----------------------------");
 
-
   return 0;
 }
-
-// */

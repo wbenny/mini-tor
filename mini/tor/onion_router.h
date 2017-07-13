@@ -2,6 +2,7 @@
 #include <mini/flags.h>
 #include <mini/byte_buffer.h>
 #include <mini/net/ip_address.h>
+#include <mini/crypto/sha1.h>
 
 namespace mini::tor {
 
@@ -97,7 +98,7 @@ class onion_router
       const string_ref ip,
       uint16_t or_port,
       uint16_t dir_port,
-      const string_ref identity_fingerprint
+      const byte_buffer_ref identity_fingerprint
       );
 
     consensus&
@@ -145,14 +146,14 @@ class onion_router
       uint16_t value
       );
 
-    string_ref
+    byte_buffer_ref
     get_identity_fingerprint(
       void
       ) const;
 
     void
     set_identity_fingerprint(
-      const string_ref value
+      const byte_buffer_ref value
       );
 
     status_flags
@@ -186,6 +187,16 @@ class onion_router
       );
 
     byte_buffer_ref
+    get_ntor_onion_key(
+      void
+      );
+
+    void
+    set_ntor_onion_key(
+      const byte_buffer_ref value
+      );
+
+    byte_buffer_ref
     get_service_key(
       void
       );
@@ -208,12 +219,16 @@ class onion_router
     uint16_t _or_port;
     uint16_t _dir_port;
 
-    string _identity_fingerprint;
+    byte_buffer _identity_fingerprint; // 20 bytes.
     status_flags _flags;
 
     byte_buffer _onion_key;
     byte_buffer _signing_key;
+    byte_buffer _ntor_onion_key;
+
     byte_buffer _service_key; // for introduction point
+
+    bool _descriptor_fetched;
 };
 
 using onion_router_list = collections::list<onion_router*>;

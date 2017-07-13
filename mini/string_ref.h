@@ -8,7 +8,16 @@ class string_ref
   : public buffer_ref<char>
 {
   public:
+    static const size_type not_found       = string::not_found;
+    static const size_type zero_terminated = string::zero_terminated;
+
+    static const string_ref empty;
+
     using buffer_ref<char>::buffer_ref;
+
+    //
+    // constructors.
+    //
 
     string_ref(
       char value
@@ -25,14 +34,97 @@ class string_ref
       const char* value
       );
 
-    size_type
-    get_size(
+    //
+    // capacity.
+    //
+
+    bool
+    is_empty(
       void
       ) const;
+
+    //
+    // lookup.
+    //
+
+    size_type
+    index_of(
+      const string_ref item,
+      size_type from_offset = 0
+      ) const;
+
+    size_type
+    last_index_of(
+      const string_ref item,
+      size_type from_offset = 0
+      ) const;
+
+    bool
+    contains(
+      const string_ref item
+      ) const;
+
+    bool
+    starts_with(
+      const string_ref item
+      ) const;
+
+    bool
+    ends_with(
+      const string_ref item
+      ) const;
+
+    //
+    // operations.
+    //
+
+    bool
+    equals(
+      const string_ref other
+      ) const;
+
+    int
+    compare(
+      const string_ref other
+      ) const;
+
+    string_ref
+    substring(
+      size_type offset
+      ) const;
+
+    string_ref
+    substring(
+      size_type offset,
+      size_type length
+      ) const;
+
+    string_collection
+    split(
+      const string_ref delimiter,
+      size_type count = size_type_max
+      ) const;
+
+    bool
+    is_zero_terminated(
+      void
+      ) const;
+
+    //
+    // conversion operators.
+    //
 
     operator string(
       void
       ) const;
+
+    operator byte_buffer_ref(
+      void
+      ) const;
+
+    //
+    // non-member operations.
+    //
 
     friend bool
     operator==(
@@ -65,6 +157,16 @@ class string_ref
         );
 
   private:
+
+    //
+    // private constructor for empty string_refs.
+    // use string_ref::empty instead.
+    //
+
+    string_ref(
+      void
+      );
+
     char _internal_char_buffer[2];
 };
 

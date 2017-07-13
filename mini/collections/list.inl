@@ -58,7 +58,7 @@ template <
 >
 list<T, ALLOCATOR_TYPE>::list(
   std::initializer_list<T> values
-)
+  )
   : list<T, ALLOCATOR_TYPE>()
 {
   for (auto&& e : values)
@@ -110,6 +110,33 @@ list<T, ALLOCATOR_TYPE>::list(
   : list<T, ALLOCATOR_TYPE>(buffer.begin(), buffer.end())
 {
 
+}
+
+template <
+  typename T,
+  typename ALLOCATOR_TYPE
+>
+template <
+  size_type N
+>
+list<T, ALLOCATOR_TYPE>::list(
+  const T(&array)[N]
+  )
+  : list<T, ALLOCATOR_TYPE>(array, array + N)
+{
+
+}
+
+template <
+  typename T,
+  typename ALLOCATOR_TYPE
+>
+list<T, ALLOCATOR_TYPE>::list(
+  std::initializer_list<const buffer_ref<T>> items
+  )
+  : list<T, ALLOCATOR_TYPE>()
+{
+  add_many(items);
 }
 
 //
@@ -300,6 +327,23 @@ list<T, ALLOCATOR_TYPE>::slice(
   return buffer_ref<T>(_first + begin, _first + end);
 }
 
+template <
+  typename T,
+  typename ALLOCATOR_TYPE
+>
+mutable_buffer_ref<T>
+list<T, ALLOCATOR_TYPE>::slice(
+  size_type begin,
+  size_type end
+  )
+{
+  end = end == (size_type)-1
+    ? get_size()
+    : end;
+
+  return mutable_buffer_ref<T>(_first + begin, _first + end);
+}
+
 //
 // iterators.
 //
@@ -466,6 +510,30 @@ template <
   typename T,
   typename ALLOCATOR_TYPE
 >
+bool
+list<T, ALLOCATOR_TYPE>::equals(
+  const list& other
+  ) const
+{
+  return buffer_ref<T>(*this).equals(other);
+}
+
+template <
+  typename T,
+  typename ALLOCATOR_TYPE
+>
+bool
+list<T, ALLOCATOR_TYPE>::contains(
+  const value_type& item
+  ) const
+{
+  return index_of(item) != not_found;
+}
+
+template <
+  typename T,
+  typename ALLOCATOR_TYPE
+>
 typename list<T, ALLOCATOR_TYPE>::size_type
 list<T, ALLOCATOR_TYPE>::index_of(
   const value_type& item,
@@ -481,18 +549,6 @@ list<T, ALLOCATOR_TYPE>::index_of(
   }
 
   return not_found;
-}
-
-template <
-  typename T,
-  typename ALLOCATOR_TYPE
->
-bool
-list<T, ALLOCATOR_TYPE>::contains(
-  const value_type& item
-  ) const
-{
-  return index_of(item) != not_found;
 }
 
 //
@@ -542,6 +598,21 @@ list<T, ALLOCATOR_TYPE>::add_many(
   memory::copy(&_first[get_size()], items.get_buffer(), items.get_size() * sizeof(T));
 
   _last = _first + new_size;
+}
+
+template <
+  typename T,
+  typename ALLOCATOR_TYPE
+>
+void
+list<T, ALLOCATOR_TYPE>::add_many(
+  std::initializer_list<const buffer_ref<T>> items
+  )
+{
+  for (auto&& e : items)
+  {
+    add_many(e);
+  }
 }
 
 template <
@@ -793,6 +864,7 @@ list<T, ALLOCATOR_TYPE>::operator mutable_buffer_ref<T>(
 //
 // private methods.
 //
+
 template <
   typename T,
   typename ALLOCATOR_TYPE

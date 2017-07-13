@@ -7,11 +7,6 @@
 
 namespace mini::tor {
 
-//
-// sha1 hash size.
-//
-static constexpr size_type HASH_LEN = 20;
-
 class relay_cell;
 
 class circuit_node_crypto_state
@@ -38,10 +33,10 @@ class circuit_node_crypto_state
       );
 
   private:
-    using aes128_t = crypto::aes_ctr<128>;
+    using aes_ctr_128 = crypto::aes<crypto::cipher_mode::ctr, 128>;
 
-    aes128_t _forward_cipher;
-    aes128_t _backward_cipher;
+    aes_ctr_128 _forward_cipher;
+    aes_ctr_128 _backward_cipher;
 
     crypto::sha1 _forward_digest;
     crypto::sha1 _backward_digest;

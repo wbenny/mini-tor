@@ -66,6 +66,17 @@ class list
       const buffer_ref<T> buffer
       );
 
+    template <
+      size_type N
+    >
+    list(
+      const T (&array)[N]
+      );
+
+    list(
+      std::initializer_list<const buffer_ref<T>> items
+      );
+
     //
     // destructor.
     //
@@ -147,6 +158,12 @@ class list
       size_type end = (size_type)-1
       ) const;
 
+    mutable_buffer_ref<T>
+    slice(
+      size_type begin,
+      size_type end = (size_type)-1
+      );
+
     //
     // iterators.
     //
@@ -215,15 +232,20 @@ class list
     // lookup.
     //
 
-    size_type
-    index_of(
-      const value_type& item,
-      size_type from_offset = 0
+    bool
+    equals(
+        const list& other
       ) const;
 
     bool
     contains(
       const value_type& item
+      ) const;
+
+    size_type
+    index_of(
+      const value_type& item,
+      size_type from_offset = 0
       ) const;
 
     //
@@ -243,6 +265,11 @@ class list
     void
     add_many(
       const buffer_ref<T> items
+      );
+
+    void
+    add_many(
+      std::initializer_list<const buffer_ref<T>> items
       );
 
     void
@@ -315,6 +342,19 @@ class list
     operator mutable_buffer_ref<T>(
       void
       );
+
+    //
+    // non-member operations.
+    //
+
+    friend bool
+    operator==(
+      const list<T, ALLOCATOR_TYPE>& lhs,
+      const list<T, ALLOCATOR_TYPE>& rhs
+      )
+    {
+      return lhs.equals(rhs);
+    }
 
   private:
     void

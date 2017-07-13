@@ -13,4 +13,13 @@ strchr(
     : strchr(s + 1, c);
 }
 
+constexpr static int strlen(
+  const char* s
+  )
+{
+  return *s == '\0'
+    ? 0
+    : strlen(s + 1) + 1;
+}
+
 }

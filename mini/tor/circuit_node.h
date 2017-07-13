@@ -43,10 +43,14 @@ class circuit_node
       void
       );
 
+    byte_buffer
+    create_onion_skin_ntor(
+      void
+      );
+
     void
-    set_shared_secret(
-      const byte_buffer_ref peer_public,
-      const byte_buffer_ref kh
+    compute_shared_secret(
+      const byte_buffer_ref cell_payload
       );
 
     bool
@@ -97,7 +101,7 @@ class circuit_node
 
     onion_router* _onion_router;
     ptr<circuit_node_crypto_state> _crypto_state;
-    key_agreement _dh;
+    ptr<key_agreement> _handshake;
 
     size_type _package_window = window_start;
     size_type _deliver_window = window_start;

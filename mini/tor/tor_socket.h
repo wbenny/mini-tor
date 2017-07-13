@@ -40,7 +40,7 @@ class tor_socket
 
     circuit*
     create_circuit(
-      void
+      handshake_type handshake = preferred_handshake_type
       );
 
     void

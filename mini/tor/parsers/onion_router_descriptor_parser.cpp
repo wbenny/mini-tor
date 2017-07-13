@@ -18,6 +18,9 @@ onion_router_descriptor_parser::parse(
 
   for (auto&& line : lines)
   {
+    string_collection splitted_line = line.split(" ");
+    string_hash control_word_hash = splitted_line[0];
+
     //
     // onion-key
     //
@@ -66,9 +69,13 @@ onion_router_descriptor_parser::parse(
       current_key.clear();
     }
     else if (current_location == document_location::onion_key_content ||
-              current_location == document_location::signing_key_content)
+             current_location == document_location::signing_key_content)
     {
       current_key += line;
+    }
+    else if (control_word_hash == control_words[control_word_ntor_onion_key])
+    {
+      router->set_ntor_onion_key(crypto::base64::decode(splitted_line[1]));
     }
   }
 }

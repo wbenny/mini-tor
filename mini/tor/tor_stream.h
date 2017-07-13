@@ -1,5 +1,5 @@
 #pragma once
-#include "types.h"
+#include "common.h"
 
 #include <mini/io/stream.h>
 #include <mini/threading/locked_value.h>

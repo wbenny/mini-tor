@@ -9,6 +9,8 @@
 #include <mini/io/stream_reader.h>
 #include <mini/io/stream_wrapper.h>
 
+#include <mini/crypto/base16.h>
+
 namespace mini::tor {
 
 circuit::circuit(
@@ -176,76 +178,41 @@ circuit::create_dir_stream(
 
 void
 circuit::create(
-  onion_router* first_onion_router
+  onion_router* first_onion_router,
+  handshake_type handshake
   )
 {
-  mini_debug("circuit::create() [or: %s, state: creating]", first_onion_router->get_name().get_buffer());
-  set_state(state::creating);
+  switch (handshake)
   {
-    _extend_node = create_circuit_node(first_onion_router);
+    case handshake_type::tap:
+      return create_tap(first_onion_router);
 
-    send_cell(cell(
-      _circuit_id,
-      cell_command::create,
-      _extend_node->create_onion_skin()
-    ));
-  }
+    case handshake_type::ntor:
+      return create_ntor(first_onion_router);
 
-  if (mini_wait_success(wait_for_state(state::ready)))
-  {
-    mini_debug("circuit::create() [or: %s, state: created]", first_onion_router->get_name().get_buffer());
-  }
-  else
-  {
-    mini_error("circuit::create() [or: %s, state: destroyed]", first_onion_router->get_name().get_buffer());
+    default:
+      mini_assert(0 && "invalid handshake type");
+      break;
   }
 }
 
 void
 circuit::extend(
-  onion_router* next_onion_router
-)
+  onion_router* next_onion_router,
+  handshake_type handshake
+  )
 {
-  mini_debug("circuit::extend() [or: %s, state: extending]", next_onion_router->get_name().get_buffer());
-  set_state(state::extending);
+  switch (handshake)
   {
-    _extend_node = create_circuit_node(next_onion_router);
-    const byte_buffer onion_skin = _extend_node->create_onion_skin();
+    case handshake_type::tap:
+      return extend_tap(next_onion_router);
 
-    byte_buffer relay_payload_bytes(
-      4 +                         // ip address
-      2 +                         // port
-      onion_skin.get_size() +     // hybrid encrypted data length
-      HASH_LEN);                  // identity fingerprint
+    case handshake_type::ntor:
+      return extend_ntor(next_onion_router);
 
-    io::memory_stream relay_payload_stream(relay_payload_bytes);
-    io::stream_wrapper relay_payload_buffer(relay_payload_stream, endianness::big_endian);
-
-    relay_payload_buffer.write(swap_endianness(next_onion_router->get_ip_address().to_int()));
-    relay_payload_buffer.write(next_onion_router->get_or_port());
-    relay_payload_buffer.write(onion_skin);
-    relay_payload_buffer.write(crypto::base16::decode(next_onion_router->get_identity_fingerprint()));
-
-    send_relay_cell(
-      0,
-      cell_command::relay_extend,
-      relay_payload_bytes,
-
-      //
-      // clients MUST only send
-      // EXTEND cells inside RELAY_EARLY cells
-      //
-
-      cell_command::relay_early,
-      _extend_node);
-  }
-  if (mini_wait_success(wait_for_state(state::ready)))
-  {
-    mini_debug("circuit::extend() [or: %s, state: extended]", next_onion_router->get_name().get_buffer());
-  }
-  else
-  {
-    mini_error("circuit::extend() [or: %s, state: destroyed]", next_onion_router->get_name().get_buffer());
+    default:
+      mini_assert(0 && "invalid handshake type");
+      break;
   }
 }
 
@@ -297,6 +264,229 @@ circuit::get_stream_by_id(
   return stream
     ? *stream
     : nullptr;
+}
+
+void
+circuit::create_tap(
+  onion_router* first_onion_router
+  )
+{
+  mini_debug("circuit::create_tap() [or: %s, state: creating]", first_onion_router->get_name().get_buffer());
+  set_state(state::creating);
+  {
+    _extend_node = create_circuit_node(first_onion_router);
+
+    send_cell(cell(
+      _circuit_id,
+      cell_command::create,
+      _extend_node->create_onion_skin()
+    ));
+  }
+
+  if (mini_wait_success(wait_for_state(state::ready)))
+  {
+    mini_debug("circuit::create_tap() [or: %s, state: created]", first_onion_router->get_name().get_buffer());
+  }
+  else
+  {
+    mini_error("circuit::create_tap() [or: %s, state: destroyed]", first_onion_router->get_name().get_buffer());
+  }
+}
+
+void
+circuit::create_ntor(
+  onion_router* first_onion_router
+  )
+{
+  if (first_onion_router->get_ntor_onion_key().is_empty())
+  {
+    mini_warning("circuit::create_ntor() [or: %s does not support NTOR handshake]", first_onion_router->get_name().get_buffer());
+    return;
+  }
+
+  mini_debug("circuit::create_ntor() [or: %s, state: creating]", first_onion_router->get_name().get_buffer());
+  set_state(state::creating);
+  {
+    _extend_node = create_circuit_node(first_onion_router);
+
+    byte_buffer handshake_bytes(sizeof(uint16_t) + sizeof(uint16_t) + 84);
+    io::memory_stream handshake_stream(handshake_bytes);
+    io::stream_wrapper handshake_buffer(handshake_stream, endianness::big_endian);
+    handshake_buffer.write(static_cast<uint16_t>(2));  // ntor type
+    handshake_buffer.write(static_cast<uint16_t>(84)); // ntor onion skin length
+    handshake_buffer.write(_extend_node->create_onion_skin_ntor());
+
+    send_cell(cell(
+      _circuit_id,
+      cell_command::create2,
+      handshake_bytes
+    ));
+  }
+
+  if (mini_wait_success(wait_for_state(state::ready)))
+  {
+    mini_debug("circuit::create_ntor() [or: %s, state: created]", first_onion_router->get_name().get_buffer());
+  }
+  else
+  {
+    mini_error("circuit::create_ntor() [or: %s, state: destroyed]", first_onion_router->get_name().get_buffer());
+  }
+}
+
+void
+circuit::extend_tap(
+  onion_router* next_onion_router
+  )
+{
+  //
+  // The relay payload for an EXTEND relay cell consists of:
+  //       Address                       [4 bytes]
+  //       Port                          [2 bytes]
+  //       Onion skin                    [TAP_C_HANDSHAKE_LEN bytes]
+  //       Identity fingerprint          [HASH_LEN bytes]
+  //
+
+  mini_debug("circuit::extend_tap() [or: %s, state: extending]", next_onion_router->get_name().get_buffer());
+  set_state(state::extending);
+  {
+    _extend_node = create_circuit_node(next_onion_router);
+    const byte_buffer onion_skin = _extend_node->create_onion_skin();
+
+    byte_buffer relay_payload_bytes(
+      4 +                                // ip address
+      2 +                                // port
+      onion_skin.get_size() +            // hybrid encrypted data length
+      crypto::sha1::hash_size_in_bytes); // identity fingerprint
+
+    io::memory_stream relay_payload_stream(relay_payload_bytes);
+    io::stream_wrapper relay_payload_buffer(relay_payload_stream, endianness::big_endian);
+
+    relay_payload_buffer.write(swap_endianness(next_onion_router->get_ip_address().to_int()));
+    relay_payload_buffer.write(next_onion_router->get_or_port());
+    relay_payload_buffer.write(onion_skin);
+    relay_payload_buffer.write(next_onion_router->get_identity_fingerprint());
+
+    send_relay_cell(
+      0,
+      cell_command::relay_extend,
+      relay_payload_bytes,
+
+      //
+      // clients MUST only send
+      // EXTEND cells inside RELAY_EARLY cells
+      //
+
+      cell_command::relay_early,
+      _extend_node);
+  }
+
+  if (mini_wait_success(wait_for_state(state::ready)))
+  {
+    mini_debug("circuit::extend_tap() [or: %s, state: extended]", next_onion_router->get_name().get_buffer());
+  }
+  else
+  {
+    mini_error("circuit::extend_tap() [or: %s, state: destroyed]", next_onion_router->get_name().get_buffer());
+  }
+}
+
+void
+circuit::extend_ntor(
+  onion_router* next_onion_router
+  )
+{
+  //
+  // An EXTEND2 cell's relay payload contains:
+  //     NSPEC      (Number of link specifiers)     [1 byte]
+  //       NSPEC times:
+  //         LSTYPE (Link specifier type)           [1 byte]
+  //         LSLEN  (Link specifier length)         [1 byte]
+  //         LSPEC  (Link specifier)                [LSLEN bytes]
+  //     HTYPE      (Client Handshake Type)         [2 bytes]
+  //     HLEN       (Client Handshake Data Len)     [2 bytes]
+  //     HDATA      (Client Handshake Data)         [HLEN bytes]
+  //
+  // Link specifiers describe the next node in the circuit and how to
+  // connect to it. Recognized specifiers are:
+  //    [00] TLS-over-TCP, IPv4 address
+  //         A four-byte IPv4 address plus two-byte ORPort
+  //    [01] TLS-over-TCP, IPv6 address
+  //         A sixteen-byte IPv6 address plus two-byte ORPort
+  //    [02] Legacy identity
+  //         A 20-byte SHA1 identity fingerprint. At most one may be listed.
+  //
+
+  if (next_onion_router->get_ntor_onion_key().is_empty())
+  {
+    mini_warning("circuit::extend_ntor() [or: %s does not support NTOR handshake]", next_onion_router->get_name().get_buffer());
+    return;
+  }
+
+  enum class link_specifier_type : uint8_t
+  {
+    ipv4 = 0,
+    ipv6 = 1,
+    legacy_id = 2,
+  };
+
+  mini_debug("circuit::extend_ntor() [or: %s, state: extending]", next_onion_router->get_name().get_buffer());
+  set_state(state::extending);
+  {
+    _extend_node = create_circuit_node(next_onion_router);
+    const byte_buffer onion_skin = _extend_node->create_onion_skin_ntor();
+
+    byte_buffer relay_payload_bytes(
+      1 +                                // NSPEC
+        1 + 1 +  6 +                     // NSPEC IPv4 (4 bytes) + port (2 bytes)
+        1 + 1 + 20 +                     // NSPEC identity_fingerprint (20 bytes)
+      2 +                                // HTYPE
+      2 +                                // HLEN
+      84);                               // HDATA
+
+    io::memory_stream relay_payload_stream(relay_payload_bytes);
+    io::stream_wrapper relay_payload_buffer(relay_payload_stream, endianness::big_endian);
+
+    relay_payload_buffer.write(static_cast<uint8_t>(2)); // 2x NSPEC
+
+    {
+      relay_payload_buffer.write(static_cast<uint8_t>(link_specifier_type::ipv4));
+      relay_payload_buffer.write(static_cast<uint8_t>(6));
+      relay_payload_buffer.write(swap_endianness(next_onion_router->get_ip_address().to_int()));
+      relay_payload_buffer.write(next_onion_router->get_or_port());
+    }
+
+    {
+      relay_payload_buffer.write(static_cast<uint8_t>(link_specifier_type::legacy_id));
+      relay_payload_buffer.write(static_cast<uint8_t>(20));
+      relay_payload_buffer.write(next_onion_router->get_identity_fingerprint());
+    }
+
+    relay_payload_buffer.write(static_cast<uint16_t>(2));
+    relay_payload_buffer.write(static_cast<uint16_t>(84));
+    relay_payload_buffer.write(onion_skin);
+
+    send_relay_cell(
+      0,
+      cell_command::relay_extend2,
+      relay_payload_bytes,
+
+      //
+      // clients MUST only send
+      // EXTEND cells inside RELAY_EARLY cells
+      //
+
+      cell_command::relay_early,
+      _extend_node);
+  }
+
+  if (mini_wait_success(wait_for_state(state::ready)))
+  {
+    mini_debug("circuit::extend_ntor() [or: %s, state: extended]", next_onion_router->get_name().get_buffer());
+  }
+  else
+  {
+    mini_error("circuit::extend_ntor() [or: %s, state: destroyed]", next_onion_router->get_name().get_buffer());
+  }
 }
 
 void
@@ -401,7 +591,7 @@ circuit::rendezvous_introduce(
     //
     // compute PK_ID, aka hash of the service key.
     //
-    auto service_key_hash = crypto::sha1::hash(introduction_point->get_service_key());
+    auto service_key_hash = crypto::sha1::compute(introduction_point->get_service_key());
 
     //
     // create rest of the payload in separate buffer;
@@ -411,7 +601,7 @@ circuit::rendezvous_introduce(
       1 +                                       // version
       4 +                                       // ip address
       2 +                                       // port
-      HASH_LEN +                                // identity_fingerprint
+      crypto::sha1::hash_size_in_bytes +        // identity_fingerprint
       2 +                                       // onion key size
       introducee->get_onion_key().get_size() +  // onion key
       20 +                                      // rendezvous cookie
@@ -425,7 +615,7 @@ circuit::rendezvous_introduce(
     handshake_buffer.write(static_cast<uint8_t>(2));
     handshake_buffer.write(swap_endianness(introducee->get_ip_address().to_int()));
     handshake_buffer.write(introducee->get_or_port());
-    handshake_buffer.write(crypto::base16::decode(introducee->get_identity_fingerprint()));
+    handshake_buffer.write(introducee->get_identity_fingerprint());
     handshake_buffer.write(static_cast<payload_size_type>(introducee->get_onion_key().get_size()));
     handshake_buffer.write(introducee->get_onion_key());
     handshake_buffer.write(rendezvous_cookie);
@@ -438,9 +628,10 @@ circuit::rendezvous_introduce(
     //
     // compose the final payload.
     //
-    byte_buffer relay_payload_bytes;
-    relay_payload_bytes.add_many(service_key_hash);
-    relay_payload_bytes.add_many(handshake_encrypted);
+    byte_buffer relay_payload_bytes = {
+      service_key_hash,
+      handshake_encrypted
+    };
 
     //
     // send the cell.
@@ -656,6 +847,10 @@ circuit::handle_cell(
       handle_created_cell(cell);
       break;
 
+    case cell_command::created2:
+      handle_created2_cell(cell);
+      break;
+
     case cell_command::destroy:
       handle_destroyed_cell(cell);
       break;
@@ -696,6 +891,10 @@ circuit::handle_cell(
 
         case cell_command::relay_extended:
           handle_relay_extended_cell(decrypted_relay_cell);
+          break;
+
+        case cell_command::relay_extended2:
+          handle_relay_extended2_cell(decrypted_relay_cell);
           break;
 
         case cell_command::relay_data:
@@ -742,11 +941,20 @@ circuit::handle_created_cell(
   )
 {
   //
+  // Define TAP_S_HANDSHAKE_LEN as DH_LEN+HASH_LEN
+  //
+  //   ...
+  //
+  // The format of a CREATED cell is:
+  //     HDATA(Server Handshake Data)[TAP_S_HANDSHAKE_LEN bytes]
+  //
+
+  //
   // finish the handshake.
   //
-  _extend_node->set_shared_secret(
-    cell.get_payload().slice(0, DH_LEN),
-    cell.get_payload().slice(DH_LEN, DH_LEN + HASH_LEN));
+
+  auto handshake_data = cell.get_payload();
+  _extend_node->compute_shared_secret(handshake_data);
 
   if (_extend_node->has_valid_crypto_state())
   {
@@ -761,6 +969,42 @@ circuit::handle_created_cell(
   else
   {
     mini_error("circuit::handle_created_cell() extend node [ %s ] has invalid crypto state", _extend_node->get_onion_router()->get_name());
+
+    destroy();
+  }
+}
+
+void
+circuit::handle_created2_cell(
+  cell& cell
+  )
+{
+  //
+  // A CREATED2 cell contains:
+  //   HLEN      (Server Handshake Data Len) [2 bytes]
+  //   HDATA     (Server Handshake Data)     [HLEN bytes]
+  //
+
+  //
+  // finish the handshake.
+  //
+
+  auto handshake_data = cell.get_payload().slice(sizeof(uint16_t));
+  _extend_node->compute_shared_secret(handshake_data);
+
+  if (_extend_node->has_valid_crypto_state())
+  {
+    _node_list.add(_extend_node);
+
+    //
+    // we're ready here.
+    //
+    _extend_node = nullptr;
+    set_state(state::ready);
+  }
+  else
+  {
+    mini_error("circuit::handle_created2_cell() extend node [ %s ] has invalid crypto state", _extend_node->get_onion_router()->get_name());
 
     destroy();
   }
@@ -782,11 +1026,16 @@ circuit::handle_relay_extended_cell(
   )
 {
   //
+  // The payload of an EXTENDED cell is the same as the payload of a
+  // CREATED cell.
+  //
+
+  //
   // finish the handshake.
   //
-  _extend_node->set_shared_secret(
-    cell.get_relay_payload().slice(0, DH_LEN),
-    cell.get_relay_payload().slice(DH_LEN, DH_LEN + HASH_LEN));
+
+  auto handshake_data = cell.get_relay_payload();
+  _extend_node->compute_shared_secret(handshake_data);
 
   if (_extend_node->has_valid_crypto_state())
   {
@@ -800,7 +1049,42 @@ circuit::handle_relay_extended_cell(
   }
   else
   {
-    mini_error("circuit::handle_created_cell() extend node [ %s ] has invalid crypto state", _extend_node->get_onion_router()->get_name());
+    mini_error("circuit::handle_relay_extended_cell() extend node [ %s ] has invalid crypto state", _extend_node->get_onion_router()->get_name());
+
+    destroy();
+  }
+}
+
+void
+circuit::handle_relay_extended2_cell(
+  relay_cell& cell
+  )
+{
+  //
+  // The payload of an EXTENDED2 cell is the same as the payload of a
+  // CREATED2 cell
+  //
+
+  //
+  // finish the handshake.
+  //
+
+  auto handshake_data = cell.get_relay_payload().slice(sizeof(uint16_t));
+  _extend_node->compute_shared_secret(handshake_data);
+
+  if (_extend_node->has_valid_crypto_state())
+  {
+    _node_list.add(_extend_node);
+
+    //
+    // we're ready here.
+    //
+    _extend_node = nullptr;
+    set_state(state::ready);
+  }
+  else
+  {
+    mini_error("circuit::handle_extended2_cell() extend node [ %s ] has invalid crypto state", _extend_node->get_onion_router()->get_name());
 
     destroy();
   }

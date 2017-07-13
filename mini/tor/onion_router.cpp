@@ -10,7 +10,7 @@ onion_router::onion_router(
   const string_ref ip,
   uint16_t or_port,
   uint16_t dir_port,
-  const string_ref identity_fingerprint
+  const byte_buffer_ref identity_fingerprint
   )
   : _consensus(consensus)
   , _name(name)
@@ -21,7 +21,9 @@ onion_router::onion_router(
   , _flags(status_flag::none)
   , _onion_key()
   , _signing_key()
+  , _ntor_onion_key()
   , _service_key()
+  , _descriptor_fetched(false)
 {
 
 }
@@ -99,7 +101,7 @@ onion_router::set_dir_port(
   _dir_port = value;
 }
 
-string_ref
+byte_buffer_ref
 onion_router::get_identity_fingerprint(
   void
   ) const
@@ -109,7 +111,7 @@ onion_router::get_identity_fingerprint(
 
 void
 onion_router::set_identity_fingerprint(
-  const string_ref value
+  const byte_buffer_ref value
   )
 {
   _identity_fingerprint = value;
@@ -136,7 +138,7 @@ onion_router::get_onion_key(
   void
   )
 {
-  if (_onion_key.is_empty())
+  if (!_descriptor_fetched)
   {
     fetch_descriptor();
   }
@@ -157,7 +159,7 @@ onion_router::get_signing_key(
   void
   )
 {
-  if (_signing_key.is_empty())
+  if (!_descriptor_fetched)
   {
     fetch_descriptor();
   }
@@ -171,6 +173,27 @@ onion_router::set_signing_key(
   )
 {
   _signing_key = value;
+}
+
+byte_buffer_ref
+onion_router::get_ntor_onion_key(
+  void
+  )
+{
+  if (!_descriptor_fetched)
+  {
+    fetch_descriptor();
+  }
+
+  return _ntor_onion_key;
+}
+
+void
+onion_router::set_ntor_onion_key(
+  const byte_buffer_ref value
+  )
+{
+  _ntor_onion_key = value;
 }
 
 byte_buffer_ref
@@ -196,6 +219,8 @@ onion_router::fetch_descriptor(
 {
   onion_router_descriptor_parser parser;
   parser.parse(this, _consensus.get_onion_router_descriptor(_identity_fingerprint));
+
+  _descriptor_fetched = true;
 }
 
 }

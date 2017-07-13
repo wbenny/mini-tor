@@ -154,7 +154,7 @@ consensus::get_onion_router_by_name(
 
 onion_router*
 consensus::get_onion_router_by_identity_fingerprint(
-  const string_ref identity_fingerprint
+  const byte_buffer_ref identity_fingerprint
   )
 {
   return _onion_router_map[identity_fingerprint];
@@ -225,10 +225,10 @@ consensus::get_random_onion_router_by_criteria(
 
 string
 consensus::get_onion_router_descriptor(
-  const string_ref identity_fingerprint
+  const byte_buffer_ref identity_fingerprint
   )
 {
-  return download_from_random_router("/tor/server/fp/" + identity_fingerprint);
+  return download_from_random_router("/tor/server/fp/" + crypto::base16::encode(identity_fingerprint));
 }
 
 //

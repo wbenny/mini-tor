@@ -1,17 +1,9 @@
 #pragma once
-#include <mini/string.h>
-#include <mini/byte_buffer.h>
+#include "common.h"
+#include "capi/base64.h"
 
-namespace mini::crypto::base64 {
+namespace mini::crypto {
 
-string
-encode(
-  const byte_buffer_ref input
-  );
-
-byte_buffer
-decode(
-  const string_ref input
-  );
+using base64 = MINI_CRYPTO_BASE64_NAMESPACE::base64;
 
 }

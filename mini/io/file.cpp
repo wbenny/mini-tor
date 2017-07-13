@@ -4,22 +4,30 @@
 
 #include <shlwapi.h>
 
-namespace mini::io::file {
+namespace mini::io {
 
-bool
-exists(
+file_attributes
+file::get_attributes(
   const string_ref path
   )
 {
-  DWORD attributes = GetFileAttributes(path.get_buffer());
+  return file_attributes(GetFileAttributes(path.get_buffer()));
+}
+
+bool
+file::exists(
+  const string_ref path
+  )
+{
+  auto attributes = get_attributes(path.get_buffer());
 
   return
-     (attributes != INVALID_FILE_ATTRIBUTES) &&
-    !(attributes & FILE_ATTRIBUTE_DIRECTORY);
+     attributes != file_attributes::invalid &&
+    !attributes.is_directory();
 }
 
 string
-read_to_string(
+file::read_to_string(
   const string_ref path
   )
 {
@@ -33,7 +41,7 @@ read_to_string(
 }
 
 collections::list<string>
-read_all_lines(
+file::read_all_lines(
   const string_ref path
   )
 {
@@ -41,7 +49,7 @@ read_all_lines(
 }
 
 void
-write_from_string(
+file::write_from_string(
   const string_ref path,
   const byte_buffer_ref content
   )

@@ -2,7 +2,6 @@
 #include "relay_cell.h"
 
 #include <mini/stack_buffer.h>
-#include <mini/crypto/provider.h>
 #include <mini/io/memory_stream.h>
 #include <mini/io/stream_wrapper.h>
 
@@ -17,27 +16,21 @@ circuit_node_crypto_state::circuit_node_crypto_state(
   io::memory_stream key_material_stream(key_material);
   io::stream_wrapper key_material_buffer(key_material_stream);
 
-  //
-  // skip checksum digest.
-  //
-  stack_byte_buffer<20> checksum_digest;
-  key_material_buffer.read(checksum_digest);
-
-  stack_byte_buffer<20> df;
+  stack_byte_buffer<crypto::sha1::hash_size_in_bytes> df;
   key_material_buffer.read(df);
   _forward_digest.update(df);
 
-  stack_byte_buffer<20> db;
+  stack_byte_buffer<crypto::sha1::hash_size_in_bytes> db;
   key_material_buffer.read(db);
   _backward_digest.update(db);
 
-  stack_byte_buffer<16> kf;
+  stack_byte_buffer<aes_ctr_128::key_size_in_bytes> kf;
   key_material_buffer.read(kf);
-  _forward_cipher.init(aes128_t::key(kf));
+  _forward_cipher.init(aes_ctr_128::key(kf));
 
-  stack_byte_buffer<16> kb;
+  stack_byte_buffer<aes_ctr_128::key_size_in_bytes> kb;
   key_material_buffer.read(kb);
-  _backward_cipher.init(aes128_t::key(kb));
+  _backward_cipher.init(aes_ctr_128::key(kb));
 }
 
 void
@@ -74,7 +67,7 @@ circuit_node_crypto_state::encrypt_forward_cell(
   //
   // encrypt the payload
   //
-  auto encrypted_payload = _forward_cipher.update(relay_payload_bytes);
+  auto encrypted_payload = _forward_cipher.encrypt(relay_payload_bytes);
   mini_assert(encrypted_payload.get_size() == cell::payload_size);
 
   //
@@ -89,7 +82,7 @@ circuit_node_crypto_state::decrypt_backward_cell(
   )
 {
   mini_assert(cell.get_payload().get_size() == cell::payload_size);
-  auto decrypted_payload = _backward_cipher.update(cell.get_payload());
+  auto decrypted_payload = _backward_cipher.decrypt(cell.get_payload());
 
   mini_assert(decrypted_payload.get_size() == cell::payload_size);
   cell.set_payload(decrypted_payload);

@@ -1,30 +1,13 @@
 #include "circuit_node.h"
 #include "crypto/hybrid_encryption.h"
+#include "crypto/key_agreement_tap.h"
+#include "crypto/key_agreement_ntor.h"
 
 #include <mini/logger.h>
-#include <mini/crypto/sha1.h>
+
+#include <mini/crypto/base16.h>
 
 namespace mini::tor {
-
-static byte_buffer
-derive_keys(
-  const byte_buffer_ref secret
-  )
-{
-  byte_buffer key_material;
-  key_material.reserve(100);
-
-  byte_buffer hashdata(secret);
-  hashdata.resize(hashdata.get_size() + 1);
-
-  for (uint8_t i = 0; i < 5; i++)
-  {
-    hashdata[secret.get_size()] = i;
-    key_material.add_many(crypto::sha1::hash(hashdata));
-  }
-
-  return key_material;
-}
 
 circuit_node::circuit_node(
   circuit* circuit,
@@ -35,7 +18,10 @@ circuit_node::circuit_node(
   , _type(node_type)
   , _onion_router(router)
 {
-
+  if (_type == circuit_node_type::introduction_point)
+  {
+    _handshake = new key_agreement_tap(_onion_router);
+  }
 }
 
 circuit*
@@ -67,7 +53,7 @@ circuit_node::get_key_agreement(
   void
   )
 {
-  return _dh;
+  return *_handshake;
 }
 
 byte_buffer
@@ -75,25 +61,54 @@ circuit_node::create_onion_skin(
   void
   )
 {
+  _handshake = new key_agreement_tap(_onion_router);
+
   return hybrid_encryption::encrypt(
-    _dh.get_public_key(),
+    _handshake->get_public_key(),
     _onion_router->get_onion_key()
     );
 }
 
-void
-circuit_node::set_shared_secret(
-  const byte_buffer_ref peer_public,
-  const byte_buffer_ref kh // derivative key data, for verification of derivation
+byte_buffer
+circuit_node::create_onion_skin_ntor(
+  void
   )
 {
-  mini_assert(kh.get_size() == HASH_LEN)
+  _handshake = new key_agreement_ntor(_onion_router);
 
-  auto shared_secret = _dh.get_shared_secret(peer_public);
-  auto key_material = derive_keys(shared_secret);
+  return {
+    _onion_router->get_identity_fingerprint(),
+    _onion_router->get_ntor_onion_key(),
+    _handshake->get_public_key()
+  };
+}
 
-  if (memory::equal(key_material.get_buffer(), kh.get_buffer(), kh.get_size()))
+void
+circuit_node::compute_shared_secret(
+  const byte_buffer_ref cell_payload
+  )
+{
+  auto key_material = _handshake->compute_shared_secret(cell_payload);
+
+  if (!key_material.is_empty())
   {
+    //
+    // struct key_material
+    // {
+    //   byte_type digest_forward [20];
+    //   byte_type digest_backward[20];
+    //   byte_type cipher_forward [16];
+    //   byte_type cipher_backward[16];
+    //   ^^ sizeof == 40 + 32 == 72 ^^
+    //
+    //   byte_type rend_nonce     [20]; << ignored now
+    //   ^^ sizeof == 72 + 20 == 92 ^^  << (used in establishing of introduction points,
+    //                                      rend-spec.txt § 1.2.)
+    //
+    //   byte_type __garbage__    [];   << ignored
+    // };
+    //
+
     _crypto_state = new circuit_node_crypto_state(key_material);
   }
 }

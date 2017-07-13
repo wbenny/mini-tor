@@ -1,10 +1,34 @@
 #pragma once
-#include "types.h"
+#include "common.h"
 
 #include <mini/byte_buffer.h>
 #include <mini/io/stream.h>
 
 namespace mini::tor {
+
+//
+// 5.4.
+//
+// The payload of a RELAY_TRUNCATED or DESTROY cell contains a single octet,
+// describing why the circuit is being closed or truncated.
+//
+
+enum class cell_destroy_reason : uint8_t
+{
+  none                           =  0, // no reason given
+  protocol                       =  1, // tor protocol violation
+  internal                       =  2, // internal error
+  requested                      =  3, // a client sent a TRUNCATE command
+  hibernating                    =  4, // not currently operating; trying to save bandwidth
+  resource_limit                 =  5, // out of memory, sockets, or circuit IDs
+  connection_failed              =  6, // unable to reach relay
+  onion_router_identity          =  7, // connected to relay, but its OR identity was not as expected
+  onion_router_connection_closed =  8, // the OR connection that was carrying this circuit died
+  finished                       =  9, // the circuit has expired for being dirty or old
+  timeout                        = 10, // circuit construction took too long
+  destroyed                      = 11, // the circuit was destroyed w/o client TRUNCATE
+  no_such_service                = 12, // request for unknown hidden service
+};
 
 enum class cell_command : uint8_t
 {
@@ -18,9 +42,11 @@ enum class cell_command : uint8_t
   destroy = 4,
   create_fast = 5,
   created_fast = 6,
+  versions = 7,
   netinfo = 8,
   relay_early = 9,
-  versions = 7,
+  create2 = 10,
+  created2 = 11,
 
   //
   // relay commands.
@@ -38,6 +64,8 @@ enum class cell_command : uint8_t
   relay_resolve = 11,
   relay_resolved = 12,
   relay_begin_dir = 13,
+  relay_extend2 = 14,
+  relay_extended2 = 15,
 
   //
   // rendezvous commands.

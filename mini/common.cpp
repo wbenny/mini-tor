@@ -11,7 +11,7 @@ assert(
   int line
   )
 {
-#ifndef _DEBUG
+#ifndef MINI_CONFIG_DEBUG
   MINI_UNREFERENCED(expression_str);
   MINI_UNREFERENCED(filename);
   MINI_UNREFERENCED(line);

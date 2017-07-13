@@ -7,6 +7,32 @@ namespace mini::tor {
 class circuit_node;
 class tor_stream;
 
+//
+// 6.3.
+//
+// The payload of a RELAY_END cell begins with a single 'reason' byte to
+// describe why the stream is closing, plus optional data(depending on
+// the reason.)
+//
+
+enum class relay_end_reason : uint8_t
+{
+  misc                   =  1, // catch-all for unlisted reasons
+  resolve_failed         =  2, // couldn't look up hostname
+  connection_refused     =  3, // remote host refused connection
+  exit_policy            =  4, // OR refuses to connect to host or port
+  destroy                =  5, // circuit is being destroyed
+  done                   =  6, // anonymized TCP connection was closed
+  timeout                =  7, // connection timed out, or OR timed out while connecting
+  no_route               =  8, // routing error while attempting to contact destination
+  hibernating            =  9, // OR is temporarily hibernating
+  internal               = 10, // internal error at the OR
+  resource_limit         = 11, // OR has no resources to fulfill request
+  connection_reset       = 12, // connection was unexpectedly reset
+  tor_protocol_violation = 13, // sent when closing connection because of Tor protocol violations
+  not_directory          = 14, // client sent RELAY_BEGIN_DIR to a non - directory relay
+};
+
 class relay_cell
   : public cell
 {

@@ -1,8 +1,10 @@
 #pragma once
-#include "hash_template_base.h"
+#include "common.h"
+#include "capi/hash.h"
+#include "cng/hash.h"
 
 namespace mini::crypto {
 
-using sha1 = hash_template_base<CALG_SHA1, 160>;
+using sha1 = MINI_CRYPTO_HASH_NAMESPACE::hash<hash_algorithm_type::sha1>;
 
 }

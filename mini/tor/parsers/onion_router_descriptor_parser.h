@@ -17,6 +17,8 @@ struct onion_router_descriptor_parser
 
     signing_key,
     signing_key_content,
+
+    ntor_onion_key,
   };
 
   enum control_word_type
@@ -26,15 +28,18 @@ struct onion_router_descriptor_parser
 
     control_word_key_begin,
     control_word_key_end,
+
+    control_word_ntor_onion_key,
   };
 
-  using control_word_list = stack_buffer<string_hash, 4>;
+  using control_word_list = stack_buffer<string_hash, 5>;
   static constexpr control_word_list control_words = { {
     "onion-key",
     "signing-key",
     "-----BEGIN RSA PUBLIC KEY-----",
     "-----END RSA PUBLIC KEY-----",
-  } };
+    "ntor-onion-key",
+    } };
 
   void
   parse(

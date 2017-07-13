@@ -29,7 +29,7 @@ introduction_point_parser::parse(
     //
     if (control_word_hash == control_words[control_word_introduction_point])
     {
-      string identity_fingerprint = crypto::base16::encode(crypto::base32::decode(splitted_line[1]));
+      auto identity_fingerprint = crypto::base32::decode(splitted_line[1]);
       current_router = consensus.get_onion_router_by_identity_fingerprint(identity_fingerprint);
       continue;
     }

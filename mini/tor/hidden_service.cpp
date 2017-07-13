@@ -90,7 +90,7 @@ hidden_service::get_secret_id(
   secret_buffer.write(time_period);
   secret_buffer.write(replica);
 
-  return crypto::sha1::hash(secret_bytes);
+  return crypto::sha1::compute(secret_bytes);
 }
 
 byte_buffer
@@ -100,11 +100,12 @@ hidden_service::get_descriptor_id(
 {
   auto secret_id = get_secret_id(replica);
 
-  byte_buffer descriptor_id_bytes;
-  descriptor_id_bytes.add_many(_permanent_id);
-  descriptor_id_bytes.add_many(secret_id);
+  byte_buffer descriptor_id_bytes = {
+    _permanent_id,
+    secret_id
+  };
 
-  return crypto::sha1::hash(descriptor_id_bytes);
+  return crypto::sha1::compute(descriptor_id_bytes);
 }
 
 void
@@ -141,13 +142,12 @@ hidden_service::find_responsible_directories(
   for (replica_type replica = 0; replica < 2; replica++)
   {
     auto descriptor_id = get_descriptor_id(replica);
-    auto descriptor_id_hex = crypto::base16::encode(descriptor_id);
 
     auto directory_list_iterator = algorithm::lower_bound(
       directory_list.begin(),
       directory_list.end(),
-      descriptor_id_hex,
-      [](onion_router* lhs, const string_ref rhs) -> bool {
+      descriptor_id,
+      [](onion_router* lhs, const byte_buffer_ref rhs) -> bool {
         return lhs->get_identity_fingerprint().compare(rhs) < 0;
       }
     );

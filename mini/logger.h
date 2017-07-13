@@ -5,7 +5,7 @@
 
 #define MINI_LOG_ENABLED 1
 
-#if defined(_DEBUG) || defined(MINI_LOG_ENABLED)
+#if defined(MINI_CONFIG_DEBUG) || defined(MINI_LOG_ENABLED)
 
 //
 // variadic macro rape

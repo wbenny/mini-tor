@@ -85,6 +85,11 @@ class string
       const string& other
       );
 
+    string&
+    operator+=(
+      char other
+      );
+
     //
     // swap.
     //
@@ -197,6 +202,12 @@ class string
       size_type from_offset = 0
       ) const;
 
+    size_type
+    last_index_of(
+      const string_ref item,
+      size_type from_offset = 0
+      ) const;
+
     bool
     contains(
       const string_ref item
@@ -218,20 +229,20 @@ class string
 
     bool
     equals(
-      const string& other
+      const string_ref other
       ) const;
 
     int
     compare(
-      const string& other
+      const string_ref other
       ) const;
 
-    string
+    string_ref
     substring(
       size_type offset
       ) const;
 
-    string
+    string_ref
     substring(
       size_type offset,
       size_type length

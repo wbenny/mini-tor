@@ -339,15 +339,16 @@
       <PreprocessorDefinitions>_SCL_SECURE_NO_WARNINGS;_CRT_SECURE_NO_WARNINGS;WIN32_LEAN_AND_MEAN;_WINSOCK_DEPRECATED_NO_WARNINGS;WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>$(ProjectDir)</AdditionalIncludeDirectories>
       <AdditionalOptions>/std:c++latest %(AdditionalOptions)</AdditionalOptions>
-      <DisableSpecificWarnings>4268;4307;4505;</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4127;4268;4307;4505;</DisableSpecificWarnings>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <MinimalRebuild>false</MinimalRebuild>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <ObjectFileName>$(IntDir)%(RelativeDir)</ObjectFileName>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>shlwapi.lib;crypt32.lib;wininet.lib;ws2_32.lib;secur32.lib;ntdll.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>bcrypt.lib;shlwapi.lib;crypt32.lib;wininet.lib;ws2_32.lib;secur32.lib;ntdll.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug_Clang|Win32'">
@@ -362,11 +363,12 @@
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <MinimalRebuild>false</MinimalRebuild>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <ObjectFileName>$(IntDir)%(RelativeDir)%(filename).obj</ObjectFileName>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>shlwapi.lib;crypt32.lib;wininet.lib;ws2_32.lib;secur32.lib;ntdll.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>bcrypt.lib;shlwapi.lib;crypt32.lib;wininet.lib;ws2_32.lib;secur32.lib;ntdll.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release_STL|Win32'">
@@ -387,13 +389,14 @@
       <CallingConvention>FastCall</CallingConvention>
       <StringPooling>true</StringPooling>
       <RuntimeTypeInfo>false</RuntimeTypeInfo>
-      <DisableSpecificWarnings>4268;4307;4505;4530;4577</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4127;4268;4307;4505;4530;4577</DisableSpecificWarnings>
       <BasicRuntimeChecks>Default</BasicRuntimeChecks>
+      <ObjectFileName>$(IntDir)%(RelativeDir)</ObjectFileName>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>shlwapi.lib;crypt32.lib;wininet.lib;ws2_32.lib;secur32.lib;ntdll.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>bcrypt.lib;shlwapi.lib;crypt32.lib;wininet.lib;ws2_32.lib;secur32.lib;ntdll.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release_STL_Clang|Win32'">
@@ -415,11 +418,12 @@
       <RuntimeTypeInfo>false</RuntimeTypeInfo>
       <DisableSpecificWarnings>4268;4307;4505;4530;4577</DisableSpecificWarnings>
       <BasicRuntimeChecks>Default</BasicRuntimeChecks>
+      <ObjectFileName>$(IntDir)%(RelativeDir)%(filename).obj</ObjectFileName>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>shlwapi.lib;crypt32.lib;wininet.lib;ws2_32.lib;secur32.lib;ntdll.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>bcrypt.lib;shlwapi.lib;crypt32.lib;wininet.lib;ws2_32.lib;secur32.lib;ntdll.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -431,15 +435,16 @@
       <PreprocessorDefinitions>_SCL_SECURE_NO_WARNINGS;_CRT_SECURE_NO_WARNINGS;WIN32_LEAN_AND_MEAN;_WINSOCK_DEPRECATED_NO_WARNINGS;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>$(ProjectDir)</AdditionalIncludeDirectories>
       <AdditionalOptions>/std:c++latest %(AdditionalOptions)</AdditionalOptions>
-      <DisableSpecificWarnings>4268;4307;4505;</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4127;4268;4307;4505;</DisableSpecificWarnings>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <MinimalRebuild>false</MinimalRebuild>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <ObjectFileName>$(IntDir)%(RelativeDir)</ObjectFileName>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>shlwapi.lib;crypt32.lib;wininet.lib;ws2_32.lib;secur32.lib;ntdll.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>bcrypt.lib;shlwapi.lib;crypt32.lib;wininet.lib;ws2_32.lib;secur32.lib;ntdll.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug_Clang|x64'">
@@ -454,11 +459,12 @@
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <MinimalRebuild>false</MinimalRebuild>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <ObjectFileName>$(IntDir)%(RelativeDir)%(filename).obj</ObjectFileName>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>shlwapi.lib;crypt32.lib;wininet.lib;ws2_32.lib;secur32.lib;ntdll.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>bcrypt.lib;shlwapi.lib;crypt32.lib;wininet.lib;ws2_32.lib;secur32.lib;ntdll.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release_STL|x64'">
@@ -479,13 +485,14 @@
       <CallingConvention>FastCall</CallingConvention>
       <StringPooling>true</StringPooling>
       <RuntimeTypeInfo>false</RuntimeTypeInfo>
-      <DisableSpecificWarnings>4268;4307;4505;4530;4577</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4127;4268;4307;4505;4530;4577</DisableSpecificWarnings>
       <BasicRuntimeChecks>Default</BasicRuntimeChecks>
+      <ObjectFileName>$(IntDir)%(RelativeDir)</ObjectFileName>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>shlwapi.lib;crypt32.lib;wininet.lib;ws2_32.lib;secur32.lib;ntdll.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>bcrypt.lib;shlwapi.lib;crypt32.lib;wininet.lib;ws2_32.lib;secur32.lib;ntdll.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release_STL_Clang|x64'">
@@ -507,11 +514,12 @@
       <RuntimeTypeInfo>false</RuntimeTypeInfo>
       <DisableSpecificWarnings>4268;4307;4505;4530;4577</DisableSpecificWarnings>
       <BasicRuntimeChecks>Default</BasicRuntimeChecks>
+      <ObjectFileName>$(IntDir)%(RelativeDir)%(filename).obj</ObjectFileName>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>shlwapi.lib;crypt32.lib;wininet.lib;ws2_32.lib;secur32.lib;ntdll.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>bcrypt.lib;shlwapi.lib;crypt32.lib;wininet.lib;ws2_32.lib;secur32.lib;ntdll.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -530,19 +538,20 @@
       <ExceptionHandling>false</ExceptionHandling>
       <BufferSecurityCheck>false</BufferSecurityCheck>
       <CallingConvention>FastCall</CallingConvention>
-      <DisableSpecificWarnings>4268;4307;4505;4530;4577</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4127;4268;4307;4505;4530;4577</DisableSpecificWarnings>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <StringPooling>true</StringPooling>
       <RuntimeTypeInfo>false</RuntimeTypeInfo>
       <WholeProgramOptimization>true</WholeProgramOptimization>
       <AdditionalOptions>/std:c++latest %(AdditionalOptions)</AdditionalOptions>
+      <ObjectFileName>$(IntDir)%(RelativeDir)</ObjectFileName>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>$(SolutionDir)bin\$(PlatformShortName)\$(Configuration)\mini-msvcrt.lib;shlwapi.lib;crypt32.lib;wininet.lib;ws2_32.lib;secur32.lib;ntdll.lib;chkstk.obj;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;int64.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>bcrypt.lib;shlwapi.lib;crypt32.lib;wininet.lib;ws2_32.lib;secur32.lib;ntdll.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;chkstk.obj;int64.lib;$(SolutionDir)bin\$(PlatformShortName)\$(Configuration)\mini-msvcrt.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <IgnoreAllDefaultLibraries>true</IgnoreAllDefaultLibraries>
       <GenerateMapFile>true</GenerateMapFile>
     </Link>
@@ -570,13 +579,14 @@
       <RuntimeTypeInfo>false</RuntimeTypeInfo>
       <WholeProgramOptimization>true</WholeProgramOptimization>
       <AdditionalOptions>-std=c++1z %(AdditionalOptions)</AdditionalOptions>
+      <ObjectFileName>$(IntDir)%(RelativeDir)%(filename).obj</ObjectFileName>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>$(SolutionDir)bin\$(PlatformShortName)\$(Configuration)\mini-msvcrt.lib;shlwapi.lib;crypt32.lib;wininet.lib;ws2_32.lib;secur32.lib;ntdll.lib;chkstk.obj;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;int64.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>bcrypt.lib;shlwapi.lib;crypt32.lib;wininet.lib;ws2_32.lib;secur32.lib;ntdll.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;chkstk.obj;int64.lib;$(SolutionDir)bin\$(PlatformShortName)\$(Configuration)\mini-msvcrt.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <IgnoreAllDefaultLibraries>true</IgnoreAllDefaultLibraries>
       <GenerateMapFile>true</GenerateMapFile>
       <LinkTimeCodeGeneration>Default</LinkTimeCodeGeneration>
@@ -605,13 +615,14 @@
       <RuntimeTypeInfo>false</RuntimeTypeInfo>
       <WholeProgramOptimization>true</WholeProgramOptimization>
       <AdditionalOptions>-std=c++1z %(AdditionalOptions)</AdditionalOptions>
+      <ObjectFileName>$(IntDir)%(RelativeDir)%(filename).obj</ObjectFileName>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>$(SolutionDir)bin\$(PlatformShortName)\$(Configuration)\mini-msvcrt.lib;shlwapi.lib;crypt32.lib;wininet.lib;ws2_32.lib;secur32.lib;ntdll.lib;chkstk.obj;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;int64.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>bcrypt.lib;shlwapi.lib;crypt32.lib;wininet.lib;ws2_32.lib;secur32.lib;ntdll.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;chkstk.obj;int64.lib;$(SolutionDir)bin\$(PlatformShortName)\$(Configuration)\mini-msvcrt.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <IgnoreAllDefaultLibraries>true</IgnoreAllDefaultLibraries>
       <GenerateMapFile>true</GenerateMapFile>
       <LinkTimeCodeGeneration>Default</LinkTimeCodeGeneration>
@@ -639,19 +650,20 @@
       <ExceptionHandling>false</ExceptionHandling>
       <BufferSecurityCheck>false</BufferSecurityCheck>
       <CallingConvention>FastCall</CallingConvention>
-      <DisableSpecificWarnings>4268;4307;4505;4530;4577</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4127;4268;4307;4505;4530;4577</DisableSpecificWarnings>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <StringPooling>true</StringPooling>
       <RuntimeTypeInfo>false</RuntimeTypeInfo>
       <WholeProgramOptimization>true</WholeProgramOptimization>
       <AdditionalOptions>/std:c++latest %(AdditionalOptions)</AdditionalOptions>
+      <ObjectFileName>$(IntDir)%(RelativeDir)</ObjectFileName>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>false</GenerateDebugInformation>
-      <AdditionalDependencies>$(SolutionDir)bin\$(PlatformShortName)\$(Configuration)\mini-msvcrt.lib;shlwapi.lib;crypt32.lib;wininet.lib;ws2_32.lib;secur32.lib;ntdll.lib;chkstk.obj;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;int64.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>bcrypt.lib;shlwapi.lib;crypt32.lib;wininet.lib;ws2_32.lib;secur32.lib;ntdll.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;chkstk.obj;int64.lib;$(SolutionDir)bin\$(PlatformShortName)\$(Configuration)\mini-msvcrt.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <IgnoreAllDefaultLibraries>true</IgnoreAllDefaultLibraries>
       <GenerateMapFile>false</GenerateMapFile>
       <RandomizedBaseAddress>false</RandomizedBaseAddress>
@@ -689,18 +701,19 @@
       <ExceptionHandling>false</ExceptionHandling>
       <BufferSecurityCheck>false</BufferSecurityCheck>
       <CallingConvention>FastCall</CallingConvention>
-      <DisableSpecificWarnings>4268;4307;4505;4530;4577</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4127;4268;4307;4505;4530;4577</DisableSpecificWarnings>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <StringPooling>true</StringPooling>
       <RuntimeTypeInfo>false</RuntimeTypeInfo>
       <AdditionalOptions>/std:c++latest %(AdditionalOptions)</AdditionalOptions>
+      <ObjectFileName>$(IntDir)%(RelativeDir)</ObjectFileName>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>$(SolutionDir)bin\$(PlatformShortName)\$(Configuration)\mini-msvcrt.lib;shlwapi.lib;crypt32.lib;wininet.lib;ws2_32.lib;secur32.lib;ntdll.lib;chkstk.obj;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>bcrypt.lib;shlwapi.lib;crypt32.lib;wininet.lib;ws2_32.lib;secur32.lib;ntdll.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;chkstk.obj;$(SolutionDir)bin\$(PlatformShortName)\$(Configuration)\mini-msvcrt.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <IgnoreAllDefaultLibraries>true</IgnoreAllDefaultLibraries>
       <GenerateMapFile>true</GenerateMapFile>
     </Link>
@@ -727,13 +740,14 @@
       <StringPooling>true</StringPooling>
       <RuntimeTypeInfo>false</RuntimeTypeInfo>
       <AdditionalOptions>-std=c++1z %(AdditionalOptions)</AdditionalOptions>
+      <ObjectFileName>$(IntDir)%(RelativeDir)%(filename).obj</ObjectFileName>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>$(SolutionDir)bin\$(PlatformShortName)\$(Configuration)\mini-msvcrt.lib;shlwapi.lib;crypt32.lib;wininet.lib;ws2_32.lib;secur32.lib;ntdll.lib;chkstk.obj;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>bcrypt.lib;shlwapi.lib;crypt32.lib;wininet.lib;ws2_32.lib;secur32.lib;ntdll.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;chkstk.obj;$(SolutionDir)bin\$(PlatformShortName)\$(Configuration)\mini-msvcrt.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <IgnoreAllDefaultLibraries>true</IgnoreAllDefaultLibraries>
       <GenerateMapFile>true</GenerateMapFile>
       <LinkTimeCodeGeneration>Default</LinkTimeCodeGeneration>
@@ -761,13 +775,14 @@
       <StringPooling>true</StringPooling>
       <RuntimeTypeInfo>false</RuntimeTypeInfo>
       <AdditionalOptions>-std=c++1z %(AdditionalOptions)</AdditionalOptions>
+      <ObjectFileName>$(IntDir)%(RelativeDir)%(filename).obj</ObjectFileName>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>$(SolutionDir)bin\$(PlatformShortName)\$(Configuration)\mini-msvcrt.lib;shlwapi.lib;crypt32.lib;wininet.lib;ws2_32.lib;secur32.lib;ntdll.lib;chkstk.obj;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>bcrypt.lib;shlwapi.lib;crypt32.lib;wininet.lib;ws2_32.lib;secur32.lib;ntdll.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;chkstk.obj;$(SolutionDir)bin\$(PlatformShortName)\$(Configuration)\mini-msvcrt.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <IgnoreAllDefaultLibraries>true</IgnoreAllDefaultLibraries>
       <GenerateMapFile>true</GenerateMapFile>
       <LinkTimeCodeGeneration>Default</LinkTimeCodeGeneration>
@@ -795,18 +810,19 @@
       <ExceptionHandling>false</ExceptionHandling>
       <BufferSecurityCheck>false</BufferSecurityCheck>
       <CallingConvention>FastCall</CallingConvention>
-      <DisableSpecificWarnings>4268;4307;4505;4530;4577</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4127;4268;4307;4505;4530;4577</DisableSpecificWarnings>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <StringPooling>true</StringPooling>
       <RuntimeTypeInfo>false</RuntimeTypeInfo>
       <AdditionalOptions>/std:c++latest %(AdditionalOptions)</AdditionalOptions>
+      <ObjectFileName>$(IntDir)%(RelativeDir)</ObjectFileName>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>false</GenerateDebugInformation>
-      <AdditionalDependencies>$(SolutionDir)bin\$(PlatformShortName)\$(Configuration)\mini-msvcrt.lib;shlwapi.lib;crypt32.lib;wininet.lib;ws2_32.lib;secur32.lib;ntdll.lib;chkstk.obj;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>bcrypt.lib;shlwapi.lib;crypt32.lib;wininet.lib;ws2_32.lib;secur32.lib;ntdll.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;chkstk.obj;$(SolutionDir)bin\$(PlatformShortName)\$(Configuration)\mini-msvcrt.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <IgnoreAllDefaultLibraries>true</IgnoreAllDefaultLibraries>
       <GenerateMapFile>false</GenerateMapFile>
       <RandomizedBaseAddress>false</RandomizedBaseAddress>
@@ -833,14 +849,21 @@
     <ClCompile Include="mini\common.cpp" />
     <ClCompile Include="mini\console.cpp" />
     <ClCompile Include="mini\crt\crt0.cpp" />
-    <ClCompile Include="mini\crypto\base32.cpp" />
-    <ClCompile Include="mini\crypto\base64.cpp" />
-    <ClCompile Include="mini\crypto\base16.cpp" />
-    <ClCompile Include="mini\crypto\detail\base_encode.cpp" />
-    <ClCompile Include="mini\crypto\hash_base.cpp" />
-    <ClCompile Include="mini\crypto\provider.cpp" />
-    <ClCompile Include="mini\crypto\random.cpp" />
+    <ClCompile Include="mini\crypto\capi\base16.cpp" />
+    <ClCompile Include="mini\crypto\capi\base64.cpp" />
+    <ClCompile Include="mini\crypto\capi\detail\base_encode.cpp" />
+    <ClCompile Include="mini\crypto\capi\provider.cpp" />
+    <ClCompile Include="mini\crypto\capi\random.cpp" />
+    <ClCompile Include="mini\crypto\cng\curve25519.cpp" />
+    <ClCompile Include="mini\crypto\cng\provider.cpp" />
+    <ClCompile Include="mini\crypto\cng\random.cpp" />
+    <ClCompile Include="mini\crypto\ext\base32.cpp" />
+    <ClCompile Include="mini\crypto\ext\curve25519.cpp" />
+    <ClCompile Include="mini\crypto\ext\detail\curve25519-donna.cpp" />
     <ClCompile Include="mini\io\file.cpp" />
+    <ClCompile Include="mini\io\file_attributes.cpp" />
+    <ClCompile Include="mini\io\file_enumerator.cpp" />
+    <ClCompile Include="mini\io\path.cpp" />
     <ClCompile Include="mini\logger.cpp" />
     <ClCompile Include="mini\memory.cpp" />
     <ClCompile Include="mini\net\detail\ssl_context.cpp" />
@@ -858,8 +881,9 @@
     <ClCompile Include="mini\tor\circuit_node_crypto_state.cpp" />
     <ClCompile Include="mini\tor\consensus.cpp" />
     <ClCompile Include="mini\tor\crypto\hybrid_encryption.cpp" />
-    <ClCompile Include="mini\tor\crypto\key_agreement.cpp" />
+    <ClCompile Include="mini\tor\crypto\key_agreement_tap.cpp" />
     <ClCompile Include="mini\tor\circuit_node.cpp" />
+    <ClCompile Include="mini\tor\crypto\key_agreement_ntor.cpp" />
     <ClCompile Include="mini\tor\hidden_service.cpp" />
     <ClCompile Include="mini\tor\onion_router.cpp" />
     <ClCompile Include="mini\tor\parsers\consensus_parser.cpp" />
@@ -882,16 +906,40 @@
     <ClInclude Include="mini\console.h" />
     <ClInclude Include="mini\crt\crt0.h" />
     <ClInclude Include="mini\crypto\aes.h" />
+    <ClInclude Include="mini\crypto\base16.h" />
     <ClInclude Include="mini\crypto\base32.h" />
     <ClInclude Include="mini\crypto\base64.h" />
-    <ClInclude Include="mini\crypto\base16.h" />
-    <ClInclude Include="mini\crypto\detail\base_encode.h" />
+    <ClInclude Include="mini\crypto\base\key.h" />
+    <ClInclude Include="mini\crypto\capi\aes.h" />
+    <ClInclude Include="mini\crypto\capi\base16.h" />
+    <ClInclude Include="mini\crypto\capi\base64.h" />
+    <ClInclude Include="mini\crypto\capi\detail\base_encode.h" />
+    <ClInclude Include="mini\crypto\capi\dh.h" />
+    <ClInclude Include="mini\crypto\capi\hash.h" />
+    <ClInclude Include="mini\crypto\capi\hmac.h" />
+    <ClInclude Include="mini\crypto\capi\key.h" />
+    <ClInclude Include="mini\crypto\capi\provider.h" />
+    <ClInclude Include="mini\crypto\capi\random.h" />
+    <ClInclude Include="mini\crypto\capi\rsa.h" />
+    <ClInclude Include="mini\crypto\cng\aes.h" />
+    <ClInclude Include="mini\crypto\cng\curve25519.h" />
+    <ClInclude Include="mini\crypto\cng\dh.h" />
+    <ClInclude Include="mini\crypto\cng\hmac.h" />
+    <ClInclude Include="mini\crypto\cng\key.h" />
+    <ClInclude Include="mini\crypto\cng\provider.h" />
+    <ClInclude Include="mini\crypto\cng\random.h" />
+    <ClInclude Include="mini\crypto\cng\rsa.h" />
+    <ClInclude Include="mini\crypto\cng\hash.h" />
+    <ClInclude Include="mini\crypto\common.h" />
+    <ClInclude Include="mini\crypto\curve25519.h" />
     <ClInclude Include="mini\crypto\dh.h" />
-    <ClInclude Include="mini\crypto\hash_template_base.h" />
-    <ClInclude Include="mini\crypto\hash_base.h" />
-    <ClInclude Include="mini\crypto\key.h" />
-    <ClInclude Include="mini\crypto\provider.h" />
+    <ClInclude Include="mini\crypto\ext\base32.h" />
+    <ClInclude Include="mini\crypto\ext\curve25519.h" />
+    <ClInclude Include="mini\crypto\ext\detail\curve25519-donna.h" />
+    <ClInclude Include="mini\crypto\ext\key.h" />
+    <ClInclude Include="mini\crypto\hmac_sha256.h" />
     <ClInclude Include="mini\crypto\random.h" />
+    <ClInclude Include="mini\crypto\rfc5869.h" />
     <ClInclude Include="mini\crypto\rsa.h" />
     <ClInclude Include="mini\crypto\sha1.h" />
     <ClInclude Include="mini\ctl.h" />
@@ -901,8 +949,11 @@
     <ClInclude Include="mini\flags.h" />
     <ClInclude Include="mini\function.h" />
     <ClInclude Include="mini\io\file.h" />
+    <ClInclude Include="mini\io\file_attributes.h" />
+    <ClInclude Include="mini\io\file_enumerator.h" />
     <ClInclude Include="mini\io\file_stream.h" />
     <ClInclude Include="mini\io\memory_stream.h" />
+    <ClInclude Include="mini\io\path.h" />
     <ClInclude Include="mini\io\stream.h" />
     <ClInclude Include="mini\io\stream_reader.h" />
     <ClInclude Include="mini\io\stream_wrapper.h" />
@@ -932,6 +983,8 @@
     <ClInclude Include="mini\tor\consensus.h" />
     <ClInclude Include="mini\tor\crypto\hybrid_encryption.h" />
     <ClInclude Include="mini\tor\crypto\key_agreement.h" />
+    <ClInclude Include="mini\tor\crypto\key_agreement_tap.h" />
+    <ClInclude Include="mini\tor\crypto\key_agreement_ntor.h" />
     <ClInclude Include="mini\tor\hidden_service.h" />
     <ClInclude Include="mini\tor\circuit_node.h" />
     <ClInclude Include="mini\tor\onion_router.h" />
@@ -942,17 +995,23 @@
     <ClInclude Include="mini\tor\relay_cell.h" />
     <ClInclude Include="mini\tor\tor_socket.h" />
     <ClInclude Include="mini\tor\tor_stream.h" />
-    <ClInclude Include="mini\tor\types.h" />
+    <ClInclude Include="mini\tor\common.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="mini\buffer_ref.inl" />
     <None Include="mini\collections\list.inl" />
     <None Include="mini\collections\pair_list.inl" />
     <CustomBuild Include="mini\crt\msvcrt.def" />
-    <None Include="mini\crypto\aes.inl" />
-    <None Include="mini\crypto\dh.inl" />
-    <None Include="mini\crypto\hash_template_base.inl" />
-    <None Include="mini\crypto\rsa.inl" />
+    <None Include="mini\crypto\capi\aes.inl" />
+    <None Include="mini\crypto\capi\dh.inl" />
+    <None Include="mini\crypto\capi\hash.inl" />
+    <None Include="mini\crypto\capi\hmac.inl" />
+    <None Include="mini\crypto\capi\rsa.inl" />
+    <None Include="mini\crypto\cng\aes.inl" />
+    <None Include="mini\crypto\cng\dh.inl" />
+    <None Include="mini\crypto\cng\hash.inl" />
+    <None Include="mini\crypto\cng\hmac.inl" />
+    <None Include="mini\crypto\cng\rsa.inl" />
     <None Include="mini\ptr.inl" />
     <None Include="mini\stack_buffer.inl" />
     <None Include="mini\threading\locked_value.inl" />

@@ -71,6 +71,14 @@ find(
   );
 
 void*
+reverse_find(
+  const void *haystack,
+  size_t haystack_size,
+  const void *needle,
+  size_t needle_size
+  );
+
+void*
 set(
   void* destination,
   int value,

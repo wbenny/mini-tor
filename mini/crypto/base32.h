@@ -1,17 +1,9 @@
 #pragma once
-#include <mini/string.h>
-#include <mini/byte_buffer.h>
+#include "common.h"
+#include "ext/base32.h"
 
-namespace mini::crypto::base32 {
+namespace mini::crypto {
 
-string
-encode(
-  const byte_buffer_ref input
-  );
-
-byte_buffer
-decode(
-  const string_ref input
-  );
+using base32 = MINI_CRYPTO_BASE32_NAMESPACE::base32;
 
 }

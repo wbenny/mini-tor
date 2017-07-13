@@ -3,6 +3,30 @@
 
 namespace mini::memory {
 
+namespace detail {
+
+void*
+memrchr(
+  const void* haystack,
+  int needle,
+  size_t haystack_size
+  )
+{
+  byte_type* haystack_bytes = const_cast<byte_type*>(reinterpret_cast<const byte_type*>(haystack));
+
+  for (byte_type* cur = haystack_bytes + haystack_size - 1; cur != haystack_bytes - 1; cur--)
+  {
+    if (cur[0] == static_cast<byte_type>(needle))
+    {
+      return cur;
+    }
+  }
+
+  return nullptr;
+}
+
+}
+
 void*
 allocate(
   size_t size
@@ -134,6 +158,46 @@ find(
 
   byte_type* last = haystack_bytes + haystack_size - needle_size;
   for (byte_type* cur = haystack_bytes; cur <= last; cur++)
+  {
+    if (cur[0] == needle_bytes[0] && memcmp(cur, needle_bytes, needle_size) == 0)
+    {
+      return cur;
+    }
+  }
+
+  return nullptr;
+}
+
+void*
+reverse_find(
+  const void *haystack,
+  size_t haystack_size,
+  const void *needle,
+  size_t needle_size
+  )
+{
+  byte_type* haystack_bytes = const_cast<byte_type*>(reinterpret_cast<const byte_type*>(haystack));
+  byte_type* needle_bytes   = const_cast<byte_type*>(reinterpret_cast<const byte_type*>(needle));
+
+  if (haystack_size == 0 || needle_size == 0)
+  {
+    return nullptr;
+  }
+
+  if (haystack_size < needle_size)
+  {
+    return nullptr;
+  }
+
+  //
+  // special case when needle size == 1.
+  //
+  if (needle_size == 1)
+  {
+    return (void*)detail::memrchr(haystack, (int)*needle_bytes, haystack_size);
+  }
+
+  for (byte_type* cur = haystack_bytes + haystack_size - 1; cur != haystack_bytes - 1; cur--)
   {
     if (cur[0] == needle_bytes[0] && memcmp(cur, needle_bytes, needle_size) == 0)
     {

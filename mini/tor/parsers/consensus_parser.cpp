@@ -97,10 +97,7 @@ consensus_parser::parse(
                   continue;
                 }
 
-                string identity_fingerprint
-                  = crypto::base16::encode(
-                      crypto::base64::decode(
-                        splitted_line[router_status_entry_r_identity]));
+                auto identity_fingerprint = crypto::base64::decode(splitted_line[router_status_entry_r_identity]);
 
                 current_router = new onion_router(
                   consensus,

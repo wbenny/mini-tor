@@ -85,6 +85,14 @@ string::operator+=(
   return append(other);
 }
 
+string&
+string::operator+=(
+  char other
+  )
+{
+  return append(other);
+}
+
 //
 // swap.
 //
@@ -192,7 +200,7 @@ string::is_empty(
   void
   ) const
 {
-  return _buffer.is_empty();
+  return get_size() == 0;
 }
 
 typename string::size_type
@@ -210,7 +218,7 @@ string::resize(
   )
 {
   _buffer.resize(new_size + 1, item);
-  _buffer[get_size()] = 0;
+  _buffer[get_size()] = '\0';
 }
 
 typename string::size_type
@@ -239,18 +247,16 @@ string::index_of(
   size_type from_offset
   ) const
 {
-  const value_type* ptr = reinterpret_cast<const value_type*>(memory::find(
-    _buffer.get_buffer() + from_offset,
-    get_size() - from_offset,
-    item.get_buffer(),
-    item.get_size()));
+  return string_ref(*this).index_of(item, from_offset);
+}
 
-  if (ptr)
-  {
-    return ptr - _buffer.get_buffer();
-  }
-
-  return not_found;
+typename string::size_type
+string::last_index_of(
+  const string_ref item,
+  size_type from_offset
+  ) const
+{
+  return string_ref(*this).last_index_of(item, from_offset);
 }
 
 bool
@@ -258,7 +264,7 @@ string::contains(
   const string_ref item
   ) const
 {
-  return index_of(item) != not_found;
+  return string_ref(*this).contains(item);
 }
 
 bool
@@ -266,7 +272,7 @@ string::starts_with(
   const string_ref item
   ) const
 {
-  return index_of(item) == 0;
+  return string_ref(*this).starts_with(item);
 }
 
 bool
@@ -274,7 +280,7 @@ string::ends_with(
   const string_ref item
   ) const
 {
-  return index_of(item) == (get_size() - item.get_size());
+  return string_ref(*this).ends_with(item);
 }
 
 //
@@ -283,42 +289,35 @@ string::ends_with(
 
 bool
 string::equals(
-  const string& other
+  const string_ref other
   ) const
 {
-  return
-    get_size() == other.get_size() &&
-    compare(other) == 0;
+  return string_ref(*this).equals(other);
 }
 
 int
 string::compare(
-  const string& other
+  const string_ref other
   ) const
 {
-  return memory::compare(_buffer.get_buffer(), other.get_buffer(), get_size());
+  return string_ref(*this).compare(other);
 }
 
-string
+string_ref
 string::substring(
   size_type offset
   ) const
 {
-  return substring(offset, size_type(-1));
+  return string_ref(*this).substring(offset);
 }
 
-string
+string_ref
 string::substring(
   size_type offset,
   size_type length
   ) const
 {
-  string result;
-  length = min(get_size() - offset, length);
-  result.resize(length);
-  memory::copy(result.get_buffer(), get_buffer() + offset, length);
-
-  return result;
+  return string_ref(*this).substring(offset, length);
 }
 
 string_collection
@@ -327,40 +326,7 @@ string::split(
   size_type count
   ) const
 {
-  string_collection tokens;
-  size_type previous = 0;
-  size_type position = 0;
-
-  do
-  {
-    position = index_of(delimiter, previous);
-
-    if (position == not_found)
-    {
-      position = get_size();
-    }
-
-    string token = substring(previous, position - previous);
-
-    if (!token.is_empty())
-    {
-      tokens.add(std::move(token));
-
-      //
-      // add the rest of the string.
-      //
-      if (tokens.get_size() == count)
-      {
-        token = substring(previous + position);
-        tokens.add(std::move(token));
-        break;
-      }
-    }
-
-    previous = position + delimiter.get_size();
-  } while (position < get_size() && previous < get_size());
-
-  return tokens;
+  return string_ref(*this).split(delimiter, count);
 }
 
 void
@@ -514,14 +480,14 @@ string::operator string_ref(
   void
   ) const
 {
-  return string_ref(_buffer.begin(), _buffer.begin() + _buffer.get_size());
+  return string_ref(_buffer.begin(), _buffer.begin() + get_size());
 }
 
 string::operator mutable_string_ref(
   void
   )
 {
-  return mutable_string_ref(_buffer.begin(), _buffer.begin() + _buffer.get_size());
+  return mutable_string_ref(_buffer.begin(), _buffer.begin() + get_size());
 }
 
 string::operator string_hash(

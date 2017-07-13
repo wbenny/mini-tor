@@ -50,7 +50,7 @@ class consensus
 
     onion_router*
     get_onion_router_by_identity_fingerprint(
-      const string_ref identity_fingerprint
+      const byte_buffer_ref identity_fingerprint
       );
 
     onion_router_list
@@ -65,7 +65,7 @@ class consensus
 
     string
     get_onion_router_descriptor(
-      const string_ref identity_fingerprint
+      const byte_buffer_ref identity_fingerprint
       );
 
     //
@@ -132,7 +132,7 @@ class consensus
     collections::list<uint16_t> _allowed_dir_ports;
     size_type _max_try_count = 3;
 
-    collections::pair_list<string, onion_router*> _onion_router_map;
+    collections::pair_list<byte_buffer, onion_router*> _onion_router_map;
     time _valid_until;
 };
 

@@ -21,7 +21,7 @@ struct construct_range_impl
 {
   template <
     typename ITERATOR_TYPE,
-    typename... ARGS
+    typename ...ARGS
   >
   void operator() (
     ITERATOR_TYPE begin,
@@ -43,7 +43,7 @@ struct construct_range_impl<ALLOCATOR, true>
 {
   template <
     typename ITERATOR_TYPE,
-    typename... ARGS
+    typename ...ARGS
   >
   void operator() (
     ITERATOR_TYPE begin,
@@ -193,7 +193,7 @@ class allocator
     }
 
     template <
-      typename... ARGS
+      typename ...ARGS
     >
     static void
     construct(
@@ -219,7 +219,7 @@ class allocator
 
     template <
       typename ITERATOR_TYPE,
-      typename... ARGS
+      typename ...ARGS
     >
     static void
     construct_range(

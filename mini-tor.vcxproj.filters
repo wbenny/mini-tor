@@ -73,12 +73,6 @@
     <Filter Include="Source Files\mini\tor\parsers">
       <UniqueIdentifier>{cd47b506-5842-4bd6-918e-146fd28194fe}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\mini\crypto\detail">
-      <UniqueIdentifier>{395de0dc-4806-4be0-b526-bb8b964cdfcf}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\mini\crypto\detail">
-      <UniqueIdentifier>{d813828b-ad3b-4598-9a45-d6459a18fa3d}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\mini\net\detail">
       <UniqueIdentifier>{fd5f7949-940b-42fa-8aa7-b032460b4def}</UniqueIdentifier>
     </Filter>
@@ -88,11 +82,41 @@
     <Filter Include="Header Files\mini\ctl">
       <UniqueIdentifier>{3b508145-044e-4fc0-bf97-b96f11f256e7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\mini\crypto\capi">
+      <UniqueIdentifier>{c0ce7826-a186-4cff-bae2-5783f714ba8f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\mini\crypto\cng">
+      <UniqueIdentifier>{6c5e537e-b97d-4966-b1ae-1f03549ed466}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\mini\crypto\ext">
+      <UniqueIdentifier>{e22400c3-943a-4708-bad5-e45e9e7d8058}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\mini\crypto\capi\detail">
+      <UniqueIdentifier>{395de0dc-4806-4be0-b526-bb8b964cdfcf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\mini\crypto\capi">
+      <UniqueIdentifier>{f22fe060-e7ab-4655-beb3-2a03f45e5ddb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\mini\crypto\cng">
+      <UniqueIdentifier>{aec6115c-6858-4db1-b52c-4642eb8ef790}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\mini\crypto\ext">
+      <UniqueIdentifier>{cb5932ba-83fe-4f07-9ee0-34378a1f13ba}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\mini\crypto\capi\detail">
+      <UniqueIdentifier>{d813828b-ad3b-4598-9a45-d6459a18fa3d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\mini\crypto\base">
+      <UniqueIdentifier>{507e3c98-de87-44ae-a516-8e35bfebbb7e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\mini\crypto\ext\detail">
+      <UniqueIdentifier>{2de0b64b-e293-4e72-b4c7-d36a6d4c62c9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\mini\crypto\ext\detail">
+      <UniqueIdentifier>{1c117575-9924-4c40-9b56-7ade8e8585ec}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="main.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="mini\time.cpp">
       <Filter>Source Files\mini</Filter>
     </ClCompile>
@@ -102,12 +126,6 @@
     <ClCompile Include="mini\net\tcp_socket.cpp">
       <Filter>Source Files\mini\net</Filter>
     </ClCompile>
-    <ClCompile Include="mini\crypto\provider.cpp">
-      <Filter>Source Files\mini\crypto</Filter>
-    </ClCompile>
-    <ClCompile Include="mini\crypto\base64.cpp">
-      <Filter>Source Files\mini\crypto</Filter>
-    </ClCompile>
     <ClCompile Include="mini\string.cpp">
       <Filter>Source Files\mini</Filter>
     </ClCompile>
@@ -116,9 +134,6 @@
     </ClCompile>
     <ClCompile Include="mini\crt\crt0.cpp">
       <Filter>Source Files\mini\crt</Filter>
-    </ClCompile>
-    <ClCompile Include="mini\crypto\base16.cpp">
-      <Filter>Source Files\mini\crypto</Filter>
     </ClCompile>
     <ClCompile Include="mini\threading\mutex.cpp">
       <Filter>Source Files\mini\threading</Filter>
@@ -140,12 +155,6 @@
     </ClCompile>
     <ClCompile Include="mini\threading\thread.cpp">
       <Filter>Source Files\mini\threading</Filter>
-    </ClCompile>
-    <ClCompile Include="mini\crypto\base32.cpp">
-      <Filter>Source Files\mini\crypto</Filter>
-    </ClCompile>
-    <ClCompile Include="mini\tor\crypto\key_agreement.cpp">
-      <Filter>Source Files\mini\tor\crypto</Filter>
     </ClCompile>
     <ClCompile Include="mini\tor\circuit_node.cpp">
       <Filter>Source Files\mini\tor</Filter>
@@ -186,9 +195,6 @@
     <ClCompile Include="mini\memory.cpp">
       <Filter>Source Files\mini</Filter>
     </ClCompile>
-    <ClCompile Include="mini\crypto\random.cpp">
-      <Filter>Source Files\mini\crypto</Filter>
-    </ClCompile>
     <ClCompile Include="mini\string_ref.cpp">
       <Filter>Source Files\mini</Filter>
     </ClCompile>
@@ -198,17 +204,62 @@
     <ClCompile Include="mini\io\file.cpp">
       <Filter>Source Files\mini\io</Filter>
     </ClCompile>
-    <ClCompile Include="mini\crypto\hash_base.cpp">
-      <Filter>Source Files\mini\crypto</Filter>
-    </ClCompile>
     <ClCompile Include="mini\net\ssl_socket.cpp">
       <Filter>Source Files\mini\net</Filter>
     </ClCompile>
-    <ClCompile Include="mini\crypto\detail\base_encode.cpp">
-      <Filter>Source Files\mini\crypto\detail</Filter>
-    </ClCompile>
     <ClCompile Include="mini\net\detail\ssl_context.cpp">
       <Filter>Source Files\mini\net\detail</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="mini\io\path.cpp">
+      <Filter>Source Files\mini\io</Filter>
+    </ClCompile>
+    <ClCompile Include="mini\io\file_enumerator.cpp">
+      <Filter>Source Files\mini\io</Filter>
+    </ClCompile>
+    <ClCompile Include="mini\io\file_attributes.cpp">
+      <Filter>Source Files\mini\io</Filter>
+    </ClCompile>
+    <ClCompile Include="mini\tor\crypto\key_agreement_ntor.cpp">
+      <Filter>Source Files\mini\tor\crypto</Filter>
+    </ClCompile>
+    <ClCompile Include="mini\tor\crypto\key_agreement_tap.cpp">
+      <Filter>Source Files\mini\tor\crypto</Filter>
+    </ClCompile>
+    <ClCompile Include="mini\crypto\capi\base16.cpp">
+      <Filter>Source Files\mini\crypto\capi</Filter>
+    </ClCompile>
+    <ClCompile Include="mini\crypto\capi\base64.cpp">
+      <Filter>Source Files\mini\crypto\capi</Filter>
+    </ClCompile>
+    <ClCompile Include="mini\crypto\capi\provider.cpp">
+      <Filter>Source Files\mini\crypto\capi</Filter>
+    </ClCompile>
+    <ClCompile Include="mini\crypto\capi\random.cpp">
+      <Filter>Source Files\mini\crypto\capi</Filter>
+    </ClCompile>
+    <ClCompile Include="mini\crypto\capi\detail\base_encode.cpp">
+      <Filter>Source Files\mini\crypto\capi\detail</Filter>
+    </ClCompile>
+    <ClCompile Include="mini\crypto\cng\curve25519.cpp">
+      <Filter>Source Files\mini\crypto\cng</Filter>
+    </ClCompile>
+    <ClCompile Include="mini\crypto\ext\base32.cpp">
+      <Filter>Source Files\mini\crypto\ext</Filter>
+    </ClCompile>
+    <ClCompile Include="mini\crypto\cng\provider.cpp">
+      <Filter>Source Files\mini\crypto\cng</Filter>
+    </ClCompile>
+    <ClCompile Include="mini\crypto\cng\random.cpp">
+      <Filter>Source Files\mini\crypto\cng</Filter>
+    </ClCompile>
+    <ClCompile Include="mini\crypto\ext\detail\curve25519-donna.cpp">
+      <Filter>Source Files\mini\crypto\ext\detail</Filter>
+    </ClCompile>
+    <ClCompile Include="mini\crypto\ext\curve25519.cpp">
+      <Filter>Source Files\mini\crypto\ext</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -224,23 +275,11 @@
     <ClInclude Include="mini\net\tcp_socket.h">
       <Filter>Header Files\mini\net</Filter>
     </ClInclude>
-    <ClInclude Include="mini\crypto\sha1.h">
-      <Filter>Header Files\mini\crypto</Filter>
-    </ClInclude>
-    <ClInclude Include="mini\crypto\provider.h">
-      <Filter>Header Files\mini\crypto</Filter>
-    </ClInclude>
-    <ClInclude Include="mini\crypto\base64.h">
-      <Filter>Header Files\mini\crypto</Filter>
-    </ClInclude>
     <ClInclude Include="mini\memory.h">
       <Filter>Header Files\mini</Filter>
     </ClInclude>
     <ClInclude Include="mini\string.h">
       <Filter>Header Files\mini</Filter>
-    </ClInclude>
-    <ClInclude Include="mini\crypto\random.h">
-      <Filter>Header Files\mini\crypto</Filter>
     </ClInclude>
     <ClInclude Include="mini\allocator.h">
       <Filter>Header Files\mini</Filter>
@@ -274,9 +313,6 @@
     </ClInclude>
     <ClInclude Include="mini\ptr.h">
       <Filter>Header Files\mini</Filter>
-    </ClInclude>
-    <ClInclude Include="mini\crypto\base16.h">
-      <Filter>Header Files\mini\crypto</Filter>
     </ClInclude>
     <ClInclude Include="mini\string_ref.h">
       <Filter>Header Files\mini</Filter>
@@ -329,12 +365,6 @@
     <ClInclude Include="mini\net\ip_address.h">
       <Filter>Header Files\mini\net</Filter>
     </ClInclude>
-    <ClInclude Include="mini\crypto\base32.h">
-      <Filter>Header Files\mini\crypto</Filter>
-    </ClInclude>
-    <ClInclude Include="mini\tor\crypto\key_agreement.h">
-      <Filter>Header Files\mini\tor\crypto</Filter>
-    </ClInclude>
     <ClInclude Include="mini\tor\crypto\hybrid_encryption.h">
       <Filter>Header Files\mini\tor\crypto</Filter>
     </ClInclude>
@@ -345,9 +375,6 @@
       <Filter>Header Files\mini\tor</Filter>
     </ClInclude>
     <ClInclude Include="mini\tor\relay_cell.h">
-      <Filter>Header Files\mini\tor</Filter>
-    </ClInclude>
-    <ClInclude Include="mini\tor\types.h">
       <Filter>Header Files\mini\tor</Filter>
     </ClInclude>
     <ClInclude Include="mini\collections\pair_list.h">
@@ -389,29 +416,8 @@
     <ClInclude Include="mini\threading\common.h">
       <Filter>Header Files\mini\threading</Filter>
     </ClInclude>
-    <ClInclude Include="mini\crypto\key.h">
-      <Filter>Header Files\mini\crypto</Filter>
-    </ClInclude>
-    <ClInclude Include="mini\crypto\aes.h">
-      <Filter>Header Files\mini\crypto</Filter>
-    </ClInclude>
-    <ClInclude Include="mini\crypto\dh.h">
-      <Filter>Header Files\mini\crypto</Filter>
-    </ClInclude>
-    <ClInclude Include="mini\crypto\rsa.h">
-      <Filter>Header Files\mini\crypto</Filter>
-    </ClInclude>
-    <ClInclude Include="mini\crypto\hash_base.h">
-      <Filter>Header Files\mini\crypto</Filter>
-    </ClInclude>
-    <ClInclude Include="mini\crypto\hash_template_base.h">
-      <Filter>Header Files\mini\crypto</Filter>
-    </ClInclude>
     <ClInclude Include="mini\net\ssl_socket.h">
       <Filter>Header Files\mini\net</Filter>
-    </ClInclude>
-    <ClInclude Include="mini\crypto\detail\base_encode.h">
-      <Filter>Header Files\mini\crypto\detail</Filter>
     </ClInclude>
     <ClInclude Include="mini\net\detail\ssl_context.h">
       <Filter>Header Files\mini\net\detail</Filter>
@@ -427,6 +433,138 @@
     </ClInclude>
     <ClInclude Include="mini\ctl.h">
       <Filter>Header Files\mini</Filter>
+    </ClInclude>
+    <ClInclude Include="mini\io\file_attributes.h">
+      <Filter>Header Files\mini\io</Filter>
+    </ClInclude>
+    <ClInclude Include="mini\io\path.h">
+      <Filter>Header Files\mini\io</Filter>
+    </ClInclude>
+    <ClInclude Include="mini\io\file_enumerator.h">
+      <Filter>Header Files\mini\io</Filter>
+    </ClInclude>
+    <ClInclude Include="mini\tor\crypto\key_agreement_ntor.h">
+      <Filter>Header Files\mini\tor\crypto</Filter>
+    </ClInclude>
+    <ClInclude Include="mini\tor\crypto\key_agreement_tap.h">
+      <Filter>Header Files\mini\tor\crypto</Filter>
+    </ClInclude>
+    <ClInclude Include="mini\tor\crypto\key_agreement.h">
+      <Filter>Header Files\mini\tor\crypto</Filter>
+    </ClInclude>
+    <ClInclude Include="mini\crypto\hmac_sha256.h">
+      <Filter>Header Files\mini\crypto</Filter>
+    </ClInclude>
+    <ClInclude Include="mini\crypto\rfc5869.h">
+      <Filter>Header Files\mini\crypto</Filter>
+    </ClInclude>
+    <ClInclude Include="mini\crypto\sha1.h">
+      <Filter>Header Files\mini\crypto</Filter>
+    </ClInclude>
+    <ClInclude Include="mini\crypto\capi\aes.h">
+      <Filter>Header Files\mini\crypto\capi</Filter>
+    </ClInclude>
+    <ClInclude Include="mini\crypto\capi\base16.h">
+      <Filter>Header Files\mini\crypto\capi</Filter>
+    </ClInclude>
+    <ClInclude Include="mini\crypto\capi\base64.h">
+      <Filter>Header Files\mini\crypto\capi</Filter>
+    </ClInclude>
+    <ClInclude Include="mini\crypto\capi\dh.h">
+      <Filter>Header Files\mini\crypto\capi</Filter>
+    </ClInclude>
+    <ClInclude Include="mini\crypto\capi\provider.h">
+      <Filter>Header Files\mini\crypto\capi</Filter>
+    </ClInclude>
+    <ClInclude Include="mini\crypto\capi\random.h">
+      <Filter>Header Files\mini\crypto\capi</Filter>
+    </ClInclude>
+    <ClInclude Include="mini\crypto\capi\rsa.h">
+      <Filter>Header Files\mini\crypto\capi</Filter>
+    </ClInclude>
+    <ClInclude Include="mini\crypto\capi\detail\base_encode.h">
+      <Filter>Header Files\mini\crypto\capi\detail</Filter>
+    </ClInclude>
+    <ClInclude Include="mini\crypto\cng\curve25519.h">
+      <Filter>Header Files\mini\crypto\cng</Filter>
+    </ClInclude>
+    <ClInclude Include="mini\crypto\ext\base32.h">
+      <Filter>Header Files\mini\crypto\ext</Filter>
+    </ClInclude>
+    <ClInclude Include="mini\crypto\base16.h">
+      <Filter>Header Files\mini\crypto</Filter>
+    </ClInclude>
+    <ClInclude Include="mini\crypto\curve25519.h">
+      <Filter>Header Files\mini\crypto</Filter>
+    </ClInclude>
+    <ClInclude Include="mini\crypto\aes.h">
+      <Filter>Header Files\mini\crypto</Filter>
+    </ClInclude>
+    <ClInclude Include="mini\crypto\dh.h">
+      <Filter>Header Files\mini\crypto</Filter>
+    </ClInclude>
+    <ClInclude Include="mini\crypto\random.h">
+      <Filter>Header Files\mini\crypto</Filter>
+    </ClInclude>
+    <ClInclude Include="mini\crypto\capi\key.h">
+      <Filter>Header Files\mini\crypto\capi</Filter>
+    </ClInclude>
+    <ClInclude Include="mini\crypto\cng\key.h">
+      <Filter>Header Files\mini\crypto\cng</Filter>
+    </ClInclude>
+    <ClInclude Include="mini\crypto\cng\provider.h">
+      <Filter>Header Files\mini\crypto\cng</Filter>
+    </ClInclude>
+    <ClInclude Include="mini\crypto\rsa.h">
+      <Filter>Header Files\mini\crypto</Filter>
+    </ClInclude>
+    <ClInclude Include="mini\crypto\base32.h">
+      <Filter>Header Files\mini\crypto</Filter>
+    </ClInclude>
+    <ClInclude Include="mini\crypto\base64.h">
+      <Filter>Header Files\mini\crypto</Filter>
+    </ClInclude>
+    <ClInclude Include="mini\crypto\base\key.h">
+      <Filter>Header Files\mini\crypto\base</Filter>
+    </ClInclude>
+    <ClInclude Include="mini\crypto\cng\aes.h">
+      <Filter>Header Files\mini\crypto\cng</Filter>
+    </ClInclude>
+    <ClInclude Include="mini\crypto\common.h">
+      <Filter>Header Files\mini\crypto</Filter>
+    </ClInclude>
+    <ClInclude Include="mini\crypto\cng\rsa.h">
+      <Filter>Header Files\mini\crypto\cng</Filter>
+    </ClInclude>
+    <ClInclude Include="mini\crypto\cng\dh.h">
+      <Filter>Header Files\mini\crypto\cng</Filter>
+    </ClInclude>
+    <ClInclude Include="mini\crypto\cng\random.h">
+      <Filter>Header Files\mini\crypto\cng</Filter>
+    </ClInclude>
+    <ClInclude Include="mini\crypto\cng\hash.h">
+      <Filter>Header Files\mini\crypto\cng</Filter>
+    </ClInclude>
+    <ClInclude Include="mini\crypto\cng\hmac.h">
+      <Filter>Header Files\mini\crypto\cng</Filter>
+    </ClInclude>
+    <ClInclude Include="mini\crypto\capi\hash.h">
+      <Filter>Header Files\mini\crypto\capi</Filter>
+    </ClInclude>
+    <ClInclude Include="mini\crypto\capi\hmac.h">
+      <Filter>Header Files\mini\crypto\capi</Filter>
+    </ClInclude>
+    <ClInclude Include="mini\crypto\ext\detail\curve25519-donna.h">
+      <Filter>Header Files\mini\crypto\ext\detail</Filter>
+    </ClInclude>
+    <ClInclude Include="mini\crypto\ext\curve25519.h">
+      <Filter>Header Files\mini\crypto\ext</Filter>
+    </ClInclude>
+    <ClInclude Include="mini\crypto\ext\key.h">
+      <Filter>Header Files\mini\crypto\ext</Filter>
+    </ClInclude>
+    <ClInclude Include="mini\tor\common.h">
+      <Filter>Header Files\mini\tor</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -448,17 +586,35 @@
     <None Include="mini\threading\locked_value.inl">
       <Filter>Source Files\mini\threading</Filter>
     </None>
-    <None Include="mini\crypto\aes.inl">
-      <Filter>Source Files\mini\crypto</Filter>
+    <None Include="mini\crypto\capi\aes.inl">
+      <Filter>Source Files\mini\crypto\capi</Filter>
     </None>
-    <None Include="mini\crypto\dh.inl">
-      <Filter>Source Files\mini\crypto</Filter>
+    <None Include="mini\crypto\capi\dh.inl">
+      <Filter>Source Files\mini\crypto\capi</Filter>
     </None>
-    <None Include="mini\crypto\rsa.inl">
-      <Filter>Source Files\mini\crypto</Filter>
+    <None Include="mini\crypto\capi\rsa.inl">
+      <Filter>Source Files\mini\crypto\capi</Filter>
     </None>
-    <None Include="mini\crypto\hash_template_base.inl">
-      <Filter>Source Files\mini\crypto</Filter>
+    <None Include="mini\crypto\cng\aes.inl">
+      <Filter>Source Files\mini\crypto\cng</Filter>
+    </None>
+    <None Include="mini\crypto\cng\rsa.inl">
+      <Filter>Source Files\mini\crypto\cng</Filter>
+    </None>
+    <None Include="mini\crypto\cng\dh.inl">
+      <Filter>Source Files\mini\crypto\cng</Filter>
+    </None>
+    <None Include="mini\crypto\cng\hash.inl">
+      <Filter>Source Files\mini\crypto\cng</Filter>
+    </None>
+    <None Include="mini\crypto\cng\hmac.inl">
+      <Filter>Source Files\mini\crypto\cng</Filter>
+    </None>
+    <None Include="mini\crypto\capi\hash.inl">
+      <Filter>Source Files\mini\crypto\capi</Filter>
+    </None>
+    <None Include="mini\crypto\capi\hmac.inl">
+      <Filter>Source Files\mini\crypto\capi</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>

@@ -3,7 +3,6 @@
 #include "tor_stream.h"
 #include "relay_cell.h"
 
-#include <mini/crypto/provider.h>
 #include <mini/threading/locked_value.h>
 
 namespace mini::tor {
@@ -67,12 +66,14 @@ class circuit
 
     void
     create(
-      onion_router* r
+      onion_router* first_onion_router,
+      handshake_type handshake = preferred_handshake_type
       );
 
     void
     extend(
-      onion_router* r
+      onion_router* next_onion_router,
+      handshake_type handshake = preferred_handshake_type
       );
 
     void
@@ -118,6 +119,26 @@ class circuit
       rendezvous_completing,
       rendezvous_completed,
     };
+
+    void
+    create_tap(
+      onion_router* first_onion_router
+      );
+
+    void
+    create_ntor(
+      onion_router* first_onion_router
+      );
+
+    void
+    extend_tap(
+      onion_router* next_onion_router
+      );
+
+    void
+    extend_ntor(
+      onion_router* next_onion_router
+      );
 
     void
     close_streams(
@@ -217,12 +238,22 @@ class circuit
       );
 
     void
+    handle_created2_cell(
+      cell& cell
+      );
+
+    void
     handle_destroyed_cell(
       cell& cell
       );
 
     void
     handle_relay_extended_cell(
+      relay_cell& cell
+      );
+
+    void
+    handle_relay_extended2_cell(
       relay_cell& cell
       );
 

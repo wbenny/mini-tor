@@ -128,7 +128,7 @@ tor_socket::close(
 
 circuit*
 tor_socket::create_circuit(
-  void
+  handshake_type handshake
   )
 {
   if (!is_ready())
@@ -138,7 +138,7 @@ tor_socket::create_circuit(
 
   circuit* new_circuit = new circuit(*this);
   _circuit_map.insert(new_circuit->get_circuit_id(), new_circuit);
-  new_circuit->create(_onion_router);
+  new_circuit->create(_onion_router, handshake);
 
   //
   // should't we close the socket in the case of failure?
