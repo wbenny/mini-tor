@@ -1,6 +1,6 @@
 #include "provider.h"
 
-#define MINI_CRYPTO_CNG_PROVIDER_WIN10
+// #define MINI_CRYPTO_CNG_PROVIDER_WIN10
 
 namespace mini::crypto::cng {
 
