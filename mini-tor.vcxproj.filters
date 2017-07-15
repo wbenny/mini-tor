@@ -261,6 +261,9 @@
     <ClCompile Include="mini\crypto\ext\curve25519.cpp">
       <Filter>Source Files\mini\crypto\ext</Filter>
     </ClCompile>
+    <ClCompile Include="mini\net\ssl_stream.cpp">
+      <Filter>Source Files\mini\net</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="mini\flags.h">
@@ -565,6 +568,9 @@
     </ClInclude>
     <ClInclude Include="mini\tor\common.h">
       <Filter>Header Files\mini\tor</Filter>
+    </ClInclude>
+    <ClInclude Include="mini\net\ssl_stream.h">
+      <Filter>Header Files\mini\net</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -5,15 +5,9 @@ namespace mini::net {
 ssl_socket::ssl_socket(
   void
   )
+  : _ssl_stream(_socket)
 {
-  _context.initialize(_socket);
-}
 
-ssl_socket::~ssl_socket(
-  void
-  )
-{
-  close();
 }
 
 ssl_socket::ssl_socket(
@@ -25,12 +19,19 @@ ssl_socket::ssl_socket(
   connect(host, port);
 }
 
+ssl_socket::~ssl_socket(
+  void
+  )
+{
+  close();
+}
+
 void
 ssl_socket::close(
   void
   )
 {
-  _context.disconnect();
+  _ssl_stream.close();
   _socket.close();
 }
 
@@ -66,7 +67,7 @@ ssl_socket::connect(
 {
   return
     _socket.connect(host, port) &&
-    _context.handshake() == SEC_E_OK;
+    _ssl_stream.handshake(host, port);
 }
 
 size_type
@@ -118,7 +119,7 @@ ssl_socket::is_connected(
 {
   return
     _socket.is_connected() &&
-    _context.is_valid();
+    _ssl_stream.is_handshake_established();
 }
 
 size_type
@@ -127,11 +128,7 @@ ssl_socket::read_impl(
   size_type size
   )
 {
-  mutable_byte_buffer_ref buf(
-    static_cast<byte_type*>(buffer),
-    static_cast<byte_type*>(buffer) + size);
-
-  return _context.read(buf);
+  return _ssl_stream.read(buffer, size);
 }
 
 size_type
@@ -140,11 +137,7 @@ ssl_socket::write_impl(
   size_type size
   )
 {
-  byte_buffer_ref buf(
-    static_cast<const byte_type*>(buffer),
-    static_cast<const byte_type*>(buffer) + size);
-
-  return _context.write(buf);
+  return _ssl_stream.write(buffer, size);
 }
 
 }

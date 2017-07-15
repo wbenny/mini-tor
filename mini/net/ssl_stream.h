@@ -1,25 +1,20 @@
 #pragma once
 #include "tcp_socket.h"
-#include "ssl_stream.h"
+#include "detail/ssl_context.h"
 
 #include <mini/io/stream.h>
 
 namespace mini::net {
 
-class ssl_socket
+class ssl_stream
   : public io::stream
 {
   public:
-    ssl_socket(
-      void
+    ssl_stream(
+      io::stream& underlying_stream
       );
 
-    ssl_socket(
-      const string_ref host,
-      uint16_t port
-      );
-
-    ~ssl_socket(
+    ~ssl_stream(
       void
       );
 
@@ -44,7 +39,7 @@ class ssl_socket
       ) const override;
 
     bool
-    connect(
+    handshake(
       const string_ref host,
       uint16_t port
       );
@@ -70,13 +65,13 @@ class ssl_socket
       void
       ) const override;
 
-    tcp_socket&
-    get_underlying_socket(
+    io::stream&
+    get_underlying_stream(
       void
       );
 
     bool
-    is_connected(
+    is_handshake_established(
       void
       ) const;
 
@@ -93,8 +88,10 @@ class ssl_socket
       size_type size
       ) override;
 
-    tcp_socket _socket;
-    ssl_stream _ssl_stream;
+    using ssl_context = detail::ssl_context;
+
+    io::stream& _underlying_stream;
+    ssl_context _context;
 };
 
 }

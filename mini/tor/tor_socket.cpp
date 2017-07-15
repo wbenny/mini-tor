@@ -43,7 +43,7 @@ tor_socket::connect(
   _onion_router = router;
 
   _socket.reset(new net::ssl_socket(
-    _onion_router->get_ip_address().to_string().get_buffer(),
+    _onion_router->get_ip_address().to_string(),
     _onion_router->get_or_port()));
 
   if (!is_connected())
