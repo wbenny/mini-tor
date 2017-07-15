@@ -243,8 +243,7 @@ rsa_private_key<KEY_SIZE>::swap(
   )
 {
   key::swap(other);
-  mini::swap(_blob
-    , other._blob);
+  mini::swap(_blob, other._blob);
 }
 
 //
