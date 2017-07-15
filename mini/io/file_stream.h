@@ -133,7 +133,7 @@ class file_stream
     void
     close(
       void
-      )
+      ) override
     {
       if (_file_handle != INVALID_HANDLE_VALUE)
       {
@@ -171,42 +171,6 @@ class file_stream
     {
       return true;
     }
-
-    size_type
-    read(
-      void* buffer,
-      size_type size
-      ) override
-    {
-      DWORD bytes_read;
-      ReadFile(
-        _file_handle,
-        buffer,
-        (DWORD)size,
-        &bytes_read,
-        NULL);
-
-      return bytes_read;
-    }
-
-    size_type
-    write(
-      const void* buffer,
-      size_type size
-      ) override
-    {
-      DWORD bytes_written;
-      WriteFile(_file_handle,
-        buffer,
-        (DWORD)size,
-        &bytes_written,
-        NULL);
-
-      return bytes_written;
-    }
-
-    using stream::read;
-    using stream::write;
 
     size_type
     seek(
@@ -260,6 +224,39 @@ class file_stream
     }
 
   private:
+    size_type
+    read_impl(
+      void* buffer,
+      size_type size
+      ) override
+    {
+      DWORD bytes_read;
+      ReadFile(
+        _file_handle,
+        buffer,
+        (DWORD)size,
+        &bytes_read,
+        NULL);
+
+      return bytes_read;
+    }
+
+    size_type
+    write_impl(
+      const void* buffer,
+      size_type size
+      ) override
+    {
+      DWORD bytes_written;
+      WriteFile(_file_handle,
+        buffer,
+        (DWORD)size,
+        &bytes_written,
+        NULL);
+
+      return bytes_written;
+    }
+
     HANDLE _file_handle;
     string _path;
     file_access _access;

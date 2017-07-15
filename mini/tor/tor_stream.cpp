@@ -22,69 +22,28 @@ tor_stream::~tor_stream(
   close();
 }
 
-size_type
-tor_stream::read(
-  void* buffer,
-  size_type size
-  )
+bool
+tor_stream::can_read(
+  void
+  ) const
 {
-  //
-  // pull data.
-  //
-  for (;;)
-  {
-    mini_lock(_buffer_mutex)
-    {
-      if (_buffer.is_empty() == false)
-      {
-        break;
-      }
-    }
-
-    if (get_state() == state::destroyed)
-    {
-      break;
-    }
-
-    threading::thread::sleep(10);
-  }
-
-  //
-  // process data
-  //
-  size_type size_to_copy;
-  mini_lock(_buffer_mutex)
-  {
-    size_to_copy = min(size, _buffer.get_size());
-    memory::copy(buffer, &_buffer[0], size_to_copy);
-
-    _buffer = byte_buffer_ref(_buffer).slice(size_to_copy);
-  }
-
-  return size_to_copy;
+  return true;
 }
 
-size_type
-tor_stream::write(
-  const void* buffer,
-  size_type size
-  )
+bool
+tor_stream::can_write(
+  void
+  ) const
 {
-  if (get_state() == state::destroyed)
-  {
-    mini_warning("tor_stream::write() !! attempt to write to destroyed stream");
-    return 0;
-  }
+  return true;
+}
 
-  //
-  // flush immediatelly.
-  //
-  _circuit->send_relay_data_cell(
-    this,
-    byte_buffer_ref((uint8_t*)buffer,
-    (uint8_t*)buffer + size));
-
-  return size;
+bool
+tor_stream::can_seek(
+  void
+) const
+{
+  return false;
 }
 
 size_type
@@ -189,6 +148,10 @@ tor_stream::wait_for_state(
   return _state.wait_for_value(desired_state, timeout);
 }
 
+//
+// flow control.
+//
+
 void
 tor_stream::decrement_package_window(
   void
@@ -266,6 +229,75 @@ tor_stream::consider_sending_sendme(
     mini_debug("tor_stream::consider_sending_sendme(): true");
     return true;
   }
+}
+
+//
+// io::stream
+//
+
+size_type
+tor_stream::read_impl(
+  void* buffer,
+  size_type size
+  )
+{
+  //
+  // pull data.
+  //
+  for (;;)
+  {
+    mini_lock(_buffer_mutex)
+    {
+      if (_buffer.is_empty() == false)
+      {
+        break;
+      }
+    }
+
+    if (get_state() == state::destroyed)
+    {
+      break;
+    }
+
+    threading::thread::sleep(10);
+  }
+
+  //
+  // process data
+  //
+  size_type size_to_copy;
+  mini_lock(_buffer_mutex)
+  {
+    size_to_copy = min(size, _buffer.get_size());
+    memory::copy(buffer, &_buffer[0], size_to_copy);
+
+    _buffer = byte_buffer_ref(_buffer).slice(size_to_copy);
+  }
+
+  return size_to_copy;
+}
+
+size_type
+tor_stream::write_impl(
+  const void* buffer,
+  size_type size
+  )
+{
+  if (get_state() == state::destroyed)
+  {
+    mini_warning("tor_stream::write() !! attempt to write to destroyed stream");
+    return 0;
+  }
+
+  //
+  // flush immediatelly.
+  //
+  _circuit->send_relay_data_cell(
+    this,
+    byte_buffer_ref((uint8_t*)buffer,
+    (uint8_t*)buffer + size));
+
+  return size;
 }
 
 }

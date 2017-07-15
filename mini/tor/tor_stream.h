@@ -21,41 +21,25 @@ class tor_stream
       void
       );
 
+    void
+    close(
+      void
+      ) override;
+
     bool
     can_read(
       void
-      ) const override
-    {
-      return true;
-    }
+      ) const override;
 
     bool
     can_write(
       void
-      ) const override
-    {
-      return true;
-    }
+      ) const override;
 
     bool
     can_seek(
       void
-      ) const override
-    {
-      return false;
-    }
-
-    size_type
-    read(
-      void* buffer,
-      size_type size
-      ) override;
-
-    size_type
-    write(
-      const void* buffer,
-      size_type size
-      ) override;
+      ) const override;
 
     size_type
     seek(
@@ -82,10 +66,6 @@ class tor_stream
     get_stream_id(
       void
       ) const;
-
-    void close(
-      void
-      );
 
   private:
     friend class circuit;
@@ -142,6 +122,22 @@ class tor_stream
     consider_sending_sendme(
       void
       );
+
+    //
+    // io::stream
+    //
+
+    size_type
+    read_impl(
+      void* buffer,
+      size_type size
+      ) override;
+
+    size_type
+    write_impl(
+      const void* buffer,
+      size_type size
+      ) override;
 
     static constexpr size_type window_start = 500;
     static constexpr size_type window_increment = 50;

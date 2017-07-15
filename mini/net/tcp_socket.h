@@ -24,40 +24,10 @@ class tcp_socket
       void
       );
 
-    const char*
-    get_host(
-      void
-      ) const
-    {
-      return _host.get_buffer();
-    }
-
-    const ip_address&
-    get_ip(
-      void
-      ) const
-    {
-      return _ip;
-    }
-
-    uint16_t
-    get_port(
-      void
-      ) const
-    {
-      return _port;
-    }
-
-    bool
-    connect(
-      const string_ref host,
-      uint16_t port
-      );
-
     void
     close(
       void
-      );
+      ) override;
 
     bool
     can_read(
@@ -74,18 +44,28 @@ class tcp_socket
       void
       ) const override;
 
-    size_type
-    read(
-      void* buffer,
-      size_type size
-      ) override;
+    string_ref
+    get_host(
+      void
+      ) const;
 
-    size_type
-    write(
-      const void* buffer,
-      size_type size
-      ) override;
+    const ip_address&
+    get_ip(
+      void
+      ) const;
 
+    uint16_t
+    get_port(
+      void
+      ) const;
+
+    bool
+    connect(
+      const string_ref host,
+      uint16_t port
+      );
+
+  public:
     size_type
     seek(
       intptr_t offset,
@@ -110,12 +90,21 @@ class tcp_socket
     bool
     is_connected(
       void
-      ) const
-    {
-      return _socket != INVALID_SOCKET;
-    }
+      ) const;
 
   private:
+    size_type
+    read_impl(
+      void* buffer,
+      size_type size
+      ) override;
+
+    size_type
+    write_impl(
+      const void* buffer,
+      size_type size
+      ) override;
+
     string _host;
     ip_address _ip;
 

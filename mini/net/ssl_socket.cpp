@@ -2,12 +2,16 @@
 
 namespace mini::net {
 
-ssl_socket::ssl_socket()
+ssl_socket::ssl_socket(
+  void
+  )
 {
   _context.initialize(_socket);
 }
 
-ssl_socket::~ssl_socket()
+ssl_socket::~ssl_socket(
+  void
+  )
 {
   close();
 }
@@ -19,17 +23,6 @@ ssl_socket::ssl_socket(
   : ssl_socket()
 {
   connect(host, port);
-}
-
-bool
-ssl_socket::connect(
-  const string_ref host,
-  uint16_t port
-  )
-{
-  return
-    _socket.connect(host, port) &&
-    _context.handshake() == SEC_E_OK;
 }
 
 void
@@ -65,30 +58,15 @@ ssl_socket::can_seek(
   return false;
 }
 
-size_type
-ssl_socket::read(
-  void* buffer,
-  size_type size
+bool
+ssl_socket::connect(
+  const string_ref host,
+  uint16_t port
   )
 {
-  mutable_byte_buffer_ref buf(
-    static_cast<byte_type*>(buffer),
-    static_cast<byte_type*>(buffer) + size);
-
-  return _context.read(buf);
-}
-
-size_type
-ssl_socket::write(
-  const void* buffer,
-  size_type size
-  )
-{
-  byte_buffer_ref buf(
-    static_cast<const byte_type*>(buffer),
-    static_cast<const byte_type*>(buffer) + size);
-
-  return _context.write(buf);
+  return
+    _socket.connect(host, port) &&
+    _context.handshake() == SEC_E_OK;
 }
 
 size_type
@@ -141,6 +119,32 @@ ssl_socket::is_connected(
   return
     _socket.is_connected() &&
     _context.is_valid();
+}
+
+size_type
+ssl_socket::read_impl(
+  void* buffer,
+  size_type size
+  )
+{
+  mutable_byte_buffer_ref buf(
+    static_cast<byte_type*>(buffer),
+    static_cast<byte_type*>(buffer) + size);
+
+  return _context.read(buf);
+}
+
+size_type
+ssl_socket::write_impl(
+  const void* buffer,
+  size_type size
+  )
+{
+  byte_buffer_ref buf(
+    static_cast<const byte_type*>(buffer),
+    static_cast<const byte_type*>(buffer) + size);
+
+  return _context.write(buf);
 }
 
 }

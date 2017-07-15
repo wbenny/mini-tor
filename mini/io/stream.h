@@ -41,6 +41,11 @@ class stream
 
     }
 
+    virtual void
+    close(
+      void
+      ) = 0;
+
     virtual bool
     can_read(
       void
@@ -60,13 +65,35 @@ class stream
     read(
       void* buffer,
       size_type size
-      ) = 0;
+      )
+    {
+      return read_impl(buffer, size);
+    }
+
+    virtual size_type
+    read(
+      mutable_byte_buffer_ref buffer
+      )
+    {
+      return read_impl(buffer.get_buffer(), buffer.get_size());
+    }
 
     virtual size_type
     write(
       const void* buffer,
       size_type size
-      ) = 0;
+      )
+    {
+      return write_impl(buffer, size);
+    }
+
+    virtual size_type
+    write(
+      const byte_buffer_ref buffer
+      )
+    {
+      return write_impl(buffer.get_buffer(), buffer.get_size());
+    }
 
     virtual size_type
     seek(
@@ -89,26 +116,18 @@ class stream
       void
       ) const = 0;
 
-
-    //
-    // easier manipulation
-    //
+  protected:
+    virtual size_type
+    read_impl(
+      void* buffer,
+      size_type size
+      ) = 0;
 
     virtual size_type
-    read(
-      mutable_byte_buffer_ref buffer
-      )
-    {
-      return read(buffer.get_buffer(), buffer.get_size());
-    }
-
-    virtual size_type
-    write(
-      const byte_buffer_ref buffer
-      )
-    {
-      return write(buffer.get_buffer(), buffer.get_size());
-    }
+    write_impl(
+      const void* buffer,
+      size_type size
+      ) = 0;
 };
 
 }

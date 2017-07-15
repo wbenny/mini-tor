@@ -24,6 +24,14 @@ class memory_stream
       attach(buffer);
     }
 
+    void
+    close(
+      void
+      ) override
+    {
+
+    }
+
     bool
     can_read(
       void
@@ -46,30 +54,6 @@ class memory_stream
       ) const override
     {
       return true;
-    }
-
-    size_type
-    read(
-      void* buffer,
-      size_type size
-      ) override
-    {
-      size = min(size, (size_type)(_end - _position));
-      memory::copy(buffer, _position, size);
-      _position += size;
-      return size;
-    }
-
-    size_type
-    write(
-      const void* buffer,
-      size_type size
-      ) override
-    {
-      size = min(size, static_cast<size_type>(_end - _position));
-      memory::copy(_position, buffer, size);
-      _position += size;
-      return size;
     }
 
     size_type
@@ -139,6 +123,30 @@ class memory_stream
     }
 
   private:
+    size_type
+    read_impl(
+      void* buffer,
+      size_type size
+      ) override
+    {
+      size = min(size, (size_type)(_end - _position));
+      memory::copy(buffer, _position, size);
+      _position += size;
+      return size;
+    }
+
+    size_type
+    write_impl(
+      const void* buffer,
+      size_type size
+      ) override
+    {
+      size = min(size, static_cast<size_type>(_end - _position));
+      memory::copy(_position, buffer, size);
+      _position += size;
+      return size;
+    }
+
     uint8_t* _begin;
     uint8_t* _end;
     uint8_t* _position;

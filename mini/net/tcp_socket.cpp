@@ -62,6 +62,64 @@ tcp_socket::~tcp_socket(
   close();
 }
 
+void
+tcp_socket::close(
+  void
+  )
+{
+  closesocket(_socket);
+
+  _socket = INVALID_SOCKET;
+}
+
+bool
+tcp_socket::can_read(
+  void
+  ) const
+{
+  return true;
+}
+
+bool
+tcp_socket::can_write(
+  void
+  ) const
+{
+  return true;
+}
+
+bool
+tcp_socket::can_seek(
+  void
+  ) const
+{
+  return false;
+}
+
+string_ref
+tcp_socket::get_host(
+  void
+  ) const
+{
+  return _host;
+}
+
+const ip_address&
+tcp_socket::get_ip(
+  void
+  ) const
+{
+  return _ip;
+}
+
+uint16_t
+tcp_socket::get_port(
+  void
+  ) const
+{
+  return _port;
+}
+
 bool
 tcp_socket::connect(
   const string_ref host,
@@ -89,100 +147,6 @@ tcp_socket::connect(
   }
 
   return true;
-}
-
-void
-tcp_socket::close(
-  void
-  )
-{
-  closesocket(_socket);
-
-  _socket = INVALID_SOCKET;
-}
-
-bool tcp_socket::can_read(
-  void
-  ) const
-{
-  return true;
-}
-
-bool tcp_socket::can_write(
-  void
-  ) const
-{
-  return true;
-}
-
-bool
-tcp_socket::can_seek(
-  void
-  ) const
-{
-  return false;
-}
-
-size_type
-tcp_socket::read(
-  void* buffer,
-  size_type size
-  )
-{
-  //
-  // early exit.
-  //
-  if (size == 0)
-  {
-    return 0;
-  }
-
-  size_type result = (size_type)recv(_socket, (char*)buffer, (int)size, 0);
-
-  //
-  // close & invalidate socket when we've received 0 bytes.
-  //
-  if (result == 0)
-  {
-    close();
-  }
-
-  //
-  // invalidate socket when we've encountered an error.
-  //
-  if (result == SOCKET_ERROR)
-  {
-    _socket = INVALID_SOCKET;
-  }
-
-  return result;
-}
-
-size_type
-tcp_socket::write(
-  const void* buffer,
-  size_type size
-  )
-{
-  //
-  // early exit.
-  //
-  if (size == 0)
-  {
-    return 0;
-  }
-
-  size_type result = (size_type)send(_socket, (const char*)buffer, (int)size, 0);
-
-  //
-  // invalidate socket when we've encountered an error.
-  //
-  if (result == SOCKET_ERROR)
-  {
-    _socket = INVALID_SOCKET;
-  }
-
-  return result;
 }
 
 size_type
@@ -219,6 +183,76 @@ tcp_socket::get_position(
   ) const
 {
   return 0;
+}
+
+bool
+tcp_socket::is_connected(
+  void
+  ) const
+{
+  return _socket != INVALID_SOCKET;
+}
+
+size_type
+tcp_socket::read_impl(
+  void* buffer,
+  size_type size
+  )
+{
+  //
+  // early exit.
+  //
+  if (size == 0)
+  {
+    return 0;
+  }
+
+  size_type result = (size_type)recv(_socket, (char*)buffer, (int)size, 0);
+
+  //
+  // close & invalidate socket when we've received 0 bytes.
+  //
+  if (result == 0)
+  {
+    close();
+  }
+
+  //
+  // invalidate socket when we've encountered an error.
+  //
+  if (result == SOCKET_ERROR)
+  {
+    _socket = INVALID_SOCKET;
+  }
+
+  return result;
+}
+
+size_type
+tcp_socket::write_impl(
+  const void* buffer,
+  size_type size
+  )
+{
+  //
+  // early exit.
+  //
+  if (size == 0)
+  {
+    return 0;
+  }
+
+  size_type result = (size_type)send(_socket, (const char*)buffer, (int)size, 0);
+
+  //
+  // invalidate socket when we've encountered an error.
+  //
+  if (result == SOCKET_ERROR)
+  {
+    _socket = INVALID_SOCKET;
+  }
+
+  return result;
 }
 
 }

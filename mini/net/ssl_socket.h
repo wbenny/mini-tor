@@ -23,16 +23,10 @@ class ssl_socket
       void
       );
 
-    bool
-    connect(
-      const string_ref host,
-      uint16_t port
-      );
-
     void
     close(
       void
-      );
+      ) override;
 
     bool
     can_read(
@@ -49,20 +43,11 @@ class ssl_socket
       void
       ) const override;
 
-    size_type
-    read(
-      void* buffer,
-      size_type size
-      ) override;
-
-    using io::stream::write;
-    using io::stream::read;
-
-    size_type
-    write(
-      const void* buffer,
-      size_type size
-      ) override;
+    bool
+    connect(
+      const string_ref host,
+      uint16_t port
+      );
 
     size_type
     seek(
@@ -96,6 +81,18 @@ class ssl_socket
       ) const;
 
   private:
+    size_type
+    read_impl(
+      void* buffer,
+      size_type size
+      ) override;
+
+    size_type
+    write_impl(
+      const void* buffer,
+      size_type size
+      ) override;
+
     using ssl_context = detail::ssl_context;
 
     tcp_socket  _socket;
