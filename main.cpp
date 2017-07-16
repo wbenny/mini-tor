@@ -178,7 +178,7 @@ class tor_client
         //
         // wrap ssl_stream around tor_stream.
         //
-        stream_ssl = new mini::net::ssl_stream(*stream_tor);
+        stream_ssl = new mini::net::ssl_stream(*stream_tor, host);
         if (!stream_ssl->handshake(host, port))
         {
           mini_error("Error while establishing TLS with '%s'", host.get_buffer());

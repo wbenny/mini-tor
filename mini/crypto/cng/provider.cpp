@@ -260,7 +260,7 @@ provider::init_win10(
   )
 {
   //
-  // "" 
+  // ""
   //    beginning in Windows 10, CNG provides pre-defined algorithm handles for many algorithms.
   //    you can use these handles in any situation that requires an algorithm handle.
   //                                                                                  ""

@@ -3,9 +3,9 @@
 namespace mini::net {
 
 ssl_socket::ssl_socket(
-  void
+  const string_ref host
   )
-  : _ssl_stream(_socket)
+  : _ssl_stream(_socket, host)
 {
 
 }
@@ -14,7 +14,7 @@ ssl_socket::ssl_socket(
   const string_ref host,
   uint16_t port
   )
-  : ssl_socket()
+  : ssl_socket(host)
 {
   connect(host, port);
 }

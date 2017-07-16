@@ -11,7 +11,8 @@ class ssl_stream
 {
   public:
     ssl_stream(
-      io::stream& underlying_stream
+      io::stream& underlying_stream,
+      const string_ref target_name = string_ref::empty
       );
 
     ~ssl_stream(

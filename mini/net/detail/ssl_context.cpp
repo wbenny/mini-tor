@@ -118,13 +118,14 @@ ctxt_handle::initialize(
   DWORD in_flags,
   DWORD& out_flags,
   SecBufferDesc* in_buffer_desc,
-  SecBufferDesc& out_buffer_desc
+  SecBufferDesc& out_buffer_desc,
+  const string_ref target_name
   )
 {
   return sspi->InitializeSecurityContext(
     &credential_handle,
     is_valid() ? this : NULL,
-    NULL,
+    !target_name.is_empty() ? const_cast<SEC_CHAR*>(target_name.get_buffer()) : NULL,
     in_flags,
     0,
     SECURITY_NATIVE_DREP,
@@ -207,7 +208,8 @@ ssl_context::~ssl_context(
 
 SECURITY_STATUS
 ssl_context::initialize(
-  io::stream& sock
+  io::stream& sock,
+  const string_ref target_name
   )
 {
   constexpr static DWORD common_in_sspi_flags =
@@ -219,6 +221,7 @@ ssl_context::initialize(
     ISC_REQ_STREAM;
 
   _socket = &sock;
+  _target_name = target_name;
 
   _in_sspi_flags = common_in_sspi_flags;
   _out_sspi_flags = 0;
@@ -447,6 +450,11 @@ ssl_context::read(
     //
     bool last_message_was_handshake = false;
 
+    //
+    // just a marker, if the server has initiated a clean shutdown.
+    //
+    bool context_expired = false;
+
     do
     {
       SECURITY_STATUS status = decrypt_message();
@@ -505,12 +513,12 @@ ssl_context::read(
         //
         // server signaled end of session.
         //
-        case SEC_E_CONTEXT_EXPIRED:
-
-        // [fallthrough]
+        case SEC_I_CONTEXT_EXPIRED:
+          context_expired = true;
+          continue;
 
         //
-        // undexpected error occured, break the loop.
+        // unexpected error occured, break the loop.
         //              |
         default:  //    |
           break;  //    |
@@ -527,9 +535,11 @@ ssl_context::read(
         //   - there are more data to decrypt
         //     - or we've made a handshake (renegotation)
         //   - we haven't filled the input buffer yet
+        //   - server didn't initialize shutdown
         //
         (_payload_recv_encrypted_size || last_message_was_handshake) &&
         bytes_read < buffer.get_size() &&
+        !context_expired &&
 
         //
         // reset the 'last_message_was_handshake' flag.
@@ -596,7 +606,8 @@ ssl_context::initialize_ctxt(
     _in_sspi_flags,
     _out_sspi_flags,
     provide_in_buffer ? &_in_buffer_desc : nullptr,
-    _out_buffer_desc);
+    _out_buffer_desc,
+    _target_name);
 
   if (FAILED(flush_out_buffer()))
   {
@@ -719,7 +730,6 @@ ssl_context::flush_out_buffer(
   //
   // free the buffer and invalidate it.
   //
-
   sspi->FreeContextBuffer(_out_buffer.pvBuffer);
 
   _out_buffer.cbBuffer = 0;

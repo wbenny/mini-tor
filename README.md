@@ -30,7 +30,7 @@ add -v, -vv or -vvv for verbosity:
 ```
 
 you can disable logging by commenting out `#define MINI_LOG_ENABLED` in `mini/logger.h`.
-this will also result in fairly reduced size.
+this will also result in fairly reduced size of the executable.
 
 ### Description
 

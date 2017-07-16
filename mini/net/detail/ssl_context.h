@@ -54,7 +54,8 @@ struct ctxt_handle
     DWORD in_flags,
     DWORD& out_flags,
     SecBufferDesc* in_buffer_desc,
-    SecBufferDesc& out_buffer_desc
+    SecBufferDesc& out_buffer_desc,
+    const string_ref target_name
     );
 
   void
@@ -101,7 +102,8 @@ class ssl_context
 
     SECURITY_STATUS
     initialize(
-      io::stream& sock
+      io::stream& sock,
+      const string_ref target_name = string_ref::empty
       );
 
     void
@@ -191,6 +193,11 @@ class ssl_context
     // underlying socket stream.
     //
     io::stream*   _socket;
+
+    //
+    // target name.
+    //
+    string        _target_name;
 
     SecPkgContext_StreamSizes  _stream_sizes;
 

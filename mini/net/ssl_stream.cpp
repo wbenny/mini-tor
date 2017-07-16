@@ -3,11 +3,12 @@
 namespace mini::net {
 
 ssl_stream::ssl_stream(
-  io::stream& underlying_stream
+  io::stream& underlying_stream,
+  const string_ref target_name
   )
   : _underlying_stream(underlying_stream)
 {
-  _context.initialize(_underlying_stream);
+  _context.initialize(_underlying_stream, target_name);
 }
 
 ssl_stream::~ssl_stream(
