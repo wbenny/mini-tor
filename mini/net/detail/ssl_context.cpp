@@ -720,7 +720,7 @@ ssl_context::flush_out_buffer(
   // free the buffer and invalidate it.
   //
 
-  //sspi->FreeContextBuffer(&_out_buffer);
+  sspi->FreeContextBuffer(_out_buffer.pvBuffer);
 
   _out_buffer.cbBuffer = 0;
   _out_buffer.pvBuffer = nullptr;
