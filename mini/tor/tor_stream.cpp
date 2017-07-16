@@ -114,6 +114,8 @@ tor_stream::append_to_recv_buffer(
 {
   mini_lock(_buffer_mutex)
   {
+    mini_debug("tor_stream::append_to_recv_buffer() [ size = %u ]", static_cast<uint32_t>(buffer.get_size()));
+
     _buffer.add_many(buffer);
   }
 }

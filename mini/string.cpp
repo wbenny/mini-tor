@@ -345,10 +345,7 @@ string::to_int(
   void
   ) const
 {
-  int result = 0;
-  sscanf(get_buffer(), "%d", &result);
-
-  return result;
+  return string_ref(*this).to_int();
 }
 
 //

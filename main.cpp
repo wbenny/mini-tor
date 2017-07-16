@@ -8,6 +8,8 @@
 #include <mini/tor/tor_socket.h>
 #include <mini/tor/tor_stream.h>
 #include <mini/net/http.h>
+#include <mini/net/ssl_stream.h>
+#include <mini/net/uri.h>
 
 #define MINI_TOR_USE_CONSENSUS_CACHE 1
 
@@ -123,46 +125,44 @@ class tor_client
 
     mini::string
     http_get(
-      const mini::string_ref url
+      const mini::net::uri& url
       )
     {
-      mini::tor::tor_stream* stream = nullptr;
-      mini::string result;
+      //
+      // take out the parts to local variables.
+      //
+      const auto domain  = url.get_domain();
+      const auto host    = url.get_host();
+      const auto path    = url.get_path();
+      const auto port    = url.get_port();
+      const bool use_ssl = url.get_protocol().equals("https://");
 
-      mini::string url_string = url;
+      mini_info("Accessing '%s'", url.get_url().get_buffer());
+      mini::io::stream* stream;
 
-      mini_info("Accessing '%s'", url_string.get_buffer());
-      if (url_string.starts_with("http://"))
+      mini::ptr<mini::tor::tor_stream> stream_tor;
+      mini::ptr<mini::net::ssl_stream> stream_ssl;
+
+      if (domain.ends_with(".onion"))
       {
-        url_string = url_string.substring(7);
-      }
-
-      if (url_string.contains("/") == false)
-      {
-        url_string += "/";
-      }
-
-      mini::string_collection url_parts = url_string.split("/", 1);
-      mini::string host = url_parts[0];
-      mini::string path = url_parts[1];
-      uint16_t port = 80;
-
-      if (host.ends_with(".onion"))
-      {
-        mini::string onion = host.substring(0, host.get_size() - 6);
+        //
+        // parse out the domain name without ".onion" extension.
+        //
+        mini::string onion = domain.substring(0, domain.get_size() - 6);
 
         mini_info("Creating onion stream...");
-        stream = _circuit->create_onion_stream(onion, port);
+        stream_tor = _circuit->create_onion_stream(onion, port);
       }
       else
       {
         mini_info("Creating stream...");
-        stream = _circuit->create_stream(host, port);
+        stream_tor = _circuit->create_stream(host, port);
       }
 
-      if (stream)
+      if (stream_tor)
       {
         mini_info("Created...");
+        stream = stream_tor.get();
       }
       else
       {
@@ -171,10 +171,46 @@ class tor_client
       }
 
       mini_info("Sending request...");
-      result = mini::net::http::client::get(host, port, path, *stream);
-      mini_info("Response received...");
+      mini::string result;
 
-      delete stream;
+      if (use_ssl)
+      {
+        //
+        // wrap ssl_stream around tor_stream.
+        //
+        stream_ssl = new mini::net::ssl_stream(*stream_tor);
+        if (!stream_ssl->handshake(host, port))
+        {
+          mini_error("Error while establishing TLS with '%s'", host.get_buffer());
+          return mini::string();
+        }
+
+        stream = stream_ssl.get();
+      }
+
+      result = mini::net::http::client::get(
+        host,
+        port,
+        path,
+        *stream);
+
+      if (!result.is_empty())
+      {
+        mini_info("Response received...");
+      }
+      else
+      {
+        mini_warning("Received empty response!");
+      }
+
+      //
+      // NB: if ssl_stream is wrapped around the tor_stream,
+      // the ssl_stream may attempt to write into already closed
+      // tor_stream upon destruction.
+      //
+      // i'm not sure if it should be considered as an error,
+      // but it doesn't cause any problems.
+      //
 
       return result;
     }
@@ -280,7 +316,7 @@ connect_again:
     if (tor.get_hop_count() == 0)
     {
       tor.extend_to_random(
-        mini::tor::onion_router::status_flag::fast |
+        mini::tor::onion_router::status_flag::fast    |
         mini::tor::onion_router::status_flag::running |
         mini::tor::onion_router::status_flag::valid,
         { 80, 443 });
@@ -292,9 +328,9 @@ connect_again:
     else if (tor.get_hop_count() == (hops - 1))
     {
       tor.extend_to_random(
-        mini::tor::onion_router::status_flag::fast |
+        mini::tor::onion_router::status_flag::fast    |
         mini::tor::onion_router::status_flag::running |
-        mini::tor::onion_router::status_flag::valid |
+        mini::tor::onion_router::status_flag::valid   |
         mini::tor::onion_router::status_flag::exit);
     }
 
@@ -304,13 +340,15 @@ connect_again:
     else
     {
       tor.extend_to_random(
-        mini::tor::onion_router::status_flag::fast |
+        mini::tor::onion_router::status_flag::fast    |
         mini::tor::onion_router::status_flag::running |
         mini::tor::onion_router::status_flag::valid);
     }
   }
 
-  mini::string content = tor.http_get(0 ? "http://duskgytldkxiuqc6.onion/fedpapers/federndx.htm" : argv[arg_index]);
+  mini::string content = tor.http_get(
+    mini::net::uri(0 ? "http://duskgytldkxiuqc6.onion/fedpapers/federndx.htm" : argv[arg_index]));
+
   if (content.is_empty())
   {
     mini_info("Trying to build new circuit...");

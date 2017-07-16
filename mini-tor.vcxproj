@@ -966,6 +966,7 @@
     <ClInclude Include="mini\net\ssl_socket.h" />
     <ClInclude Include="mini\net\ssl_stream.h" />
     <ClInclude Include="mini\net\tcp_socket.h" />
+    <ClInclude Include="mini\net\uri.h" />
     <ClInclude Include="mini\pair.h" />
     <ClInclude Include="mini\ptr.h" />
     <ClInclude Include="mini\stack_buffer.h" />

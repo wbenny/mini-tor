@@ -572,6 +572,9 @@
     <ClInclude Include="mini\net\ssl_stream.h">
       <Filter>Header Files\mini\net</Filter>
     </ClInclude>
+    <ClInclude Include="mini\net\uri.h">
+      <Filter>Header Files\mini\net</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="mini\collections\list.inl">

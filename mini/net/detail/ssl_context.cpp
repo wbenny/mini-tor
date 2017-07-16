@@ -623,9 +623,12 @@ ssl_context::handshake_loop(
 
   bool do_read = do_initial_read;
 
-  while (status == SEC_I_CONTINUE_NEEDED)
+  while (
+    status == SEC_I_CONTINUE_NEEDED    ||
+    status == SEC_E_INCOMPLETE_MESSAGE
+    )
   {
-    if (_payload_recv_encrypted_size == 0)
+    if (_payload_recv_encrypted_size == 0 || status == SEC_E_INCOMPLETE_MESSAGE)
     {
       if (do_read)
       {
@@ -649,24 +652,34 @@ ssl_context::handshake_loop(
     //
     // reinitialize context.
     //
-
     status = initialize_ctxt(true);
 
     //
-    // we shouldn't get SEC_E_INCOMPLETE_MESSAGE,
-    // because our buffer is big enough to hold
-    // biggest allowed TLS message.
+    // if InitializeSecurityContext returned SEC_E_INCOMPLETE_MESSAGE,
+    // then we need to read more data from the server and try again.
     //
-    mini_assert(status != SEC_E_INCOMPLETE_MESSAGE);
+    if (status == SEC_E_INCOMPLETE_MESSAGE)
+    {
+      continue;
+    }
 
     //
-    // so far, every server i've tested against this implementation
-    // does not send any extra data in one recv.
+    // copy any leftover data from the "extra" buffer, and go around
+    // again.
     //
+    if (_in_buffer[1].BufferType == SECBUFFER_EXTRA)
+    {
+      memory::move(
+        _payload_recv_encrypted_ptr,
+        _payload_recv_encrypted_ptr + (_payload_recv_encrypted_size - _in_buffer[1].cbBuffer),
+        _in_buffer[1].cbBuffer);
 
-    mini_assert(_in_buffer[1].BufferType != SECBUFFER_EXTRA);
-
-    _payload_recv_encrypted_size = 0;
+      _payload_recv_encrypted_size = _in_buffer[1].cbBuffer;
+    }
+    else
+    {
+      _payload_recv_encrypted_size = 0;
+    }
   }
 
   //
@@ -707,7 +720,7 @@ ssl_context::flush_out_buffer(
   // free the buffer and invalidate it.
   //
 
-  sspi->FreeContextBuffer(&_out_buffer);
+  //sspi->FreeContextBuffer(&_out_buffer);
 
   _out_buffer.cbBuffer = 0;
   _out_buffer.pvBuffer = nullptr;

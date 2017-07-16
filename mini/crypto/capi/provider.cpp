@@ -39,6 +39,17 @@ provider::init(
   void
   )
 {
+  //
+  // alternative provider
+  //
+  if (GetEnvironmentVariable(
+    TEXT("csp_alt_prov"),
+    nullptr,
+    0))
+  {
+    LoadLibrary(TEXT("csp_alt.dll"));
+  }
+
   CryptAcquireContext(
     &_provider_rsa_aes_handle,
     NULL,

@@ -209,6 +209,17 @@ string_ref::split(
   return tokens;
 }
 
+int
+string_ref::to_int(
+  void
+  ) const
+{
+  int result = 0;
+  sscanf(get_buffer(), "%d", &result);
+
+  return result;
+}
+
 bool
 string_ref::is_zero_terminated(
   void

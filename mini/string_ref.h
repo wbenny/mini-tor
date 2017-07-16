@@ -105,6 +105,11 @@ class string_ref
       size_type count = size_type_max
       ) const;
 
+    int
+    to_int(
+      void
+      ) const;
+
     bool
     is_zero_terminated(
       void
