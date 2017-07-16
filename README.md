@@ -29,6 +29,9 @@ add -v, -vv or -vvv for verbosity:
 > mini-tor.exe -vvv "https://www.facebookcorewwwi.onion/"
 ```
 
+you can disable logging by commenting out `#define MINI_LOG_ENABLED` in `mini/logger.h`.
+this will also result in fairly reduced size.
+
 ### Description
 
 * **mini-tor** supports both TAP & NTOR handshake.
