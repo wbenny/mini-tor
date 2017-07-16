@@ -37,6 +37,7 @@ this will also result in fairly reduced size of the executable.
 * **mini-tor** supports both TAP & NTOR handshake.
   * TAP uses ordinary DH with 1024 bit exponent.
   * NTOR is newer type of handshake and uses curve25519.
+  * you can control which handshake is used by default by changing `preferred_handshake_type` in `mini/tor/common.h`
 * **mini-tor** can use either CryptoAPI or newer CNG api.
   * configurable via `mini/crypto/common.h`.
   * note that curve25519 is supported by CNG only on win10+.
