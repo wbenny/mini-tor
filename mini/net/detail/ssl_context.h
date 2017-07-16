@@ -243,6 +243,11 @@ class ssl_context
     //
     byte_type* const _payload_send;
     size_type  _payload_send_size;
+
+    //
+    // indicator if the stream is closed.
+    //
+    bool _closed;
 };
 
 }

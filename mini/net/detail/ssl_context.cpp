@@ -189,6 +189,7 @@ ssl_context::ssl_context(
   : _stream_sizes()
   , _payload_recv(new byte_type[max_record_size])
   , _payload_send(new byte_type[max_record_size])
+  , _closed(false)
 {
   //
   // ensure the SSPI is initialized.
@@ -267,6 +268,7 @@ ssl_context::is_valid(
   ) const
 {
   return
+    !_closed &&
     _cred_handle.is_valid() &&
     _ctxt_handle.is_valid();
 }
@@ -318,6 +320,7 @@ ssl_context::disconnect(
   //
   // send 'close_notify' down the socket.
   //
+  _closed = true;
 
   return initialize_ctxt(false);
 }
@@ -442,18 +445,13 @@ ssl_context::read(
       _payload_recv_decrypted_size = 0;
     }
   }
-  else
+  else if (!_closed)
   {
     //
     // just a marker, if last decrypted message
     // was handshake / renegotation.
     //
     bool last_message_was_handshake = false;
-
-    //
-    // just a marker, if the server has initiated a clean shutdown.
-    //
-    bool context_expired = false;
 
     do
     {
@@ -514,7 +512,7 @@ ssl_context::read(
         // server signaled end of session.
         //
         case SEC_I_CONTEXT_EXPIRED:
-          context_expired = true;
+          _closed = true;
           continue;
 
         //
@@ -539,7 +537,7 @@ ssl_context::read(
         //
         (_payload_recv_encrypted_size || last_message_was_handshake) &&
         bytes_read < buffer.get_size() &&
-        !context_expired &&
+        !_closed &&
 
         //
         // reset the 'last_message_was_handshake' flag.
