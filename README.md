@@ -22,6 +22,13 @@ it can even access https content:
 > mini-tor.exe "https://www.facebookcorewwwi.onion/"
 ```
 
+add -v, -vv or -vvv for verbosity:
+```c
+> mini-tor.exe -v "http://duskgytldkxiuqc6.onion/fedpapers/federndx.htm"
+> mini-tor.exe -vv "https://check.torproject.org/"
+> mini-tor.exe -vvv "https://www.facebookcorewwwi.onion/"
+```
+
 ### Description
 
 * **mini-tor** supports both TAP & NTOR handshake.
