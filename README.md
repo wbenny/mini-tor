@@ -65,7 +65,7 @@ compile **mini-tor** using Visual Studio 2017. solution file is included. no oth
 all the code in this repository is open-source under the MIT license. see the **LICENSE.txt** file in this repository.
 
 
-if you find this project interesting, you can buy me a beer
+if you find this project interesting, you can buy me a coffee
 
 ```
   BTC 12hwTTPYDbkVqsfpGjrsVa7WpShvQn24ro
