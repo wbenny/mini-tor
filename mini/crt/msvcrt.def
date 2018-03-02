@@ -51,7 +51,7 @@ EXPORTS
 ;
 
   time
-  mktime
+  _mkgmtime
 
 ;
 ; CRT
