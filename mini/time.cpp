@@ -24,7 +24,7 @@ time(
 
 extern "C"
 uint32_t __cdecl
-mktime(
+_mkgmtime(
   struct tm* timeptr
   );
 
@@ -78,7 +78,7 @@ time::parse(
   system_time.tm_mon  -=     1;
   system_time.tm_isdst =    -1;
 
-  _timestamp = mktime(&system_time);
+  _timestamp = _mkgmtime(&system_time);
 }
 
 uint32_t
