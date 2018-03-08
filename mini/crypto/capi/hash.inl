@@ -258,12 +258,13 @@ hash<HASH_ALGORITHM>::init(
 
   struct blob
   {
-    BLOBHEADER header;
-    DWORD      size;
+    PUBLICKEYSTRUC header;
+    DWORD          size;
 //  BYTE       key[key.get_size()];
   };
 
-  blob* key_blob = reinterpret_cast<byte_type*>(new byte_type[sizeof(blob) + key.get_size()]);
+  size_t n = sizeof(blob) + key.get_size();
+  blob* key_blob = reinterpret_cast<blob*>(new byte_type[n]);
   key_blob->header.bType = PLAINTEXTKEYBLOB;
   key_blob->header.bVersion = CUR_BLOB_VERSION;
   key_blob->header.reserved = 0;
@@ -271,14 +272,14 @@ hash<HASH_ALGORITHM>::init(
   key_blob->size = static_cast<DWORD>(key.get_size());
 
   memory::copy(
-    reinterpret_cast<byte_type*>(&key_blob) + sizeof(blob),
+    reinterpret_cast<byte_type*>(key_blob) + sizeof(blob),
     key.get_buffer(),
     key_blob->size);
 
   CryptImportKey(
     provider_factory.get_rsa_aes_handle(),
-    (PBYTE)&key_blob,
-    sizeof(blob) + static_cast<DWORD>(key.get_size()),
+    (PBYTE) key_blob,
+    n,
     0,
     CRYPT_IPSEC_HMAC_KEY,
     &key_handle);
