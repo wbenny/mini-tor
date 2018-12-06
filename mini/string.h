@@ -1,5 +1,6 @@
 #pragma once
 #include <mini/common.h>
+#include <mini/hash.h>
 #include <mini/collections/list.h>
 #include <mini/byte_buffer_ref.h>
 
@@ -371,7 +372,15 @@ swap(
   string& rhs
   );
 
+template<>
+struct hash<string>
+{
+  size_type operator()(const string& value) const noexcept
+  {
+    return detail::hash_array_representation(value.get_buffer(), value.get_size());
+  }
+};
+
 }
 
 #include <mini/string_ref.h>
-

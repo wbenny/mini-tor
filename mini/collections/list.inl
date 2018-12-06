@@ -11,9 +11,9 @@ namespace mini::collections {
 
 template <
   typename T,
-  typename ALLOCATOR_TYPE
+  typename Allocator
 >
-list<T, ALLOCATOR_TYPE>::list(
+list<T, Allocator>::list(
   void
   )
   : _first(nullptr)
@@ -25,12 +25,12 @@ list<T, ALLOCATOR_TYPE>::list(
 
 template <
   typename T,
-  typename ALLOCATOR_TYPE
+  typename Allocator
 >
-list<T, ALLOCATOR_TYPE>::list(
+list<T, Allocator>::list(
   const list& other
   )
-  : list<T, ALLOCATOR_TYPE>()
+  : list<T, Allocator>()
 {
   reserve(other.get_capacity());
 
@@ -42,24 +42,24 @@ list<T, ALLOCATOR_TYPE>::list(
 
 template <
   typename T,
-  typename ALLOCATOR_TYPE
+  typename Allocator
 >
-list<T, ALLOCATOR_TYPE>::list(
+list<T, Allocator>::list(
   list&& other
   )
-  : list<T, ALLOCATOR_TYPE>()
+  : list<T, Allocator>()
 {
   swap(other);
 }
 
 template <
   typename T,
-  typename ALLOCATOR_TYPE
+  typename Allocator
 >
-list<T, ALLOCATOR_TYPE>::list(
+list<T, Allocator>::list(
   std::initializer_list<T> values
   )
-  : list<T, ALLOCATOR_TYPE>()
+  : list<T, Allocator>()
 {
   for (auto&& e : values)
   {
@@ -69,16 +69,16 @@ list<T, ALLOCATOR_TYPE>::list(
 
 template <
   typename T,
-  typename ALLOCATOR_TYPE
+  typename Allocator
 >
 template <
-  typename ITERATOR_TYPE
+  typename TIterator
 >
-list<T, ALLOCATOR_TYPE>::list(
-  ITERATOR_TYPE begin,
-  ITERATOR_TYPE end
+list<T, Allocator>::list(
+  TIterator begin,
+  TIterator end
   )
-  : list<T, ALLOCATOR_TYPE>(end - begin)
+  : list<T, Allocator>(end - begin)
 {
   size_type index = 0;
 
@@ -90,51 +90,51 @@ list<T, ALLOCATOR_TYPE>::list(
 
 template <
   typename T,
-  typename ALLOCATOR_TYPE
+  typename Allocator
 >
-list<T, ALLOCATOR_TYPE>::list(
+list<T, Allocator>::list(
   size_type initial_size
   )
-  : list<T, ALLOCATOR_TYPE>()
+  : list<T, Allocator>()
 {
   resize(initial_size);
 }
 
 template <
   typename T,
-  typename ALLOCATOR_TYPE
+  typename Allocator
 >
-list<T, ALLOCATOR_TYPE>::list(
+list<T, Allocator>::list(
   const buffer_ref<T> buffer
   )
-  : list<T, ALLOCATOR_TYPE>(buffer.begin(), buffer.end())
+  : list<T, Allocator>(buffer.begin(), buffer.end())
 {
 
 }
 
 template <
   typename T,
-  typename ALLOCATOR_TYPE
+  typename Allocator
 >
 template <
   size_type N
 >
-list<T, ALLOCATOR_TYPE>::list(
+list<T, Allocator>::list(
   const T(&array)[N]
   )
-  : list<T, ALLOCATOR_TYPE>(array, array + N)
+  : list<T, Allocator>(array, array + N)
 {
 
 }
 
 template <
   typename T,
-  typename ALLOCATOR_TYPE
+  typename Allocator
 >
-list<T, ALLOCATOR_TYPE>::list(
+list<T, Allocator>::list(
   std::initializer_list<const buffer_ref<T>> items
   )
-  : list<T, ALLOCATOR_TYPE>()
+  : list<T, Allocator>()
 {
   add_many(items);
 }
@@ -145,9 +145,9 @@ list<T, ALLOCATOR_TYPE>::list(
 
 template <
   typename T,
-  typename ALLOCATOR_TYPE
+  typename Allocator
 >
-list<T, ALLOCATOR_TYPE>::~list(
+list<T, Allocator>::~list(
   void
   )
 {
@@ -161,10 +161,10 @@ list<T, ALLOCATOR_TYPE>::~list(
 
 template <
   typename T,
-  typename ALLOCATOR_TYPE
+  typename Allocator
 >
-list<T, ALLOCATOR_TYPE>&
-list<T, ALLOCATOR_TYPE>::operator=(
+list<T, Allocator>&
+list<T, Allocator>::operator=(
   const list& other
   )
 {
@@ -180,10 +180,10 @@ list<T, ALLOCATOR_TYPE>::operator=(
 
 template <
   typename T,
-  typename ALLOCATOR_TYPE
+  typename Allocator
 >
-list<T, ALLOCATOR_TYPE>&
-list<T, ALLOCATOR_TYPE>::operator=(
+list<T, Allocator>&
+list<T, Allocator>::operator=(
   list&& other
   )
 {
@@ -198,10 +198,10 @@ list<T, ALLOCATOR_TYPE>::operator=(
 
 template <
   typename T,
-  typename ALLOCATOR_TYPE
+  typename Allocator
 >
 void
-list<T, ALLOCATOR_TYPE>::swap(
+list<T, Allocator>::swap(
   list& other
   )
 {
@@ -216,10 +216,10 @@ list<T, ALLOCATOR_TYPE>::swap(
 
 template <
   typename T,
-  typename ALLOCATOR_TYPE
+  typename Allocator
 >
-typename list<T, ALLOCATOR_TYPE>::reference
-list<T, ALLOCATOR_TYPE>::operator[](
+typename list<T, Allocator>::reference
+list<T, Allocator>::operator[](
   size_type index
   )
 {
@@ -228,10 +228,10 @@ list<T, ALLOCATOR_TYPE>::operator[](
 
 template <
   typename T,
-  typename ALLOCATOR_TYPE
+  typename Allocator
 >
-typename list<T, ALLOCATOR_TYPE>::const_reference
-list<T, ALLOCATOR_TYPE>::operator[](
+typename list<T, Allocator>::const_reference
+list<T, Allocator>::operator[](
    size_type index
   ) const
 {
@@ -240,10 +240,10 @@ list<T, ALLOCATOR_TYPE>::operator[](
 
 template <
   typename T,
-  typename ALLOCATOR_TYPE
+  typename Allocator
 >
-typename list<T, ALLOCATOR_TYPE>::reference
-list<T, ALLOCATOR_TYPE>::at(
+typename list<T, Allocator>::reference
+list<T, Allocator>::at(
   size_type index
   )
 {
@@ -252,10 +252,10 @@ list<T, ALLOCATOR_TYPE>::at(
 
 template <
   typename T,
-  typename ALLOCATOR_TYPE
+  typename Allocator
 >
-typename list<T, ALLOCATOR_TYPE>::const_reference
-list<T, ALLOCATOR_TYPE>::at(
+typename list<T, Allocator>::const_reference
+list<T, Allocator>::at(
   size_type index
   ) const
 {
@@ -264,10 +264,10 @@ list<T, ALLOCATOR_TYPE>::at(
 
 template <
   typename T,
-  typename ALLOCATOR_TYPE
+  typename Allocator
 >
-typename list<T, ALLOCATOR_TYPE>::reference
-list<T, ALLOCATOR_TYPE>::top(
+typename list<T, Allocator>::reference
+list<T, Allocator>::top(
   void
   )
 {
@@ -276,10 +276,10 @@ list<T, ALLOCATOR_TYPE>::top(
 
 template <
   typename T,
-  typename ALLOCATOR_TYPE
+  typename Allocator
 >
-typename list<T, ALLOCATOR_TYPE>::const_reference
-list<T, ALLOCATOR_TYPE>::top(
+typename list<T, Allocator>::const_reference
+list<T, Allocator>::top(
   void
   ) const
 {
@@ -288,10 +288,10 @@ list<T, ALLOCATOR_TYPE>::top(
 
 template <
   typename T,
-  typename ALLOCATOR_TYPE
+  typename Allocator
 >
-typename list<T, ALLOCATOR_TYPE>::value_type*
-list<T, ALLOCATOR_TYPE>::get_buffer(
+typename list<T, Allocator>::value_type*
+list<T, Allocator>::get_buffer(
   void
   )
 {
@@ -300,10 +300,10 @@ list<T, ALLOCATOR_TYPE>::get_buffer(
 
 template <
   typename T,
-  typename ALLOCATOR_TYPE
+  typename Allocator
 >
-const typename list<T, ALLOCATOR_TYPE>::value_type*
-list<T, ALLOCATOR_TYPE>::get_buffer(
+const typename list<T, Allocator>::value_type*
+list<T, Allocator>::get_buffer(
   void
   ) const
 {
@@ -312,10 +312,10 @@ list<T, ALLOCATOR_TYPE>::get_buffer(
 
 template <
   typename T,
-  typename ALLOCATOR_TYPE
+  typename Allocator
 >
 buffer_ref<T>
-list<T, ALLOCATOR_TYPE>::slice(
+list<T, Allocator>::slice(
   size_type begin,
   size_type end
   ) const
@@ -329,10 +329,10 @@ list<T, ALLOCATOR_TYPE>::slice(
 
 template <
   typename T,
-  typename ALLOCATOR_TYPE
+  typename Allocator
 >
 mutable_buffer_ref<T>
-list<T, ALLOCATOR_TYPE>::slice(
+list<T, Allocator>::slice(
   size_type begin,
   size_type end
   )
@@ -350,10 +350,10 @@ list<T, ALLOCATOR_TYPE>::slice(
 
 template <
   typename T,
-  typename ALLOCATOR_TYPE
+  typename Allocator
 >
-typename list<T, ALLOCATOR_TYPE>::iterator
-list<T, ALLOCATOR_TYPE>::begin(
+typename list<T, Allocator>::iterator
+list<T, Allocator>::begin(
   void
   )
 {
@@ -362,10 +362,10 @@ list<T, ALLOCATOR_TYPE>::begin(
 
 template <
   typename T,
-  typename ALLOCATOR_TYPE
+  typename Allocator
 >
-typename list<T, ALLOCATOR_TYPE>::const_iterator
-list<T, ALLOCATOR_TYPE>::begin(
+typename list<T, Allocator>::const_iterator
+list<T, Allocator>::begin(
   void
   ) const
 {
@@ -374,10 +374,10 @@ list<T, ALLOCATOR_TYPE>::begin(
 
 template <
   typename T,
-  typename ALLOCATOR_TYPE
+  typename Allocator
 >
-typename list<T, ALLOCATOR_TYPE>::iterator
-list<T, ALLOCATOR_TYPE>::end(
+typename list<T, Allocator>::iterator
+list<T, Allocator>::end(
   void
   )
 {
@@ -386,10 +386,10 @@ list<T, ALLOCATOR_TYPE>::end(
 
 template <
   typename T,
-  typename ALLOCATOR_TYPE
+  typename Allocator
 >
-typename list<T, ALLOCATOR_TYPE>::const_iterator
-list<T, ALLOCATOR_TYPE>::end(
+typename list<T, Allocator>::const_iterator
+list<T, Allocator>::end(
   void
   ) const
 {
@@ -402,10 +402,10 @@ list<T, ALLOCATOR_TYPE>::end(
 
 template <
   typename T,
-  typename ALLOCATOR_TYPE
+  typename Allocator
 >
 bool
-list<T, ALLOCATOR_TYPE>::is_empty(
+list<T, Allocator>::is_empty(
   void
   ) const
 {
@@ -414,10 +414,10 @@ list<T, ALLOCATOR_TYPE>::is_empty(
 
 template <
   typename T,
-  typename ALLOCATOR_TYPE
+  typename Allocator
 >
-typename list<T, ALLOCATOR_TYPE>::size_type
-list<T, ALLOCATOR_TYPE>::get_size(
+typename list<T, Allocator>::size_type
+list<T, Allocator>::get_size(
   void
   ) const
 {
@@ -426,10 +426,10 @@ list<T, ALLOCATOR_TYPE>::get_size(
 
 template <
   typename T,
-  typename ALLOCATOR_TYPE
+  typename Allocator
 >
 void
-list<T, ALLOCATOR_TYPE>::resize(
+list<T, Allocator>::resize(
   size_type new_size,
   const_reference item
   )
@@ -453,10 +453,10 @@ list<T, ALLOCATOR_TYPE>::resize(
 
 template <
   typename T,
-  typename ALLOCATOR_TYPE
+  typename Allocator
 >
 void
-list<T, ALLOCATOR_TYPE>::resize_unsafe(
+list<T, Allocator>::resize_unsafe(
   size_type new_size
   )
 {
@@ -470,10 +470,10 @@ list<T, ALLOCATOR_TYPE>::resize_unsafe(
 
 template <
   typename T,
-  typename ALLOCATOR_TYPE
+  typename Allocator
 >
-typename list<T, ALLOCATOR_TYPE>::size_type
-list<T, ALLOCATOR_TYPE>::get_capacity(
+typename list<T, Allocator>::size_type
+list<T, Allocator>::get_capacity(
   void
   ) const
 {
@@ -482,10 +482,10 @@ list<T, ALLOCATOR_TYPE>::get_capacity(
 
 template <
   typename T,
-  typename ALLOCATOR_TYPE
+  typename Allocator
 >
 void
-list<T, ALLOCATOR_TYPE>::reserve(
+list<T, Allocator>::reserve(
   size_type new_capacity
   )
 {
@@ -508,10 +508,10 @@ list<T, ALLOCATOR_TYPE>::reserve(
 
 template <
   typename T,
-  typename ALLOCATOR_TYPE
+  typename Allocator
 >
 bool
-list<T, ALLOCATOR_TYPE>::equals(
+list<T, Allocator>::equals(
   const list& other
   ) const
 {
@@ -520,10 +520,10 @@ list<T, ALLOCATOR_TYPE>::equals(
 
 template <
   typename T,
-  typename ALLOCATOR_TYPE
+  typename Allocator
 >
 bool
-list<T, ALLOCATOR_TYPE>::contains(
+list<T, Allocator>::contains(
   const value_type& item
   ) const
 {
@@ -532,10 +532,10 @@ list<T, ALLOCATOR_TYPE>::contains(
 
 template <
   typename T,
-  typename ALLOCATOR_TYPE
+  typename Allocator
 >
-typename list<T, ALLOCATOR_TYPE>::size_type
-list<T, ALLOCATOR_TYPE>::index_of(
+typename list<T, Allocator>::size_type
+list<T, Allocator>::index_of(
   const value_type& item,
   size_type from_offset
   ) const
@@ -557,10 +557,10 @@ list<T, ALLOCATOR_TYPE>::index_of(
 
 template <
   typename T,
-  typename ALLOCATOR_TYPE
+  typename Allocator
 >
 void
-list<T, ALLOCATOR_TYPE>::add(
+list<T, Allocator>::add(
   const value_type& item
   )
 {
@@ -569,10 +569,10 @@ list<T, ALLOCATOR_TYPE>::add(
 
 template <
   typename T,
-  typename ALLOCATOR_TYPE
+  typename Allocator
 >
 void
-list<T, ALLOCATOR_TYPE>::add(
+list<T, Allocator>::add(
   value_type&& item
   )
 {
@@ -581,10 +581,10 @@ list<T, ALLOCATOR_TYPE>::add(
 
 template <
   typename T,
-  typename ALLOCATOR_TYPE
+  typename Allocator
 >
 void
-list<T, ALLOCATOR_TYPE>::add_many(
+list<T, Allocator>::add_many(
   const buffer_ref<T> items
   )
 {
@@ -602,10 +602,10 @@ list<T, ALLOCATOR_TYPE>::add_many(
 
 template <
   typename T,
-  typename ALLOCATOR_TYPE
+  typename Allocator
 >
 void
-list<T, ALLOCATOR_TYPE>::add_many(
+list<T, Allocator>::add_many(
   std::initializer_list<const buffer_ref<T>> items
   )
 {
@@ -617,10 +617,10 @@ list<T, ALLOCATOR_TYPE>::add_many(
 
 template <
   typename T,
-  typename ALLOCATOR_TYPE
+  typename Allocator
 >
 void
-list<T, ALLOCATOR_TYPE>::push(
+list<T, Allocator>::push(
   const value_type& item
   )
 {
@@ -629,10 +629,10 @@ list<T, ALLOCATOR_TYPE>::push(
 
 template <
   typename T,
-  typename ALLOCATOR_TYPE
+  typename Allocator
 >
 void
-list<T, ALLOCATOR_TYPE>::push(
+list<T, Allocator>::push(
   value_type&& item
   )
 {
@@ -641,10 +641,10 @@ list<T, ALLOCATOR_TYPE>::push(
 
 template <
   typename T,
-  typename ALLOCATOR_TYPE
+  typename Allocator
 >
 void
-list<T, ALLOCATOR_TYPE>::insert(
+list<T, Allocator>::insert(
   const value_type& item,
   size_type index
   )
@@ -657,10 +657,10 @@ list<T, ALLOCATOR_TYPE>::insert(
 
 template <
   typename T,
-  typename ALLOCATOR_TYPE
+  typename Allocator
 >
 void
-list<T, ALLOCATOR_TYPE>::insert(
+list<T, Allocator>::insert(
   value_type&& item,
   size_type index
   )
@@ -673,10 +673,10 @@ list<T, ALLOCATOR_TYPE>::insert(
 
 template <
   typename T,
-  typename ALLOCATOR_TYPE
+  typename Allocator
 >
 void
-list<T, ALLOCATOR_TYPE>::insert_many(
+list<T, Allocator>::insert_many(
   const buffer_ref<T> items,
   size_type index
   )
@@ -695,10 +695,22 @@ list<T, ALLOCATOR_TYPE>::insert_many(
 
 template <
   typename T,
-  typename ALLOCATOR_TYPE
+  typename Allocator
 >
 void
-list<T, ALLOCATOR_TYPE>::remove(
+list<T, Allocator>::remove(
+  iterator it
+  )
+{
+  remove_at(it - begin());
+}
+
+template <
+  typename T,
+  typename Allocator
+>
+void
+list<T, Allocator>::remove(
   const value_type& item
   )
 {
@@ -710,14 +722,12 @@ list<T, ALLOCATOR_TYPE>::remove(
   }
 }
 
-// 0 0 0 0 0 0
-//   X X
 template <
   typename T,
-  typename ALLOCATOR_TYPE
+  typename Allocator
 >
 void
-list<T, ALLOCATOR_TYPE>::remove_range(
+list<T, Allocator>::remove_range(
   size_type from_offset,
   size_type count
   )
@@ -767,10 +777,10 @@ list<T, ALLOCATOR_TYPE>::remove_range(
 
 template <
   typename T,
-  typename ALLOCATOR_TYPE
+  typename Allocator
 >
 void
-list<T, ALLOCATOR_TYPE>::remove_at(
+list<T, Allocator>::remove_at(
   size_type index
   )
 {
@@ -793,10 +803,22 @@ list<T, ALLOCATOR_TYPE>::remove_at(
 
 template <
   typename T,
-  typename ALLOCATOR_TYPE
+  typename Allocator
 >
 void
-list<T, ALLOCATOR_TYPE>::remove_by_swap_at(
+list<T, Allocator>::remove_by_swap(
+  iterator it
+  )
+{
+  remove_by_swap_at(it - begin());
+}
+
+template <
+  typename T,
+  typename Allocator
+>
+void
+list<T, Allocator>::remove_by_swap_at(
   size_type index
   )
 {
@@ -804,7 +826,7 @@ list<T, ALLOCATOR_TYPE>::remove_by_swap_at(
 
   if (index != (get_size() - 1))
   {
-    swap(_first[index], (_first[get_size() - 1]));
+    ::mini::swap(_first[index], (_first[get_size() - 1]));
   }
 
   _last -= 1;
@@ -812,10 +834,10 @@ list<T, ALLOCATOR_TYPE>::remove_by_swap_at(
 
 template <
   typename T,
-  typename ALLOCATOR_TYPE
+  typename Allocator
 >
 void
-list<T, ALLOCATOR_TYPE>::pop(
+list<T, Allocator>::pop(
   void
   )
 {
@@ -824,10 +846,10 @@ list<T, ALLOCATOR_TYPE>::pop(
 
 template <
   typename T,
-  typename ALLOCATOR_TYPE
+  typename Allocator
 >
 void
-list<T, ALLOCATOR_TYPE>::clear(
+list<T, Allocator>::clear(
   void
   )
 {
@@ -841,9 +863,9 @@ list<T, ALLOCATOR_TYPE>::clear(
 
 template <
   typename T,
-  typename ALLOCATOR_TYPE
+  typename Allocator
 >
-list<T, ALLOCATOR_TYPE>::operator buffer_ref<T>(
+list<T, Allocator>::operator buffer_ref<T>(
   void
   ) const
 {
@@ -852,9 +874,9 @@ list<T, ALLOCATOR_TYPE>::operator buffer_ref<T>(
 
 template <
   typename T,
-  typename ALLOCATOR_TYPE
+  typename Allocator
 >
-list<T, ALLOCATOR_TYPE>::operator mutable_buffer_ref<T>(
+list<T, Allocator>::operator mutable_buffer_ref<T>(
   void
   )
 {
@@ -867,10 +889,10 @@ list<T, ALLOCATOR_TYPE>::operator mutable_buffer_ref<T>(
 
 template <
   typename T,
-  typename ALLOCATOR_TYPE
+  typename Allocator
 >
 void
-list<T, ALLOCATOR_TYPE>::reserve_to_at_least(
+list<T, Allocator>::reserve_to_at_least(
   size_type desired_capacity
   )
 {
@@ -897,12 +919,12 @@ namespace mini {
 
 template <
   typename T,
-  typename ALLOCATOR_TYPE
+  typename Allocator
 >
 void
 swap(
-  collections::list<T, ALLOCATOR_TYPE>& lhs,
-  collections::list<T, ALLOCATOR_TYPE>& rhs
+  collections::list<T, Allocator>& lhs,
+  collections::list<T, Allocator>& rhs
   )
 {
   lhs.swap(rhs);

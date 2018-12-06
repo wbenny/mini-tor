@@ -60,11 +60,11 @@ class buffer_ref
       );
 
     template <
-      typename CONST_ITERATOR_TYPE
+      typename TConstIterator
     >
     constexpr buffer_ref(
-      CONST_ITERATOR_TYPE begin,
-      CONST_ITERATOR_TYPE end
+      TConstIterator begin,
+      TConstIterator end
       );
 
     template <
@@ -281,11 +281,11 @@ class mutable_buffer_ref
       ) = default;
 
     template <
-      typename ITERATOR_TYPE
+      typename TIterator
     >
     mutable_buffer_ref(
-      ITERATOR_TYPE begin,
-      ITERATOR_TYPE end
+      TIterator begin,
+      TIterator end
       );
 
     template <

@@ -1,3 +1,5 @@
+#ifndef MINI_TEST
+
 #include <mini/logger.h>
 #include <mini/console.h>
 #include <mini/crypto/random.h>
@@ -366,3 +368,5 @@ connect_again:
 
   return 0;
 }
+
+#endif

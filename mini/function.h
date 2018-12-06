@@ -5,40 +5,40 @@
 
 namespace mini {
 
-template <typename T> class Mem_Fn;
+template <typename T> class mem_fn_t;
 
 template <typename Tp, typename Class>
-Mem_Fn <Tp Class::*>
+mem_fn_t <Tp Class::*>
 mem_fn(Tp Class::* pm) noexcept
 {
-  return Mem_Fn<Tp Class::*>(pm);
+  return mem_fn_t<Tp Class::*>(pm);
 }
 
-template <typename RetType, typename Class, typename... ArgTypes>
-class Mem_Fn<RetType(Class::*) (ArgTypes...)>
+template <typename ReturnType, typename Class, typename... ArgTypes>
+class mem_fn_t<ReturnType(Class::*) (ArgTypes...)>
 {
-  using Functor = RetType(Class::*) (ArgTypes...);
+  using Functor = ReturnType(Class::*) (ArgTypes...);
 
   public:
-    explicit Mem_Fn(Functor mf) : func_(mf) { }
+    explicit mem_fn_t(Functor mf) : func_(mf) { }
 
     // Handle lvalue reference to an object
     template <typename... Args>
-      RetType operator()(Class& obj, Args&&... args)
+      ReturnType operator()(Class& obj, Args&&... args)
     {
       return (obj.*func_)(std::forward<Args>(args)...);
     }
 
     // Handle Rvalue reference
       template <typename... Args>
-      RetType operator()(Class&& obj, Args&&... args)
+      ReturnType operator()(Class&& obj, Args&&... args)
     {
       return (std::move(obj).*func_)(std::forward<Args>(args)...);
     }
 
     // Handle plain pointer to an object
       template <typename... Args>
-      RetType operator()(Class* obj, Args&&... args)
+      ReturnType operator()(Class* obj, Args&&... args)
     {
       return (obj->*func_)(std::forward<Args>(args)...);
     }
@@ -47,14 +47,15 @@ class Mem_Fn<RetType(Class::*) (ArgTypes...)>
     template <typename T, typename... Args,
       typename std::enable_if<std::is_base_of<T, Class>::value>::type* = nullptr
     >
-      RetType operator()(std::reference_wrapper<T> ref, Args&&... args)
+      ReturnType operator()(std::reference_wrapper<T> ref, Args&&... args)
     {
       return operator()(ref.get(), std::forward<Args>(args)...);
     }
 
+    //
     // Handle smart pointer
     // Maybe sometime later...... :)
-
+    //
 
   private:
     // The member function pointer
@@ -63,10 +64,8 @@ class Mem_Fn<RetType(Class::*) (ArgTypes...)>
 
 }
 
-//////////////////////////////////////////////////////////////////////////
-
-#define FUNC_NO_EXCEPTIONS
-#define FUNC_NO_RTTI
+#define MINI_FUNCTION_NO_EXCEPTIONS
+#define MINI_FUNCTION_NO_RTTI
 
 //
 // ref: https://dl.dropboxusercontent.com/u/27990997/function.h
@@ -75,7 +74,7 @@ class Mem_Fn<RetType(Class::*) (ArgTypes...)>
 
 namespace mini {
 
-#ifndef FUNC_NO_EXCEPTIONS
+#ifndef MINI_FUNCTION_NO_EXCEPTIONS
 	struct bad_function_call : std::exception
 	{
 		const char * what() const noexcept override
@@ -109,7 +108,7 @@ namespace detail
 	{
 	};
 
-#	ifndef FUNC_NO_EXCEPTIONS
+#	ifndef MINI_FUNCTION_NO_EXCEPTIONS
 		template<typename Result, typename... Arguments>
 		Result empty_call(const functor_padding &, Arguments...)
 		{
@@ -142,7 +141,7 @@ namespace detail
 		return mem_fn(func);
 	}
 	template<typename Result, typename Class, typename... Arguments>
-	auto to_functor(Result (Class::*func)(Arguments...) const) -> decltype(smem_fn(func))
+	auto to_functor(Result (Class::*func)(Arguments...) const) -> decltype(mem_fn(func))
 	{
 		return mem_fn(func);
 	}
@@ -313,7 +312,7 @@ namespace detail
 				static_cast<decltype(call_copy)>(&templated_call_copy<T, Allocator>),
 				static_cast<decltype(call_copy_functor_only)>(&templated_call_copy_functor_only<T, Allocator>),
 				static_cast<decltype(call_destroy)>(&templated_call_destroy<T, Allocator>),
-#				ifndef FUNC_NO_RTTI
+#				ifndef MINI_FUNCTION_NO_RTTI
 					static_cast<decltype(call_type_id)>(&templated_call_type_id<T, Allocator>),
 					static_cast<decltype(call_target)>(&templated_call_target<T, Allocator)>
 #				endif
@@ -324,7 +323,7 @@ namespace detail
 		void (* const call_copy)(manager_storage_type & lhs, const manager_storage_type & rhs);
 		void (* const call_copy_functor_only)(manager_storage_type & lhs, const manager_storage_type & rhs);
 		void (* const call_destroy)(manager_storage_type & manager);
-#		ifndef FUNC_NO_RTTI
+#		ifndef MINI_FUNCTION_NO_RTTI
 			const std::type_info & (* const call_type_id)();
 			void * (* const call_target)(const manager_storage_type & manager, const std::type_info & type);
 #		endif
@@ -358,7 +357,7 @@ namespace detail
 			typedef function_manager_inplace_specialization<T, Allocator> specialization;
 			specialization::store_functor(lhs, specialization::get_functor_ref(rhs));
 		}
-#		ifndef FUNC_NO_RTTI
+#		ifndef MINI_FUNCTION_NO_RTTI
 			template<typename T, typename>
 			static const std::type_info & templated_call_type_id()
 			{
@@ -536,7 +535,7 @@ public:
 	}
 
 
-#	ifndef FUNC_NO_RTTI
+#	ifndef MINI_FUNCTION_NO_RTTI
 		const std::type_info & target_type() const noexcept
 		{
 			return manager_storage.manager->call_type_id();
@@ -556,7 +555,7 @@ public:
 	operator bool() const noexcept
 	{
 
-#		ifdef FUNC_NO_EXCEPTIONS
+#		ifdef MINI_FUNCTION_NO_EXCEPTIONS
 			return call != nullptr;
 #		else
 			return call != &detail::empty_call<Result, Arguments...>;
@@ -583,7 +582,7 @@ private:
 
 		detail::create_manager<Empty_Function_Type, Allocator>(manager_storage, Allocator());
 		detail::function_manager_inplace_specialization<Empty_Function_Type, Allocator>::store_functor(manager_storage, nullptr);
-#		ifdef FUNC_NO_EXCEPTIONS
+#		ifdef MINI_FUNCTION_NO_EXCEPTIONS
 			call = nullptr;
 #		else
 			call = &detail::empty_call<Result, Arguments...>;

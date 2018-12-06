@@ -4,18 +4,21 @@
 namespace mini {
 
 template <
-  typename T,
-  typename U
+  typename TFirst,
+  typename TSecond
 >
 struct pair
 {
+  using first_type = TFirst;
+  using second_type = TSecond;
+
   pair(
     void
     ) = default;
 
   pair(
-    const T& first,
-    const U& second
+    const TFirst& first,
+    const TSecond& second
     )
     : first(first)
     , second(second)
@@ -24,25 +27,25 @@ struct pair
   }
 
   template <
-    typename OTHER_T,
-    typename OTHER_U
+    typename TOtherFirst,
+    typename TOtherSecond
   >
   pair(
-    OTHER_T&& first,
-    OTHER_U&& second
+    TOtherFirst&& first,
+    TOtherSecond&& second
     )
-    : first(std::forward<OTHER_T>(first))
-    , second(std::forward<OTHER_U>(second))
+    : first(std::forward<TOtherFirst>(first))
+    , second(std::forward<TOtherSecond>(second))
   {
 
   }
 
   pair(
-    const pair<T, U>& other
+    const pair<TFirst, TSecond>& other
     ) = default;
 
   pair(
-    pair<T, U>&& other
+    pair<TFirst, TSecond>&& other
     )
   {
     swap(other);
@@ -52,40 +55,41 @@ struct pair
     void
     ) = default;
 
-  pair<T, U>&
+  pair<TFirst, TSecond>&
     operator=(
-    const pair<T, U>& other
+    const pair<TFirst, TSecond>& other
     ) = default;
 
-  pair<T, U>&
+  pair<TFirst, TSecond>&
   operator=(
-    pair<T, U>&& other
+    pair<TFirst, TSecond>&& other
     )
   {
     swap(other);
+    return *this;
   }
 
   void
   swap(
-    pair<T, U>& other
+    pair<TFirst, TSecond>& other
     )
   {
     mini::swap(first, other.first);
     mini::swap(second, other.second);
   }
 
-  T first;
-  U second;
+  TFirst  first;
+  TSecond second;
 };
 
 template <
-  typename T,
-  typename U
+  typename TFirst,
+  typename TSecond
 >
 void
 swap(
-  pair<T, U>& lhs,
-  pair<T, U>& rhs
+  pair<TFirst, TSecond>& lhs,
+  pair<TFirst, TSecond>& rhs
   )
 {
   lhs.swap(rhs);

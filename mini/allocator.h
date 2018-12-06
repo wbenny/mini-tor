@@ -14,49 +14,51 @@ namespace detail {
 // construct_range_impl.
 //
 template <
-  typename ALLOCATOR,
+  typename Allocator,
   bool is_trivially_default_constructible
 >
-struct construct_range_impl
+struct construct_range
 {
   template <
-    typename ITERATOR_TYPE,
-    typename ...ARGS
+    typename TIterator,
+    typename ...Args
   >
-  void operator() (
-    ITERATOR_TYPE begin,
-    ITERATOR_TYPE end,
-    ARGS&&... args
+  void
+  operator() (
+    Allocator& allocator,
+    TIterator begin,
+    TIterator end,
+    Args&&... args
     )
   {
     while (begin < end)
     {
-      ALLOCATOR::construct(begin++, std::forward<ARGS>(args)...);
+      allocator.construct(begin++, std::forward<Args>(args)...);
     }
   }
 };
 
 template <
-  typename ALLOCATOR
+  typename Allocator
 >
-struct construct_range_impl<ALLOCATOR, true>
+struct construct_range<Allocator, true>
 {
   template <
-    typename ITERATOR_TYPE,
-    typename ...ARGS
+    typename TIterator,
+    typename ...Args
   >
-  void operator() (
-    ITERATOR_TYPE begin,
-    ITERATOR_TYPE end,
-    ARGS&&... args
+  void
+  operator() (
+    Allocator& allocator,
+    TIterator begin,
+    TIterator end,
+    Args&&... args
     )
   {
-    MINI_UNREFERENCED_PARAMETER_PACK(args);
+    MINI_UNREFERENCED(allocator);
 
-    memory::set(
-      begin,
-      typename ALLOCATOR::value_type(),
-      (end - begin) * sizeof(typename ALLOCATOR::value_type));
+    memory::set(begin, args..., (end - begin) *
+                                sizeof(typename Allocator::value_type));
   }
 };
 
@@ -64,44 +66,50 @@ struct construct_range_impl<ALLOCATOR, true>
 // move_range_impl.
 //
 template <
-  typename ALLOCATOR,
+  typename Allocator,
   bool is_trivially_default_constructible
 >
-struct move_range_impl
+struct move_range
 {
   template <
-    typename ITERATOR_TYPE_SRC,
-    typename ITERATOR_TYPE_DEST
+    typename TIteratorSource,
+    typename TIteratorDestination
   >
-  void operator() (
-    ITERATOR_TYPE_SRC src_begin,
-    ITERATOR_TYPE_SRC src_end,
-    ITERATOR_TYPE_DEST dest_begin
+  void
+  operator() (
+    Allocator& allocator,
+    TIteratorSource src_begin,
+    TIteratorSource src_end,
+    TIteratorDestination dest_begin
     )
   {
     while (src_begin < src_end)
     {
-      ALLOCATOR::construct(dest_begin++, std::move(*src_begin++));
+      allocator.construct(dest_begin++, std::move(*src_begin++));
     }
   }
 };
 
 template <
-  typename ALLOCATOR
+  typename Allocator
 >
-struct move_range_impl<ALLOCATOR, true>
+struct move_range<Allocator, true>
 {
   template <
-    typename ITERATOR_TYPE_SRC,
-    typename ITERATOR_TYPE_DEST
+    typename TIteratorSource,
+    typename TIteratorDestination
   >
-  void operator() (
-    ITERATOR_TYPE_SRC src_begin,
-    ITERATOR_TYPE_SRC src_end,
-    ITERATOR_TYPE_DEST dest_begin
+  void
+  operator() (
+    Allocator& allocator,
+    TIteratorSource src_begin,
+    TIteratorSource src_end,
+    TIteratorDestination dest_begin
     )
   {
-    memory::move(dest_begin, src_begin, (src_end - src_begin) * sizeof(typename ALLOCATOR::value_type));
+    MINI_UNREFERENCED(allocator);
+
+    memory::move(dest_begin, src_begin, (src_end - src_begin) * sizeof(typename Allocator::value_type));
   }
 };
 
@@ -109,39 +117,44 @@ struct move_range_impl<ALLOCATOR, true>
 // move_range_impl.
 //
 template <
-  typename ALLOCATOR,
+  typename Allocator,
   bool is_trivially_destructible
 >
-struct destroy_range_impl
+struct destroy_range
 {
   template <
-    typename ITERATOR_TYPE
+    typename TIterator
   >
-  void operator() (
-    ITERATOR_TYPE begin,
-    ITERATOR_TYPE end
+  void
+  operator() (
+    Allocator& allocator,
+    TIterator begin,
+    TIterator end
     )
   {
     while (begin < end)
     {
-      ALLOCATOR::destroy(begin++);
+      allocator.destroy(begin++);
     }
   }
 };
 
 template <
-  typename ALLOCATOR
+  typename Allocator
 >
-struct destroy_range_impl<ALLOCATOR, true>
+struct destroy_range<Allocator, true>
 {
   template <
-    typename ITERATOR_TYPE
+    typename TIterator
   >
-  void operator() (
-    ITERATOR_TYPE begin,
-    ITERATOR_TYPE end
+  void
+  operator() (
+    Allocator& allocator,
+    TIterator begin,
+    TIterator end
     )
   {
+    MINI_UNREFERENCED(allocator);
     MINI_UNREFERENCED(begin);
     MINI_UNREFERENCED(end);
   }
@@ -166,7 +179,15 @@ class allocator
     using pointer                 = value_type*;
     using const_pointer           = const value_type*;
 
-    static T*
+    template <
+      typename TOther
+    >
+    struct rebind
+    {
+      using other = allocator<TOther>;
+    };
+
+    T*
     allocate(
       size_type count
       )
@@ -175,7 +196,7 @@ class allocator
       return (T*)::operator new(size * count);
     }
 
-    static void
+    void
     deallocate(
       T* pointer
       )
@@ -183,7 +204,7 @@ class allocator
       ::operator delete((void*)pointer);
     }
 
-    static void
+    void
     deallocate(
       T* pointer,
       size_type count
@@ -193,21 +214,21 @@ class allocator
     }
 
     template <
-      typename ...ARGS
+      typename ...Args
     >
-    static void
+    void
     construct(
       T* pointer,
-      ARGS&&... args
+      Args&&... args
       )
     {
-      new((void*)pointer) T(std::forward<ARGS>(args)...);
+      new((void*)pointer) T(std::forward<Args>(args)...);
     }
 
     template <
       typename U
     >
-    static void
+    void
     destroy(
       U* pointer
       )
@@ -218,51 +239,52 @@ class allocator
     }
 
     template <
-      typename ITERATOR_TYPE,
-      typename ...ARGS
+      typename TIterator,
+      typename ...Args
     >
-    static void
+    void
     construct_range(
-      ITERATOR_TYPE begin,
-      ITERATOR_TYPE end,
-      ARGS&&... args
+      TIterator begin,
+      TIterator end,
+      Args&&... args
       )
     {
-      detail::construct_range_impl<this_type, std::is_trivially_default_constructible_v<T>>()(
-        begin,
-        end,
-        std::forward<ARGS>(args)...);
+      detail::construct_range<
+        this_type,
+        std::is_trivially_default_constructible_v<T>
+      >()(*this, begin, end, std::forward<Args>(args)...);
     }
 
     template <
-      typename ITERATOR_TYPE_SRC,
-      typename ITERATOR_TYPE_DEST
+      typename TIteratorSource,
+      typename TIteratorDestination
     >
-    static void
+    void
     move_range(
-      ITERATOR_TYPE_SRC src_begin,
-      ITERATOR_TYPE_SRC src_end,
-      ITERATOR_TYPE_DEST dest_begin
+      TIteratorSource src_begin,
+      TIteratorSource src_end,
+      TIteratorDestination dest_begin
       )
     {
-      detail::move_range_impl<this_type, std::is_trivially_default_constructible_v<T>>()(
-        src_begin,
-        src_end,
-        dest_begin);
+      detail::move_range<
+        this_type,
+        std::is_trivially_default_constructible_v<T>
+      >()(*this, src_begin, src_end, dest_begin);
     }
 
     template <
-      typename ITERATOR_TYPE
+      typename TIterator
     >
-    static void
+    void
     destroy_range(
-      ITERATOR_TYPE begin,
-      ITERATOR_TYPE end
+      TIterator begin,
+      TIterator end
       )
     {
-      detail::destroy_range_impl<this_type, std::is_trivially_destructible_v<T>>()(
-        begin,
-        end);
+      detail::destroy_range<
+        this_type,
+        std::is_trivially_destructible_v<T>
+      >()(*this, begin, end);
     }
 };
 

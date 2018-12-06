@@ -5,12 +5,16 @@
 namespace mini::collections {
 
 template <
-  typename TKEY,
-  typename TVALUE
+  typename TKey,
+  typename TValue
 >
 class pair_list
 {
   public:
+    //
+    // constructors.
+    //
+
     pair_list(
       void
       );
@@ -23,58 +27,151 @@ class pair_list
       pair_list&& other
       );
 
+    //
+    // destructor.
+    //
+
     ~pair_list(
       void
       );
 
-    TVALUE&
+    //
+    // swap.
+    //
+
+    void
+    swap(
+      pair_list<TKey, TValue>& other
+      );
+
+    //
+    // element access.
+    //
+
+    TValue&
     operator[](
-      const TKEY& key
+      const TKey& key
       );
 
-    //
-    // both TKEY and TVALUE must be copy-constructible.
-    //
-    pair<TKEY, TVALUE>&
-    insert(
-      const TKEY& key,
-      const TVALUE& value
+    TValue&
+    first_value(
+      void
       );
 
-    pair<TKEY, TVALUE>&
-    insert(
-      TKEY&& key,
-      TVALUE&& value
-      );
-
-    pair<TKEY, TVALUE>&
-    insert(
-      const pair<TKEY, TVALUE>& pair
-      );
-
-    pair<TKEY, TVALUE>&
-    insert(
-      pair<TKEY, TVALUE>&& pair
-      );
-
-    pair<TKEY, TVALUE>*
-    find_pair(
-      const TKEY& key
-      );
-
-    TVALUE*
-    find(
-      const TKEY& key
-      );
-
-    const TVALUE*
-    find(
-      const TKEY& key
+    const TValue&
+    first_value(
+      void
       ) const;
+
+    TValue&
+    last_value(
+      void
+      );
+
+    const TValue&
+    last_value(
+      void
+      ) const;
+
+    //
+    // iterators.
+    //
+
+    pair<TKey, TValue>*
+    begin(
+      void
+      );
+
+    const pair<TKey, TValue>*
+    begin(
+      void
+      ) const;
+
+    pair<TKey, TValue>*
+    end(
+      void
+      );
+
+    const pair<TKey, TValue>*
+    end(
+      void
+      ) const;
+
+    //
+    // capacity.
+    //
+
+    bool
+    is_empty(
+      void
+      ) const;
+
+    size_type
+    get_size(
+      void
+      ) const;
+
+    size_type
+    get_capacity(
+      void
+      ) const;
+
+    //
+    // lookup.
+    //
+
+    bool
+    contains(
+      const TKey& key
+      ) const;
+
+    TValue*
+    find(
+      const TKey& key
+      );
+
+    const TValue*
+    find(
+      const TKey& key
+      ) const;
+
+    pair<TKey, TValue>*
+    find_pair(
+      const TKey& key
+      );
+
+    //
+    // modifiers.
+    //
+
+    //
+    // both TKey and TValue must be copy-constructible.
+    //
+    pair<TKey, TValue>&
+    insert(
+      const TKey& key,
+      const TValue& value
+      );
+
+    pair<TKey, TValue>&
+    insert(
+      TKey&& key,
+      TValue&& value
+      );
+
+    pair<TKey, TValue>&
+    insert(
+      const pair<TKey, TValue>& pair
+      );
+
+    pair<TKey, TValue>&
+    insert(
+      pair<TKey, TValue>&& pair
+      );
 
     void
     remove(
-      const TKEY& key
+      const TKey& key
       );
 
     void
@@ -87,73 +184,8 @@ class pair_list
       void
       );
 
-    TVALUE&
-    first_value(
-      void
-      );
-
-    const TVALUE&
-    first_value(
-      void
-      ) const;
-
-    TVALUE&
-    last_value(
-      void
-      );
-
-    const TVALUE&
-    last_value(
-      void
-      ) const;
-
-    pair<TKEY, TVALUE>*
-    begin(
-      void
-      );
-
-    const pair<TKEY, TVALUE>*
-    begin(
-      void
-      ) const;
-
-    pair<TKEY, TVALUE>*
-    end(
-      void
-      );
-
-    const pair<TKEY, TVALUE>*
-    end(
-      void
-      ) const;
-
-    bool
-    is_empty(
-      void
-      ) const;
-
-    bool
-    contains(
-      const TKEY& key
-      ) const;
-
-    void
-    swap(
-      pair_list<TKEY, TVALUE>& other
-      );
-
-    size_type
-    get_size(
-      void
-      ) const;
-
-    size_type
-    get_capacity(
-      void
-      ) const;
-
   private:
-    list<pair<TKEY, TVALUE>> _buffer;
+    list<pair<TKey, TValue>> _buffer;
 };
 
 }

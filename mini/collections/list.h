@@ -8,7 +8,7 @@ namespace mini::collections {
 
 template <
   typename T,
-  typename ALLOCATOR_TYPE = allocator<T>
+  typename Allocator = allocator<T>
 >
 class list
 {
@@ -26,9 +26,9 @@ class list
     using iterator                = pointer;
     using const_iterator          = const_pointer;
 
-    using allocator_type          = ALLOCATOR_TYPE;
+    using allocator_type          = Allocator;
 
-    static const size_type not_found = (size_type)-1;
+    static constexpr size_type not_found = (size_type)-1;
 
     //
     // constructors.
@@ -51,11 +51,11 @@ class list
       );
 
     template <
-      typename ITERATOR_TYPE
+      typename TIterator
     >
     list(
-      ITERATOR_TYPE begin,
-      ITERATOR_TYPE end
+      TIterator begin,
+      TIterator end
       );
 
     list(
@@ -234,7 +234,7 @@ class list
 
     bool
     equals(
-        const list& other
+      const list& other
       ) const;
 
     bool
@@ -298,7 +298,12 @@ class list
     insert_many(
       const buffer_ref<T> items,
       size_type index
-    );
+      );
+
+    void
+    remove(
+      iterator it
+      );
 
     void
     remove(
@@ -314,6 +319,11 @@ class list
     void
     remove_at(
       size_type index
+      );
+
+    void
+    remove_by_swap(
+      iterator it
       );
 
     void
@@ -349,8 +359,8 @@ class list
 
     friend bool
     operator==(
-      const list<T, ALLOCATOR_TYPE>& lhs,
-      const list<T, ALLOCATOR_TYPE>& rhs
+      const list<T, Allocator>& lhs,
+      const list<T, Allocator>& rhs
       )
     {
       return lhs.equals(rhs);
@@ -379,12 +389,12 @@ namespace mini {
 
 template <
   typename T,
-  typename ALLOCATOR_TYPE
+  typename Allocator
 >
 void
 swap(
-  mini::collections::list<T, ALLOCATOR_TYPE>& lhs,
-  mini::collections::list<T, ALLOCATOR_TYPE>& rhs
+  mini::collections::list<T, Allocator>& lhs,
+  mini::collections::list<T, Allocator>& rhs
   );
 
 }

@@ -46,11 +46,11 @@ template <
   typename T
 >
 template <
-  typename CONST_ITERATOR_TYPE
+  typename TConstIterator
 >
 constexpr buffer_ref<T>::buffer_ref(
-  CONST_ITERATOR_TYPE begin,
-  CONST_ITERATOR_TYPE end
+  TConstIterator begin,
+  TConstIterator end
   )
   : _begin((T*)begin)
   , _end((T*)end)
@@ -409,11 +409,11 @@ template <
   typename T
 >
 template <
-  typename ITERATOR_TYPE
+  typename TIterator
 >
 mutable_buffer_ref<T>::mutable_buffer_ref(
-  ITERATOR_TYPE begin,
-  ITERATOR_TYPE end
+  TIterator begin,
+  TIterator end
   )
 {
   this->_begin = (T*)begin;

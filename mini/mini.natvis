@@ -80,7 +80,7 @@
     </Expand>
   </Type>
 
-  <!-- mini::collections::pair_list<TKEY, TVALUE> -->
+  <!-- mini::collections::pair_list<TKey, TValue> -->
   <Type Name="mini::collections::pair_list&lt;*&gt;">
     <DisplayString>{{ size={_buffer._last - _buffer._first} }}</DisplayString>
     <Expand>
@@ -89,6 +89,32 @@
       <ArrayItems>
         <Size>_buffer._last - _buffer._first</Size>
         <ValuePointer>_buffer._first</ValuePointer>
+      </ArrayItems>
+    </Expand>
+  </Type>
+
+  <!-- mini::collections::hashset<T> -->
+  <Type Name="mini::collections::hashset&lt;*&gt;">
+    <DisplayString>{{ size={_node_list._last - _node_list._first} }}</DisplayString>
+    <Expand>
+      <Item Name="[size]" ExcludeView="simple">_node_list._last - _node_list._first</Item>
+      <Item Name="[capacity]" ExcludeView="simple">_node_list._end - _node_list._first</Item>
+      <ArrayItems>
+        <Size>_node_list._last - _node_list._first</Size>
+        <ValuePointer>_node_list._first</ValuePointer>
+      </ArrayItems>
+    </Expand>
+  </Type>
+
+  <!-- mini::collections::hashmap<TKey, TValue> -->
+  <Type Name="mini::collections::hashmap&lt;*&gt;">
+    <DisplayString>{{ size={_node_list._last - _node_list._first} }}</DisplayString>
+    <Expand>
+      <Item Name="[size]" ExcludeView="simple">_node_list._last - _node_list._first</Item>
+      <Item Name="[capacity]" ExcludeView="simple">_node_list._end - _node_list._first</Item>
+      <ArrayItems>
+        <Size>_node_list._last - _node_list._first</Size>
+        <ValuePointer>_node_list._first</ValuePointer>
       </ArrayItems>
     </Expand>
   </Type>

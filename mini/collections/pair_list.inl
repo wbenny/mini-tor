@@ -2,11 +2,15 @@
 
 namespace mini::collections {
 
+//
+// constructors.
+//
+
 template <
-  typename TKEY,
-  typename TVALUE
+  typename TKey,
+  typename TValue
 >
-pair_list<TKEY, TVALUE>::pair_list(
+pair_list<TKey, TValue>::pair_list(
   void
   )
 {
@@ -14,10 +18,10 @@ pair_list<TKEY, TVALUE>::pair_list(
 }
 
 template <
-  typename TKEY,
-  typename TVALUE
+  typename TKey,
+  typename TValue
 >
-pair_list<TKEY, TVALUE>::pair_list(
+pair_list<TKey, TValue>::pair_list(
   const pair_list& other
   )
 {
@@ -25,37 +29,61 @@ pair_list<TKEY, TVALUE>::pair_list(
 }
 
 template <
-  typename TKEY,
-  typename TVALUE
+  typename TKey,
+  typename TValue
 >
-pair_list<TKEY, TVALUE>::pair_list(
+pair_list<TKey, TValue>::pair_list(
   pair_list&& other
   )
 {
   swap(other);
 }
 
+//
+// destructor.
+//
+
 template <
-  typename TKEY,
-  typename TVALUE
+  typename TKey,
+  typename TValue
 >
-pair_list<TKEY, TVALUE>::~pair_list(
+pair_list<TKey, TValue>::~pair_list(
   void
   )
 {
 
 }
 
+//
+// swap.
+//
+
 template <
-  typename TKEY,
-  typename TVALUE
+  typename TKey,
+  typename TValue
 >
-TVALUE&
-pair_list<TKEY, TVALUE>::operator[](
-  const TKEY& key
+void
+pair_list<TKey, TValue>::swap(
+  pair_list<TKey, TValue>& other
   )
 {
-  TVALUE* value = find(key);
+  _buffer.swap(other._buffer);
+}
+
+//
+// element access.
+//
+
+template <
+  typename TKey,
+  typename TValue
+>
+TValue&
+pair_list<TKey, TValue>::operator[](
+  const TKey& key
+  )
+{
+  TValue* value = find(key);
 
   if (value)
   {
@@ -63,75 +91,174 @@ pair_list<TKEY, TVALUE>::operator[](
   }
   else
   {
-    return insert(key, TVALUE()).second;
+    return insert(key, TValue()).second;
   }
 }
 
 template <
-  typename TKEY,
-  typename TVALUE
+  typename TKey,
+  typename TValue
 >
-pair<TKEY, TVALUE>&
-pair_list<TKEY, TVALUE>::insert(
-  const TKEY& key,
-  const TVALUE& value
+TValue&
+pair_list<TKey, TValue>::first_value(
+  void
   )
 {
-  _buffer.add(pair<TKEY, TVALUE>(key, value));
-
-  return _buffer[get_size()];
+  return _buffer[0].second;
 }
 
 template <
-  typename TKEY,
-  typename TVALUE
+  typename TKey,
+  typename TValue
 >
-pair<TKEY, TVALUE>&
-pair_list<TKEY, TVALUE>::insert(
-  TKEY&& key,
-  TVALUE&& value
-  )
+const TValue&
+pair_list<TKey, TValue>::first_value(
+  void
+  ) const
 {
-  _buffer.add(pair<TKEY, TVALUE>(std::forward<TKEY>(key), std::forward<TVALUE>(value)));
-
-  return _buffer[get_size()];
+  return _buffer[0].second;
 }
 
 template <
-  typename TKEY,
-  typename TVALUE
+  typename TKey,
+  typename TValue
 >
-pair<TKEY, TVALUE>&
-pair_list<TKEY, TVALUE>::insert(
-  const pair<TKEY, TVALUE>& pair
+TValue&
+pair_list<TKey, TValue>::last_value(
+  void
   )
 {
-  _buffer.add(pair);
-
-  return _buffer[get_size()];
+  return _buffer[get_size() - 1].second;
 }
 
 template <
-  typename TKEY,
-  typename TVALUE
+  typename TKey,
+  typename TValue
 >
-pair<TKEY, TVALUE>&
-pair_list<TKEY, TVALUE>::insert(
-  pair<TKEY, TVALUE>&& pair
+const TValue&
+pair_list<TKey, TValue>::last_value(
+  void
+  ) const
+{
+  return _buffer[get_size() - 1].second;
+}
+
+//
+// iterators.
+//
+
+template <
+  typename TKey,
+  typename TValue
+>
+pair<TKey, TValue>*
+pair_list<TKey, TValue>::begin(
+  void
   )
 {
-  _buffer.add(std::move(pair));
-
-  return _buffer[get_size()];
+  return _buffer.begin();
 }
 
 template <
-  typename TKEY,
-  typename TVALUE
+  typename TKey,
+  typename TValue
 >
-TVALUE*
-pair_list<TKEY, TVALUE>::find(
-  const TKEY& key
+const pair<TKey, TValue>*
+pair_list<TKey, TValue>::begin(
+  void
+  ) const
+{
+  return _buffer.begin();
+}
+
+template <
+  typename TKey,
+  typename TValue
+>
+pair<TKey, TValue>*
+pair_list<TKey, TValue>::end(
+  void
+  )
+{
+  return _buffer.end();
+}
+
+template <
+  typename TKey,
+  typename TValue
+>
+const pair<TKey, TValue>*
+pair_list<TKey, TValue>::end(
+  void
+  ) const
+{
+  return _buffer.end();
+}
+
+//
+// capacity.
+//
+
+template <
+  typename TKey,
+  typename TValue
+>
+bool
+pair_list<TKey, TValue>::is_empty(
+  void
+  ) const
+{
+  return _buffer.is_empty();
+}
+
+template <
+  typename TKey,
+  typename TValue
+>
+size_type
+pair_list<TKey, TValue>::get_size(
+  void
+  ) const
+{
+  return _buffer.get_size() ? _buffer.get_size() - 1 : 0;
+}
+
+template <
+  typename TKey,
+  typename TValue
+>
+size_type
+pair_list<TKey, TValue>::get_capacity(
+  void
+  ) const
+{
+  return _buffer.get_capacity();
+}
+
+//
+// lookup.
+//
+
+
+template <
+  typename TKey,
+  typename TValue
+>
+bool
+pair_list<TKey, TValue>::contains(
+  const TKey& key
+  ) const
+{
+  return find(key) != nullptr;
+}
+
+template <
+  typename TKey,
+  typename TValue
+>
+TValue*
+pair_list<TKey, TValue>::find(
+  const TKey& key
   )
 {
   auto&& result = find_pair(key);
@@ -145,32 +272,12 @@ pair_list<TKEY, TVALUE>::find(
 }
 
 template <
-  typename TKEY,
-  typename TVALUE
+  typename TKey,
+  typename TValue
 >
-pair<TKEY, TVALUE>*
-pair_list<TKEY, TVALUE>::find_pair(
-  const TKEY& key
-  )
-{
-  for (auto&& e : _buffer)
-  {
-    if (e.first == key)
-    {
-      return &e;
-    }
-  }
-
-  return nullptr;
-}
-
-template <
-  typename TKEY,
-  typename TVALUE
->
-const TVALUE*
-pair_list<TKEY, TVALUE>::find(
-  const TKEY& key
+const TValue*
+pair_list<TKey, TValue>::find(
+  const TKey& key
   ) const
 {
   for (auto&& e : _buffer)
@@ -185,12 +292,95 @@ pair_list<TKEY, TVALUE>::find(
 }
 
 template <
-  typename TKEY,
-  typename TVALUE
+  typename TKey,
+  typename TValue
+>
+pair<TKey, TValue>*
+pair_list<TKey, TValue>::find_pair(
+  const TKey& key
+  )
+{
+  for (auto&& e : _buffer)
+  {
+    if (e.first == key)
+    {
+      return &e;
+    }
+  }
+
+  return nullptr;
+}
+
+//
+// modifiers.
+//
+
+template <
+  typename TKey,
+  typename TValue
+>
+pair<TKey, TValue>&
+pair_list<TKey, TValue>::insert(
+  const TKey& key,
+  const TValue& value
+  )
+{
+  _buffer.add(pair<TKey, TValue>(key, value));
+
+  return _buffer[get_size()];
+}
+
+template <
+  typename TKey,
+  typename TValue
+>
+pair<TKey, TValue>&
+pair_list<TKey, TValue>::insert(
+  TKey&& key,
+  TValue&& value
+  )
+{
+  _buffer.add(pair<TKey, TValue>(std::forward<TKey>(key), std::forward<TValue>(value)));
+
+  return _buffer[get_size()];
+}
+
+template <
+  typename TKey,
+  typename TValue
+>
+pair<TKey, TValue>&
+pair_list<TKey, TValue>::insert(
+  const pair<TKey, TValue>& pair
+  )
+{
+  _buffer.add(pair);
+
+  return _buffer[get_size()];
+}
+
+template <
+  typename TKey,
+  typename TValue
+>
+pair<TKey, TValue>&
+pair_list<TKey, TValue>::insert(
+  pair<TKey, TValue>&& pair
+  )
+{
+  _buffer.add(std::move(pair));
+
+  return _buffer[get_size()];
+}
+
+
+template <
+  typename TKey,
+  typename TValue
 >
 void
-pair_list<TKEY, TVALUE>::remove(
-  const TKEY& key
+pair_list<TKey, TValue>::remove(
+  const TKey& key
   )
 {
   auto&& result = find_pair(key);
@@ -202,11 +392,11 @@ pair_list<TKEY, TVALUE>::remove(
 }
 
 template <
-  typename TKEY,
-  typename TVALUE
+  typename TKey,
+  typename TValue
 >
 void
-pair_list<TKEY, TVALUE>::reserve(
+pair_list<TKey, TValue>::reserve(
   size_type new_capacity
   )
 {
@@ -214,171 +404,15 @@ pair_list<TKEY, TVALUE>::reserve(
 }
 
 template <
-  typename TKEY,
-  typename TVALUE
+  typename TKey,
+  typename TValue
 >
 void
-pair_list<TKEY, TVALUE>::clear(
+pair_list<TKey, TValue>::clear(
   void
   )
 {
   return _buffer.clear();
-}
-
-template <
-  typename TKEY,
-  typename TVALUE
->
-TVALUE&
-pair_list<TKEY, TVALUE>::first_value(
-  void
-  )
-{
-  return _buffer[0].second;
-}
-
-template <
-  typename TKEY,
-  typename TVALUE
->
-const TVALUE&
-pair_list<TKEY, TVALUE>::first_value(
-  void
-  ) const
-{
-  return _buffer[0].second;
-}
-
-template <
-  typename TKEY,
-  typename TVALUE
->
-TVALUE&
-pair_list<TKEY, TVALUE>::last_value(
-  void
-  )
-{
-  return _buffer[get_size() - 1].second;
-}
-
-template <
-  typename TKEY,
-  typename TVALUE
->
-const TVALUE&
-pair_list<TKEY, TVALUE>::last_value(
-  void
-  ) const
-{
-  return _buffer[get_size() - 1].second;
-}
-
-template <
-  typename TKEY,
-  typename TVALUE
->
-pair<TKEY, TVALUE>*
-pair_list<TKEY, TVALUE>::begin(
-  void
-  )
-{
-  return _buffer.begin();
-}
-
-template <
-  typename TKEY,
-  typename TVALUE
->
-const pair<TKEY, TVALUE>*
-pair_list<TKEY, TVALUE>::begin(
-  void
-  ) const
-{
-  return _buffer.begin();
-}
-
-template <
-  typename TKEY,
-  typename TVALUE
->
-pair<TKEY, TVALUE>*
-pair_list<TKEY, TVALUE>::end(
-  void
-  )
-{
-  return _buffer.end();
-}
-
-template <
-  typename TKEY,
-  typename TVALUE
->
-const pair<TKEY, TVALUE>*
-pair_list<TKEY, TVALUE>::end(
-  void
-  ) const
-{
-  return _buffer.end();
-}
-
-template <
-  typename TKEY,
-  typename TVALUE
->
-bool
-pair_list<TKEY, TVALUE>::is_empty(
-  void
-  ) const
-{
-  return _buffer.is_empty();
-}
-
-template <
-  typename TKEY,
-  typename TVALUE
->
-bool
-pair_list<TKEY, TVALUE>::contains(
-  const TKEY& key
-  ) const
-{
-  return find(key) != nullptr;
-}
-
-template <
-  typename TKEY,
-  typename TVALUE
->
-void
-pair_list<TKEY, TVALUE>::swap(
-  pair_list<TKEY, TVALUE>& other
-  )
-{
-  _buffer.swap(other._buffer);
-}
-
-template <
-  typename TKEY,
-  typename TVALUE
->
-size_type
-pair_list<TKEY, TVALUE>::get_size(
-  void
-  ) const
-{
-  return _buffer.get_size() ? _buffer.get_size() - 1 : 0;
-}
-
-template <
-  typename TKEY,
-  typename TVALUE
->
-size_type
-pair_list<TKEY, TVALUE>::get_capacity(
-  void
-  ) const
-{
-  return _buffer.get_capacity();
 }
 
 }

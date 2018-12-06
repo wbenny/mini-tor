@@ -264,6 +264,9 @@
     <ClCompile Include="mini\net\ssl_stream.cpp">
       <Filter>Source Files\mini\net</Filter>
     </ClCompile>
+    <ClCompile Include="test.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="mini\flags.h">
@@ -298,9 +301,6 @@
     </ClInclude>
     <ClInclude Include="mini\io\stream_wrapper.h">
       <Filter>Header Files\mini\io</Filter>
-    </ClInclude>
-    <ClInclude Include="mini\collections\list.h">
-      <Filter>Header Files\mini\collections</Filter>
     </ClInclude>
     <ClInclude Include="mini\pair.h">
       <Filter>Header Files\mini</Filter>
@@ -379,9 +379,6 @@
     </ClInclude>
     <ClInclude Include="mini\tor\relay_cell.h">
       <Filter>Header Files\mini\tor</Filter>
-    </ClInclude>
-    <ClInclude Include="mini\collections\pair_list.h">
-      <Filter>Header Files\mini\collections</Filter>
     </ClInclude>
     <ClInclude Include="mini\tor\tor_socket.h">
       <Filter>Header Files\mini\tor</Filter>
@@ -575,11 +572,29 @@
     <ClInclude Include="mini\net\uri.h">
       <Filter>Header Files\mini\net</Filter>
     </ClInclude>
+    <ClInclude Include="mini\collections\hashmap.h">
+      <Filter>Header Files\mini\collections</Filter>
+    </ClInclude>
+    <ClInclude Include="mini\collections\hashset.h">
+      <Filter>Header Files\mini\collections</Filter>
+    </ClInclude>
+    <ClInclude Include="mini\collections\linked_list.h">
+      <Filter>Header Files\mini\collections</Filter>
+    </ClInclude>
+    <ClInclude Include="mini\collections\list.h">
+      <Filter>Header Files\mini\collections</Filter>
+    </ClInclude>
+    <ClInclude Include="mini\collections\pair_list.h">
+      <Filter>Header Files\mini\collections</Filter>
+    </ClInclude>
+    <ClInclude Include="mini\hash.h">
+      <Filter>Header Files\mini</Filter>
+    </ClInclude>
+    <ClInclude Include="mini\compare.h">
+      <Filter>Header Files\mini</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="mini\collections\list.inl">
-      <Filter>Source Files\mini\collections</Filter>
-    </None>
     <None Include="mini\ptr.inl">
       <Filter>Source Files\mini</Filter>
     </None>
@@ -588,9 +603,6 @@
     </None>
     <None Include="mini\stack_buffer.inl">
       <Filter>Source Files\mini</Filter>
-    </None>
-    <None Include="mini\collections\pair_list.inl">
-      <Filter>Source Files\mini\collections</Filter>
     </None>
     <None Include="mini\threading\locked_value.inl">
       <Filter>Source Files\mini\threading</Filter>
@@ -624,6 +636,18 @@
     </None>
     <None Include="mini\crypto\capi\hmac.inl">
       <Filter>Source Files\mini\crypto\capi</Filter>
+    </None>
+    <None Include="mini\collections\hashset.inl">
+      <Filter>Source Files\mini\collections</Filter>
+    </None>
+    <None Include="mini\collections\list.inl">
+      <Filter>Source Files\mini\collections</Filter>
+    </None>
+    <None Include="mini\collections\pair_list.inl">
+      <Filter>Source Files\mini\collections</Filter>
+    </None>
+    <None Include="mini\collections\hashmap.inl">
+      <Filter>Source Files\mini\collections</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>

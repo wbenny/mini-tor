@@ -9,6 +9,8 @@ Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug_Clang|x64 = Debug_Clang|x64
 		Debug_Clang|x86 = Debug_Clang|x86
+		Debug_Test|x64 = Debug_Test|x64
+		Debug_Test|x86 = Debug_Test|x86
 		Debug|x64 = Debug|x64
 		Debug|x86 = Debug|x86
 		Release_Clang|x64 = Release_Clang|x64
@@ -21,6 +23,8 @@ Global
 		Release_STL_Clang|x86 = Release_STL_Clang|x86
 		Release_STL|x64 = Release_STL|x64
 		Release_STL|x86 = Release_STL|x86
+		Release_Test|x64 = Release_Test|x64
+		Release_Test|x86 = Release_Test|x86
 		Release|x64 = Release|x64
 		Release|x86 = Release|x86
 	EndGlobalSection
@@ -29,6 +33,10 @@ Global
 		{6A9A9A93-E77E-44E3-B36E-2336A7EE9770}.Debug_Clang|x64.Build.0 = Debug_Clang|x64
 		{6A9A9A93-E77E-44E3-B36E-2336A7EE9770}.Debug_Clang|x86.ActiveCfg = Debug_Clang|Win32
 		{6A9A9A93-E77E-44E3-B36E-2336A7EE9770}.Debug_Clang|x86.Build.0 = Debug_Clang|Win32
+		{6A9A9A93-E77E-44E3-B36E-2336A7EE9770}.Debug_Test|x64.ActiveCfg = Debug_Test|x64
+		{6A9A9A93-E77E-44E3-B36E-2336A7EE9770}.Debug_Test|x64.Build.0 = Debug_Test|x64
+		{6A9A9A93-E77E-44E3-B36E-2336A7EE9770}.Debug_Test|x86.ActiveCfg = Debug_Test|Win32
+		{6A9A9A93-E77E-44E3-B36E-2336A7EE9770}.Debug_Test|x86.Build.0 = Debug_Test|Win32
 		{6A9A9A93-E77E-44E3-B36E-2336A7EE9770}.Debug|x64.ActiveCfg = Debug|x64
 		{6A9A9A93-E77E-44E3-B36E-2336A7EE9770}.Debug|x64.Build.0 = Debug|x64
 		{6A9A9A93-E77E-44E3-B36E-2336A7EE9770}.Debug|x86.ActiveCfg = Debug|Win32
@@ -53,6 +61,10 @@ Global
 		{6A9A9A93-E77E-44E3-B36E-2336A7EE9770}.Release_STL|x64.Build.0 = Release_STL|x64
 		{6A9A9A93-E77E-44E3-B36E-2336A7EE9770}.Release_STL|x86.ActiveCfg = Release_STL|Win32
 		{6A9A9A93-E77E-44E3-B36E-2336A7EE9770}.Release_STL|x86.Build.0 = Release_STL|Win32
+		{6A9A9A93-E77E-44E3-B36E-2336A7EE9770}.Release_Test|x64.ActiveCfg = Release_Test|x64
+		{6A9A9A93-E77E-44E3-B36E-2336A7EE9770}.Release_Test|x64.Build.0 = Release_Test|x64
+		{6A9A9A93-E77E-44E3-B36E-2336A7EE9770}.Release_Test|x86.ActiveCfg = Release_Test|Win32
+		{6A9A9A93-E77E-44E3-B36E-2336A7EE9770}.Release_Test|x86.Build.0 = Release_Test|Win32
 		{6A9A9A93-E77E-44E3-B36E-2336A7EE9770}.Release|x64.ActiveCfg = Release|x64
 		{6A9A9A93-E77E-44E3-B36E-2336A7EE9770}.Release|x64.Build.0 = Release|x64
 		{6A9A9A93-E77E-44E3-B36E-2336A7EE9770}.Release|x86.ActiveCfg = Release|Win32
@@ -60,5 +72,8 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {0CE24C06-007A-444A-AAD5-79D1291EAA19}
 	EndGlobalSection
 EndGlobal

@@ -55,6 +55,10 @@ struct MINI_UNREFERENCED_PARAMETER_PACK_impl
 # define MINI_ARCH_X86
 #elif defined(_M_X64)
 # define MINI_ARCH_X64
+#elif defined(_M_ARM)
+# define MINI_ARCH_ARM32
+#elif defined(_M_ARM64)
+# define MINI_ARCH_ARM64
 #else
 # error "Unknown architecture!"
 #endif

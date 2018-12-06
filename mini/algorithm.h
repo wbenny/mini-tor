@@ -4,45 +4,45 @@
 namespace mini::algorithm {
 
 template <
-  typename ITERATOR_TYPE
+  typename TIterator
 >
-ptrdiff_t
+pointer_difference_type
 distance(
-  ITERATOR_TYPE first,
-  ITERATOR_TYPE last
+  TIterator first,
+  TIterator last
   )
 {
   return last - first;
 }
 
 template <
-  typename ITERATOR_TYPE,
-  typename DISTANCE_TYPE
+  typename TIterator,
+  typename TDistance
 >
 void
 advance(
-  ITERATOR_TYPE& iterator,
-  DISTANCE_TYPE distance
+  TIterator& iterator,
+  TDistance distance
   )
 {
   iterator += distance;
 }
 
 template <
-  typename ITERATOR_TYPE,
+  typename TIterator,
   typename T,
-  typename COMPARE_TYPE
+  typename Compare
 >
-ITERATOR_TYPE
+TIterator
 lower_bound(
-  ITERATOR_TYPE first,
-  ITERATOR_TYPE last,
+  TIterator first,
+  TIterator last,
   const T& value,
-  COMPARE_TYPE comp
+  Compare comp
   )
 {
-  ITERATOR_TYPE it;
-  ptrdiff_t count, step;
+  TIterator it;
+  pointer_difference_type count, step;
   count = distance(first, last);
 
   while (count > 0)
@@ -64,16 +64,16 @@ lower_bound(
 }
 
 template <
-  typename ITERATOR_TYPE,
+  typename TIterator,
   typename T,
-  typename COMPARE_TYPE
+  typename Compare
 >
 bool
 binary_search(
-  ITERATOR_TYPE first,
-  ITERATOR_TYPE last,
+  TIterator first,
+  TIterator last,
   const T& value,
-  COMPARE_TYPE comp
+  Compare comp
   )
 {
   first = lower_bound(first, last, value, comp);
