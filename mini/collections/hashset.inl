@@ -2,8 +2,7 @@
 
 #include <mini/common.h>
 #include <mini/memory.h>
-
-#include <algorithm>
+#include <mini/algorithm.h>
 
 namespace mini::collections {
 
@@ -36,7 +35,7 @@ hashset<T, IndexType, Hash, KeyEqual, Allocator>::hashset(
   const hashset& other
   )
   : _node_list(other._node_list)
-  , _index_list(other._index_list)
+  , _bucket_list(other._bucket_list)
 {
 
 }
@@ -121,7 +120,7 @@ hashset<T, IndexType, Hash, KeyEqual, Allocator>::operator=(
   )
 {
   _node_list = other._node_list;
-  _index_list = other._index_list;
+  _bucket_list = other._bucket_list;
 }
 
 template <
@@ -158,7 +157,7 @@ hashset<T, IndexType, Hash, KeyEqual, Allocator>::swap(
   )
 {
   _node_list.swap(other._node_list);
-  _index_list.swap(other._index_list);
+  _bucket_list.swap(other._bucket_list);
 }
 
 //
@@ -177,7 +176,7 @@ hashset<T, IndexType, Hash, KeyEqual, Allocator>::begin(
   void
   )
 {
-  return iterator{ _node_list.begin() };
+  return iterator(_node_list.begin());
 }
 
 template <
@@ -192,7 +191,7 @@ hashset<T, IndexType, Hash, KeyEqual, Allocator>::begin(
   void
   ) const
 {
-  return const_iterator{ _node_list.begin() };
+  return const_iterator(_node_list.begin());
 }
 
 template <
@@ -207,7 +206,7 @@ hashset<T, IndexType, Hash, KeyEqual, Allocator>::end(
   void
   )
 {
-  return iterator{ _node_list.end() };
+  return iterator(_node_list.end());
 }
 
 template <
@@ -222,7 +221,7 @@ hashset<T, IndexType, Hash, KeyEqual, Allocator>::end(
   void
   ) const
 {
-  return const_iterator{ _node_list.end() };
+  return const_iterator(_node_list.end());
 }
 
 //
@@ -267,11 +266,11 @@ template <
   typename Allocator
 >
 typename hashset<T, IndexType, Hash, KeyEqual, Allocator>::size_type
-hashset<T, IndexType, Hash, KeyEqual, Allocator>::get_capacity(
+hashset<T, IndexType, Hash, KeyEqual, Allocator>::get_bucket_count(
   void
   )
 {
-  return _index_list.get_capacity();
+  return _bucket_list.get_size();
 }
 
 template <
@@ -287,7 +286,7 @@ hashset<T, IndexType, Hash, KeyEqual, Allocator>::reserve(
   )
 {
   _node_list.reserve(new_capacity);
-  _index_list.reserve(new_capacity);
+  _bucket_list.reserve(algorithm::nearest_power_of_2(new_capacity));
 }
 
 //
@@ -321,7 +320,7 @@ hashset<T, IndexType, Hash, KeyEqual, Allocator>::find(
   const T& item
   )
 {
-  find_generic(item);
+  return find_generic(item);
 }
 
 template <
@@ -336,7 +335,22 @@ hashset<T, IndexType, Hash, KeyEqual, Allocator>::find(
   const T& item
   ) const
 {
-  find_generic(item);
+  return find_generic(item);
+}
+
+template <
+  typename T,
+  typename IndexType,
+  typename Hash,
+  typename KeyEqual,
+  typename Allocator
+>
+typename hashset<T, IndexType, Hash, KeyEqual, Allocator>::index_type
+hashset<T, IndexType, Hash, KeyEqual, Allocator>::get_bucket(
+  const T& item
+  ) const
+{
+  return get_bucket_generic(item);
 }
 
 //
@@ -355,41 +369,41 @@ hashset<T, IndexType, Hash, KeyEqual, Allocator>::insert(
   const T& item
   )
 {
-  if (!_index_list.get_size())
+  if (!_bucket_list.get_size())
   {
     _node_list.add({ item, invalid_index });
 
-    _index_list.reserve(8);
-    _index_list.add(0);
+    _bucket_list.reserve(8);
+    _bucket_list.add(0);
     return begin();
   }
 
-  auto bucket = bucket_for_item(item);
+  auto bucket = get_bucket(item);
 
-  auto index = _index_list[bucket];
+  auto index = _bucket_list[bucket];
   while (index >= 0)
   {
     auto& node = _node_list[index];
     if (_equal(node.item, item))
     {
       node.item = item;
-      return iterator{ &_node_list[index] };
+      return iterator(&_node_list[index]);
     }
 
     index = node.next;
   }
 
   index = static_cast<index_type>(_node_list.get_size());
-  _node_list.add({ item, _index_list[bucket] });
-  _index_list[bucket] = index;
+  _node_list.add({ item, _bucket_list[bucket] });
+  _bucket_list[bucket] = index;
 
-  if (_node_list.get_size() > _index_list.get_size())
+  if (_node_list.get_size() > _bucket_list.get_size())
   {
-    _index_list.resize(_index_list.get_size() * 2);
+    _bucket_list.resize(_bucket_list.get_size() * 2);
     rehash();
   }
 
-  return iterator{ &_node_list[index] };
+  return iterator(&_node_list[index]);
 }
 
 
@@ -428,7 +442,7 @@ hashset<T, IndexType, Hash, KeyEqual, Allocator>::remove(
 {
   mini_assert(it != end());
 
-  auto bucket = bucket_for_item(*it);
+  auto bucket = get_bucket(*it);
   auto index = static_cast<index_type>(it._node - _node_list.get_buffer());
 
   unbind_entry(bucket, index);
@@ -440,15 +454,15 @@ hashset<T, IndexType, Hash, KeyEqual, Allocator>::remove(
     return end();
   }
 
-  bucket = bucket_for_item(_node_list[last].item);
+  bucket = get_bucket(_node_list[last].item);
   unbind_entry(bucket, last);
   _node_list.remove_by_swap_at(index);
 
   auto& node = _node_list[index];
-  mini_assert(bucket == bucket_for_item(node.item));
+  mini_assert(bucket == get_bucket(node.item));
 
-  node.next = _index_list[bucket];
-  _index_list[bucket] = index;
+  node.next = _bucket_list[bucket];
+  _bucket_list[bucket] = index;
   return it;
 }
 
@@ -465,7 +479,7 @@ hashset<T, IndexType, Hash, KeyEqual, Allocator>::clear(
   )
 {
   _node_list.clear();
-  _index_list.clear();
+  _bucket_list.clear();
 }
 
 //
@@ -492,7 +506,7 @@ hashset<T, IndexType, Hash, KeyEqual, Allocator>::find_generic(
     return end();
   }
 
-  auto index = _index_list[bucket_for_item(item)];
+  auto index = _bucket_list[get_bucket_generic(item)];
 
   while (index >= 0)
   {
@@ -500,7 +514,7 @@ hashset<T, IndexType, Hash, KeyEqual, Allocator>::find_generic(
 
     if (_equal(node.item, item))
     {
-      return iterator{ &node };
+      return iterator(&node);
     }
 
     index = node.next;
@@ -529,7 +543,7 @@ hashset<T, IndexType, Hash, KeyEqual, Allocator>::find_generic(
     return end();
   }
 
-  auto index = _index_list[bucket_for_item(item)];
+  auto index = _bucket_list[get_bucket_generic(item)];
 
   while (index >= 0)
   {
@@ -537,7 +551,7 @@ hashset<T, IndexType, Hash, KeyEqual, Allocator>::find_generic(
 
     if (_equal(node.item, item))
     {
-      return const_iterator{ &node };
+      return const_iterator(&node);
     }
 
     index = node.next;
@@ -561,12 +575,12 @@ template <
   typename U
 >
 typename hashset<T, IndexType, Hash, KeyEqual, Allocator>::index_type
-hashset<T, IndexType, Hash, KeyEqual, Allocator>::bucket_for_item(
+hashset<T, IndexType, Hash, KeyEqual, Allocator>::get_bucket_generic(
   const U& item
   ) const
 {
   return static_cast<index_type>(
-    _hasher(item) & (_index_list.get_size() - 1)
+    _hasher(item) & (_bucket_list.get_size() - 1)
     );
 }
 
@@ -582,15 +596,15 @@ hashset<T, IndexType, Hash, KeyEqual, Allocator>::rehash(
   void
   )
 {
-  std::fill(_index_list.begin(), _index_list.end(), invalid_index);
+  std::fill(_bucket_list.begin(), _bucket_list.end(), invalid_index);
 
   index_type index = 0;
   for (auto& node : _node_list)
   {
-    auto bucket = bucket_for_item(node.item);
+    auto bucket = get_bucket(node.item);
 
-    node.next = _index_list[bucket];
-    _index_list[bucket] = index;
+    node.next = _bucket_list[bucket];
+    _bucket_list[bucket] = index;
 
     ++index;
   }
@@ -609,7 +623,7 @@ hashset<T, IndexType, Hash, KeyEqual, Allocator>::unbind_entry(
   index_type index
   )
 {
-  auto tmp = _index_list[bucket];
+  auto tmp = _bucket_list[bucket];
   auto prev = invalid_index;
 
   while (tmp != invalid_index)
@@ -637,8 +651,8 @@ hashset<T, IndexType, Hash, KeyEqual, Allocator>::unbind_entry(
     // replace head.
     //
 
-    mini_assert(_index_list[bucket] == index);
-    _index_list[bucket] = next;
+    mini_assert(_bucket_list[bucket] == index);
+    _bucket_list[bucket] = next;
   }
 }
 

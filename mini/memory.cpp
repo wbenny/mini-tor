@@ -1,6 +1,9 @@
 #include "memory.h"
 #include "common.h"
 
+#include <cstdlib>
+#include <cstring>
+
 namespace mini::memory {
 
 namespace detail {
@@ -27,6 +30,8 @@ memrchr(
 
 }
 
+#if !defined(MINI_MODE_KERNEL)
+
 void*
 allocate(
   size_t size
@@ -45,12 +50,66 @@ reallocate(
 }
 
 void
-deallocate(
+free(
   void* ptr
   )
 {
   ::free(ptr);
 }
+
+#else
+
+#define MINI_MEMORY_TAG     'inim'
+
+struct pool_header
+{
+  size_t size;
+  byte_type data[];
+}
+
+void*
+allocate(
+  size_t size
+  )
+{
+  pool_header* result = reinterpret_cast<pool_header*>(
+    ExAllocatePoolWithTag(size + sizeof(pool_header), MINI_MEMORY_TAG)
+    );
+
+  result->size = size;
+  return result->data;
+}
+
+void*
+reallocate(
+  void* ptr,
+  size_t new_size
+  )
+{
+  pool_header* ptr_header = reinterpret_cast<pool_header*>(ptr)[-1];
+
+  if (ptr_header->size >= new_size)
+  {
+    return ptr;
+  }
+
+  void* new_ptr = allocate(new_size);
+  copy(new_ptr, ptr, ptr_header->size);
+  free(ptr);
+
+  return new_ptr;
+}
+
+void
+free(
+  void* ptr
+  )
+{
+  pool_header* result = reinterpret_cast<pool_header*>(ptr)[-1];
+  ExFreePoolWithTag(result, MINI_MEMORY_TAG);
+}
+
+#endif
 
 void*
 copy(

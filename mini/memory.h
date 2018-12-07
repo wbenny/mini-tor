@@ -1,6 +1,4 @@
 #pragma once
-#include <cstdlib>
-#include <cstring>
 #include <type_traits>
 
 namespace mini::memory {
@@ -17,7 +15,7 @@ reallocate(
   );
 
 void
-deallocate(
+free(
   void* ptr
   );
 
@@ -92,27 +90,27 @@ zero(
   );
 
 template <
-  typename T,
-  typename = std::enable_if_t<std::is_pod_v<T>>
+  typename T
 >
 T&
 zero(
   T& destination
   )
 {
+  static_assert(std::is_pod_v<T>);
   return *reinterpret_cast<T*>(zero(&destination, sizeof(destination)));
 }
 
 template <
   typename T,
-  size_t N,
-  typename = std::enable_if_t<std::is_pod_v<T>>
+  size_t N
 >
 T*
 zero(
   T (&destination)[N]
   )
 {
+  static_assert(std::is_pod_v<T>);
   return reinterpret_cast<T*>(zero(destination, sizeof(T) * N));
 }
 

@@ -11,6 +11,20 @@ template <
 class pair_list
 {
   public:
+    using value_type              = pair<TKey, TValue>;
+    using size_type               = size_type;
+    using difference_type         = pointer_difference_type;
+
+    // using allocator_type          = Allocator;
+
+    using pointer                 = value_type*;
+    using const_pointer           = const value_type*;
+    using reference               = value_type&;
+    using const_reference         = const value_type&;
+
+    using iterator                = pointer;
+    using const_iterator          = const_pointer;
+
     //
     // constructors.
     //

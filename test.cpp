@@ -1,6 +1,7 @@
 #ifdef MINI_TEST
 
 #define _CRTDBG_MAP_ALLOC
+#include <mini/memory.h>
 #include <stdlib.h>
 #include <crtdbg.h>
 
@@ -67,7 +68,7 @@ main(
     hashmap_int_string[0x3142] = "pellentesque metus";
 
     assert(hashmap_int_string.get_size() == 5);
-    assert(hashmap_int_string.get_capacity() == 8);
+    assert(hashmap_int_string.get_bucket_count() == 8);
 
     assert(hashmap_int_string[0x1234] == "Lorem ipsum");
     assert(hashmap_int_string[0x5678] == "dolor sit");
@@ -92,7 +93,7 @@ main(
     {
       auto copy_of_hashmap_int_string = hashmap_int_string;
       assert(copy_of_hashmap_int_string.get_size() == 4);
-      assert(copy_of_hashmap_int_string.get_capacity() == 8);
+      assert(copy_of_hashmap_int_string.get_bucket_count() == 8);
 
       assert(copy_of_hashmap_int_string[0x1234] == "Lorem ipsum");
       assert(copy_of_hashmap_int_string[0x5678] == "dolor sit");
@@ -116,7 +117,7 @@ main(
     {
       auto move_of_hashmap_int_string = std::move(hashmap_int_string);
       assert(move_of_hashmap_int_string.get_size() == 4);
-      assert(move_of_hashmap_int_string.get_capacity() == 8);
+      assert(move_of_hashmap_int_string.get_bucket_count() == 8);
 
       assert(move_of_hashmap_int_string[0x1234] == "Lorem ipsum");
       assert(move_of_hashmap_int_string[0x5678] == "dolor sit");

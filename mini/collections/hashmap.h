@@ -90,20 +90,19 @@ class hashmap
     using key_type                = TKey;
     using mapped_type             = TValue;
     using value_type              = pair<TKey, TValue>;
-    using size_type               = size_t;
-    using pointer_difference_type = ptrdiff_t;
+    using size_type               = size_type;
+    using difference_type         = pointer_difference_type;
+
+    using hasher                  = Hash;
+    using key_equal               = KeyEqual;
+    using allocator_type          = Allocator;
 
     using pointer                 = value_type*;
     using const_pointer           = const value_type*;
-
     using reference               = value_type&;
     using const_reference         = const value_type&;
 
-    using allocator_type          = Allocator;
-
-    using index_type              = IndexType;
-    using hasher                  = Hash;
-    using key_equal               = KeyEqual;
+    using index_type              = typename base_type::index_type;
 
     using iterator                = typename base_type::iterator;
     using const_iterator          = typename base_type::const_iterator;
@@ -190,7 +189,7 @@ class hashmap
 
     using base_type::is_empty;
     using base_type::get_size;
-    using base_type::get_capacity;
+    using base_type::get_bucket_count;
     using base_type::reserve;
 
     //

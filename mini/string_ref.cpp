@@ -1,4 +1,5 @@
 #include "string_ref.h"
+#include "algorithm.h"
 
 namespace mini {
 
@@ -160,7 +161,7 @@ string_ref::substring(
   size_type length
   ) const
 {
-  length = min(get_size() - offset, length);
+  length = algorithm::min(get_size() - offset, length);
 
   return string_ref(
     buffer_ref<char>::get_buffer() + offset,

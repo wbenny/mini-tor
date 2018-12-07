@@ -15,18 +15,17 @@ class list
   public:
     using value_type              = T;
     using size_type               = size_type;
-    using pointer_difference_type = pointer_difference_type;
+    using difference_type         = pointer_difference_type;
+
+    using allocator_type          = Allocator;
 
     using pointer                 = value_type*;
     using const_pointer           = const value_type*;
-
     using reference               = value_type&;
     using const_reference         = const value_type&;
 
     using iterator                = pointer;
     using const_iterator          = const_pointer;
-
-    using allocator_type          = Allocator;
 
     static constexpr size_type not_found = (size_type)-1;
 

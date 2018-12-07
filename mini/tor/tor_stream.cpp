@@ -2,6 +2,7 @@
 #include "circuit.h"
 
 #include <mini/logger.h>
+#include <mini/algorithm.h>
 
 namespace mini::tor {
 
@@ -270,7 +271,7 @@ tor_stream::read_impl(
   size_type size_to_copy;
   mini_lock(_buffer_mutex)
   {
-    size_to_copy = min(size, _buffer.get_size());
+    size_to_copy = algorithm::min(size, _buffer.get_size());
     memory::copy(buffer, &_buffer[0], size_to_copy);
 
     _buffer = byte_buffer_ref(_buffer).slice(size_to_copy);

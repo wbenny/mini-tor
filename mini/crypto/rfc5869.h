@@ -2,6 +2,7 @@
 #include "hmac_sha256.h"
 
 #include <mini/byte_buffer.h>
+#include <mini/algorithm.h>
 
 #include <type_traits>
 
@@ -53,7 +54,7 @@ class rfc5869
 
         result_block = HMAC_CLASS::compute(pseudo_random_key, message);
 
-        size_type bytes_processed = min(result_block.get_size(), bytes_remaining);
+        size_type bytes_processed = algorithm::min(result_block.get_size(), bytes_remaining);
         result.add_many(result_block.slice(0, bytes_processed));
 
         bytes_remaining -= bytes_processed;

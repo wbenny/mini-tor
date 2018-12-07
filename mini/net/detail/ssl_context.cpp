@@ -1,6 +1,7 @@
 #include "ssl_context.h"
 
 #include <mini/logger.h>
+#include <mini/algorithm.h>
 
 //
 // highly inspired by:
@@ -363,7 +364,7 @@ ssl_context::write(
     // determine how big the current message will be
     // and make appropriate buffer ref.
     //
-    const size_type message_size = min(bytes_remaining, max_message_size);
+    const size_type message_size = algorithm::min(bytes_remaining, max_message_size);
     const byte_buffer_ref message = buffer.slice(buffer_position, buffer_position + message_size);
 
     SECURITY_STATUS status = encrypt_message(message);
@@ -464,7 +465,7 @@ ssl_context::read(
         //
         case SEC_E_OK:
           {
-            const size_type size_to_copy = min(
+            const size_type size_to_copy = algorithm::min(
               buffer.get_size() - bytes_read,
               _payload_recv_decrypted_size);
 

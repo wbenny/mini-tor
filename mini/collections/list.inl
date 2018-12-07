@@ -2,6 +2,7 @@
 
 #include <mini/common.h>
 #include <mini/memory.h>
+#include <mini/algorithm.h>
 
 namespace mini::collections {
 
@@ -444,7 +445,7 @@ list<T, Allocator>::resize(
   }
   else if (new_size > get_capacity())
   {
-    reserve(max(new_size, (get_size() * 3) / 2));
+    reserve(algorithm::max(new_size, (get_size() * 3) / 2));
     _allocator.construct_range(_first + get_size(), _first + new_size, item);
   }
 
@@ -462,7 +463,7 @@ list<T, Allocator>::resize_unsafe(
 {
   if (new_size > get_capacity())
   {
-    reserve(max(new_size, (get_size() * 3) / 2));
+    reserve(algorithm::max(new_size, (get_size() * 3) / 2));
   }
 
   _last = _first + new_size;

@@ -19,20 +19,19 @@ class hashset
 {
   public:
     using value_type              = T;
-    using size_type               = size_t;
-    using pointer_difference_type = ptrdiff_t;
+    using size_type               = size_type;
+    using difference_type         = pointer_difference_type;
+
+    using hasher                  = Hash;
+    using key_equal               = KeyEqual;
+    using allocator_type          = Allocator;
 
     using pointer                 = value_type*;
     using const_pointer           = const value_type*;
-
     using reference               = value_type&;
     using const_reference         = const value_type&;
 
-    using allocator_type          = Allocator;
-
     using index_type              = IndexType;
-    using hasher                  = Hash;
-    using key_equal               = KeyEqual;
 
     static constexpr index_type invalid_index = (index_type)-1;
 
@@ -48,11 +47,12 @@ class hashset
     {
       friend class hashset;
 
-      using value_type        = T;
-      using difference_type   = std::ptrdiff_t;
-      using pointer           = value_type*;
-      using reference         = const value_type&;
       using iterator_category = std::bidirectional_iterator_tag;
+
+      using value_type        = T;
+      using difference_type   = pointer_difference_type;
+      using pointer           = value_type*;
+      using reference         = value_type&;
 
       iterator& operator++(   )                               {                   ++_node; return *this; }
       iterator  operator++(int)                               { auto tmp = *this; ++_node; return tmp;   }
@@ -77,11 +77,12 @@ class hashset
     {
       friend class hashset;
 
+      using iterator_category = std::bidirectional_iterator_tag;
+
       using value_type        = T;
-      using difference_type   = std::ptrdiff_t;
+      using difference_type   = pointer_difference_type;
       using pointer           = const value_type*;
       using reference         = const value_type&;
-      using iterator_category = std::bidirectional_iterator_tag;
 
       const_iterator& operator++(   )                         {                   ++_node; return *this; }
       const_iterator  operator++(int)                         { auto tmp = *this; ++_node; return tmp;   }
@@ -96,10 +97,10 @@ class hashset
 
       private:
         const_iterator(
-          node_type* node
+          const node_type* node
           ) : _node(node) { }
 
-        node_type* _node;
+        const node_type* _node;
     };
 
     //
@@ -196,7 +197,7 @@ class hashset
       ) const;
 
     size_type
-    get_capacity(
+    get_bucket_count(
       void
       );
 
@@ -221,6 +222,11 @@ class hashset
 
     const_iterator
     find(
+      const T& item
+      ) const;
+
+    index_type
+    get_bucket(
       const T& item
       ) const;
 
@@ -265,17 +271,17 @@ class hashset
       const U& item
       ) const;
 
-  private:
-    using entry_allocator = typename Allocator::template rebind<node_type>::other;
-    using index_allocator = typename Allocator::template rebind<index_type>::other;
-
     template <
       typename U
     >
     index_type
-    bucket_for_item(
+    get_bucket_generic(
       const U& item
       ) const;
+
+  private:
+    using entry_allocator = typename Allocator::template rebind<node_type>::other;
+    using index_allocator = typename Allocator::template rebind<index_type>::other;
 
     void
     rehash(
@@ -289,7 +295,7 @@ class hashset
       );
 
     list<node_type>  _node_list;
-    list<index_type> _index_list;
+    list<index_type> _bucket_list;
     hasher           _hasher;
     key_equal        _equal;
 };

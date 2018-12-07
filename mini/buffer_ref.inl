@@ -1,6 +1,7 @@
 #include "byte_buffer_ref.h"
 
 #include <mini/memory.h>
+#include <mini/algorithm.h>
 
 namespace mini {
 
@@ -324,7 +325,7 @@ buffer_ref<T>::copy_to(
   ) const
 {
   size = size == (size_type)-1
-    ? min(get_size(), other.get_size())
+    ? algorithm::min(get_size(), other.get_size())
     : size;
 
   memory::copy(other._begin, _begin, size);
@@ -351,7 +352,7 @@ buffer_ref<T>::reverse_copy_to(
   ) const
 {
   size = size == (size_type)-1
-    ? min(get_size(), other.get_size())
+    ? algorithm::min(get_size(), other.get_size())
     : size;
 
   memory::reverse_copy(other._begin, _begin, size);
@@ -630,7 +631,7 @@ mutable_buffer_ref<T>::copy_from(
   const buffer_ref<T> other
   )
 {
-  size_type size_to_copy = min(this->get_size(), other.get_size());
+  size_type size_to_copy = algorithm::min(this->get_size(), other.get_size());
   memory::copy(this->_begin, other._begin, size_to_copy);
   return *this;
 }
@@ -643,7 +644,7 @@ mutable_buffer_ref<T>::reverse_copy_from(
   const buffer_ref<T> other
   )
 {
-  size_type size_to_copy = min(this->get_size(), other.get_size());
+  size_type size_to_copy = algorithm::min(this->get_size(), other.get_size());
   memory::reverse_copy(this->_begin, other._begin, size_to_copy);
   return *this;
 }

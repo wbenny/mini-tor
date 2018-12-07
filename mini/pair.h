@@ -56,7 +56,7 @@ struct pair
     ) = default;
 
   pair<TFirst, TSecond>&
-    operator=(
+  operator=(
     const pair<TFirst, TSecond>& other
     ) = default;
 

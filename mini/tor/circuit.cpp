@@ -19,6 +19,9 @@ circuit::circuit(
   : _tor_socket(tor_socket)
   , _circuit_id(get_next_circuit_id())
 {
+  //
+  // set MSB (most significant bit).
+  //
   _circuit_id |= 0x80000000;
 }
 
@@ -780,9 +783,13 @@ circuit::send_relay_data_cell(
   const byte_buffer_ref buffer
   )
 {
-  for (size_type i = 0; i < round_up_to_multiple(buffer.get_size(), relay_cell::payload_data_size); i += relay_cell::payload_data_size)
+  for (
+    size_type i = 0;
+    i < algorithm::round_up_to_multiple(buffer.get_size(), relay_cell::payload_data_size);
+    i += relay_cell::payload_data_size
+    )
   {
-    const size_type data_size = min(buffer.get_size() - i, relay_cell::payload_data_size);
+    const size_type data_size = algorithm::min(buffer.get_size() - i, relay_cell::payload_data_size);
 
     get_final_circuit_node()->decrement_package_window();
 

@@ -1,6 +1,8 @@
 #pragma once
 #include "stream.h"
 
+#include <mini/algorithm.h>
+
 namespace mini::io {
 
 class memory_stream
@@ -67,7 +69,7 @@ class memory_stream
                   ? _position : origin == seek_origin::end
                   ? _end      : nullptr;
 
-      _position = clamp(origin_pointer + offset, _begin, _end);
+      _position = algorithm::clamp(origin_pointer + offset, _begin, _end);
 
       return _position - _begin;
     }
@@ -129,7 +131,7 @@ class memory_stream
       size_type size
       ) override
     {
-      size = min(size, (size_type)(_end - _position));
+      size = algorithm::min(size, static_cast<size_type>(_end - _position));
       memory::copy(buffer, _position, size);
       _position += size;
       return size;
@@ -141,15 +143,15 @@ class memory_stream
       size_type size
       ) override
     {
-      size = min(size, static_cast<size_type>(_end - _position));
+      size = algorithm::min(size, static_cast<size_type>(_end - _position));
       memory::copy(_position, buffer, size);
       _position += size;
       return size;
     }
 
-    uint8_t* _begin;
-    uint8_t* _end;
-    uint8_t* _position;
+    byte_type* _begin;
+    byte_type* _end;
+    byte_type* _position;
 };
 
 }

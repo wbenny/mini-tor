@@ -5,6 +5,8 @@
 #pragma warning(push)
 #pragma warning(disable: 4458)
 
+namespace mini::collections {
+
 //
 // Basic implementation.
 //
@@ -117,48 +119,62 @@ struct linked_list_item_wrapper : linked_list_item
 template <
   typename T
 >
-struct linked_list : linked_list_head
+struct linked_list
+  : linked_list_head
 {
+  using value_type              = T;
+  using size_type               = size_t;
+  using difference_type         = pointer_difference_type;
+
+  // using allocator_type          = Allocator;
+
+  using pointer                 = value_type*;
+  using const_pointer           = const value_type*;
+  using reference               = value_type&;
+  using const_reference         = const value_type&;
+
   struct iterator
   {
-    using value_type        = T;
-    using difference_type   = std::ptrdiff_t;
-    using pointer           = T*;
-    using reference         = T&;
     using iterator_category = std::bidirectional_iterator_tag;
 
-    iterator& operator++(   )                          {                   item = (linked_list_item_wrapper<T>*)item->head; return *this; }
-    iterator  operator++(int)                          { auto tmp = *this; item = (linked_list_item_wrapper<T>*)item->head; return tmp;   }
-    iterator& operator--(   )                          {                   item = (linked_list_item_wrapper<T>*)item->tail; return *this; }
-    iterator  operator--(int)                          { auto tmp = *this; item = (linked_list_item_wrapper<T>*)item->tail; return tmp;   }
+    using value_type        = T;
+    using difference_type   = pointer_difference_type;
+    using pointer           = value_type*;
+    using reference         = value_type&;
 
-    bool operator==(const iterator& other)       const { return item == other.item; }
-    bool operator!=(const iterator& other)       const { return item != other.item; }
+    iterator& operator++(   )                                     {                   item = (linked_list_item_wrapper<T>*)item->head; return *this; }
+    iterator  operator++(int)                                     { auto tmp = *this; item = (linked_list_item_wrapper<T>*)item->head; return tmp;   }
+    iterator& operator--(   )                                     {                   item = (linked_list_item_wrapper<T>*)item->tail; return *this; }
+    iterator  operator--(int)                                     { auto tmp = *this; item = (linked_list_item_wrapper<T>*)item->tail; return tmp;   }
 
-    reference operator*()                              { return  item->value; }
-    pointer   operator->()                             { return &item->value; }
+    bool      operator==(const iterator& other)             const { return item == other.item; }
+    bool      operator!=(const iterator& other)             const { return item != other.item; }
+
+    reference operator*()                                         { return  item->value; }
+    pointer   operator->()                                        { return &item->value; }
 
     linked_list_item_wrapper<T>* item;
   };
 
   struct const_iterator
   {
-    using value_type        = T;
-    using difference_type   = std::ptrdiff_t;
-    using pointer           = const T*;
-    using reference         = const T&;
     using iterator_category = std::bidirectional_iterator_tag;
 
-    const_iterator& operator++()                       { item = (linked_list_item_wrapper<T>*)item->head; return *this; }
-    const_iterator  operator++(int)                    { auto tmp = *this; item = (linked_list_item_wrapper<T>*)item->head; return tmp; }
-    const_iterator& operator--()                       { item = (linked_list_item_wrapper<T>*)item->tail; return *this; }
-    const_iterator  operator--(int)                    { auto tmp = *this; item = (linked_list_item_wrapper<T>*)item->tail; return tmp; }
+    using value_type        = T;
+    using difference_type   = pointer_difference_type;
+    using pointer           = const value_type*;
+    using reference         = const value_type&;
 
-    bool operator==(const const_iterator& other) const { return item == other.item; }
-    bool operator!=(const const_iterator& other) const { return item != other.item; }
+    const_iterator& operator++(   )                               { item = (linked_list_item_wrapper<T>*)item->head; return *this; }
+    const_iterator  operator++(int)                               { auto tmp = *this; item = (linked_list_item_wrapper<T>*)item->head; return tmp; }
+    const_iterator& operator--(   )                               { item = (linked_list_item_wrapper<T>*)item->tail; return *this; }
+    const_iterator  operator--(int)                               { auto tmp = *this; item = (linked_list_item_wrapper<T>*)item->tail; return tmp; }
 
-    reference operator*()                              { return  item->value; }
-    pointer   operator->()                             { return &item->value; }
+    bool            operator==(const const_iterator& other) const { return item == other.item; }
+    bool            operator!=(const const_iterator& other) const { return item != other.item; }
+
+    reference       operator*()                                   { return  item->value; }
+    pointer         operator->()                                  { return &item->value; }
 
     const linked_list_item_wrapper<T>* item;
   };
@@ -254,5 +270,7 @@ struct linked_list : linked_list_head
     return result;
   }
 };
+
+}
 
 #pragma warning(pop)

@@ -6,14 +6,6 @@
 #include <cstdarg>
 #include <utility>
 
-#ifdef min
-# undef min
-#endif
-
-#ifdef max
-# undef max
-#endif
-
 #define MINI_UNREFERENCED(p)        \
   (void)(p)
 
@@ -63,6 +55,10 @@ struct MINI_UNREFERENCED_PARAMETER_PACK_impl
 # error "Unknown architecture!"
 #endif
 
+#if defined(_KERNEL_MODE)
+# define MINI_MODE_KERNEL
+#endif
+
 #define MINI_MAKE_NONCONSTRUCTIBLE(type)  \
   type(                                   \
     void                                  \
@@ -88,13 +84,13 @@ struct MINI_UNREFERENCED_PARAMETER_PACK_impl
     type&&                                \
     ) = delete;
 
-#ifdef MINI_CONFIG_DEBUG
+#if defined(MINI_CONFIG_DEBUG) && !defined(MINI_MODE_KERNEL)
 # define mini_assert(expression) ::mini::assert(!!(expression), #expression, __FILE__, __LINE__);
 #else
 # define mini_assert(expression)
 #endif
 
-#define mini_break_if(expression) if (expression) { break; } else;
+#define mini_break_if(expression) if (!(expression)); else break
 
 #define mini_sizeof_struct_member(struct, member) sizeof(((struct*)nullptr)->member)
 
@@ -124,7 +120,7 @@ template <
   typename T,
   size_type N
 >
-constexpr size_type
+inline constexpr size_type
 countof(
   const T (&)[N]
   )
@@ -135,56 +131,7 @@ countof(
 template <
   typename T
 >
-T
-min(
-  T a,
-  T b
-  )
-{
-  return (a < b) ? a : b;
-}
-
-template <
-  typename T
->
-T
-max(
-  T a,
-  T b
-  )
-{
-  return (a > b) ? a : b;
-}
-
-template <
-  typename T
->
-T
-clamp(
-  T value,
-  T low,
-  T high
-  )
-{
-  return min(low, max(value, high));
-}
-
-template <
-  typename T
->
-T
-round_up_to_multiple(
-  T value,
-  T multiple
-  )
-{
-  return ((value + multiple - 1) / multiple) * multiple;
-}
-
-template <
-  typename T
->
-void
+inline void
 swap(
   T& lhs,
   T& rhs
@@ -199,7 +146,7 @@ template <
   typename T,
   size_type N
 >
-void
+inline void
 swap(
   T (&lhs)[N],
   T (&rhs)[N]
@@ -214,7 +161,7 @@ swap(
 template <
   typename T
 >
-T
+inline constexpr T
 swap_endianness(
   T u
   )

@@ -42,8 +42,8 @@ namespace detail {
     ) noexcept
   {
     static_assert(std::is_trivial_v<T>, "Only trivial types can be directly hashed.");
-    const auto firstb = reinterpret_cast<const unsigned char *>(first);
-    const auto lastb = reinterpret_cast<const unsigned char *>(last);
+    const auto firstb = reinterpret_cast<const unsigned char*>(first);
+    const auto lastb  = reinterpret_cast<const unsigned char*>(last);
     return (fnv1a_append_bytes(value, firstb, static_cast<size_type>(lastb - firstb)));
   }
 
