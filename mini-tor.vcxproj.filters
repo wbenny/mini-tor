@@ -115,6 +115,24 @@
     <Filter Include="Source Files\mini\crypto\ext\detail">
       <UniqueIdentifier>{1c117575-9924-4c40-9b56-7ade8e8585ec}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\mini\win32">
+      <UniqueIdentifier>{cde4036c-90f9-4c92-90ee-736b7e20cb09}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\mini\win32">
+      <UniqueIdentifier>{5b8b7eae-590e-4abd-883e-39a4a0c133e3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\mini\win32\pe">
+      <UniqueIdentifier>{40e3d3f7-f8ea-4ce1-b8fd-b905fd978faa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\mini\win32\pe">
+      <UniqueIdentifier>{ad665a7b-0128-49ad-ab82-d9783023d3bb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\mini\win32\api_set">
+      <UniqueIdentifier>{7c3f669a-5134-43a7-8606-94dd758724f6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\mini\win32\api_set">
+      <UniqueIdentifier>{5668adbc-6bea-4752-9a62-0d845fe62262}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="mini\time.cpp">
@@ -266,6 +284,36 @@
     </ClCompile>
     <ClCompile Include="test.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="mini\win32\pe\export_directory_enumerator.cpp">
+      <Filter>Source Files\mini\win32\pe</Filter>
+    </ClCompile>
+    <ClCompile Include="mini\win32\pe\import_directory_enumerator.cpp">
+      <Filter>Source Files\mini\win32\pe</Filter>
+    </ClCompile>
+    <ClCompile Include="mini\win32\pe\import_thunk_enumerator.cpp">
+      <Filter>Source Files\mini\win32\pe</Filter>
+    </ClCompile>
+    <ClCompile Include="mini\win32\pe\resource_directory_enumerator.cpp">
+      <Filter>Source Files\mini\win32\pe</Filter>
+    </ClCompile>
+    <ClCompile Include="mini\win32\pe\section_enumerator.cpp">
+      <Filter>Source Files\mini\win32\pe</Filter>
+    </ClCompile>
+    <ClCompile Include="mini\win32\pe\tls_directory_enumerator.cpp">
+      <Filter>Source Files\mini\win32\pe</Filter>
+    </ClCompile>
+    <ClCompile Include="mini\win32\pe\relocation_directory_enumerator.cpp">
+      <Filter>Source Files\mini\win32\pe</Filter>
+    </ClCompile>
+    <ClCompile Include="mini\win32\pe\relocation_fixup_enumerator.cpp">
+      <Filter>Source Files\mini\win32\pe</Filter>
+    </ClCompile>
+    <ClCompile Include="mini\win32\api_set\api_set_enumerator.cpp">
+      <Filter>Source Files\mini\win32\api_set</Filter>
+    </ClCompile>
+    <ClCompile Include="mini\win32\api_set\api_set_value_enumerator.cpp">
+      <Filter>Source Files\mini\win32\api_set</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -592,6 +640,48 @@
     </ClInclude>
     <ClInclude Include="mini\compare.h">
       <Filter>Header Files\mini</Filter>
+    </ClInclude>
+    <ClInclude Include="mini\win32\pe\export_directory_enumerator.h">
+      <Filter>Header Files\mini\win32\pe</Filter>
+    </ClInclude>
+    <ClInclude Include="mini\win32\pe\import_directory_enumerator.h">
+      <Filter>Header Files\mini\win32\pe</Filter>
+    </ClInclude>
+    <ClInclude Include="mini\win32\pe\import_thunk_enumerator.h">
+      <Filter>Header Files\mini\win32\pe</Filter>
+    </ClInclude>
+    <ClInclude Include="mini\win32\pe\resource_directory_enumerator.h">
+      <Filter>Header Files\mini\win32\pe</Filter>
+    </ClInclude>
+    <ClInclude Include="mini\win32\pe\section_enumerator.h">
+      <Filter>Header Files\mini\win32\pe</Filter>
+    </ClInclude>
+    <ClInclude Include="mini\win32\pe.h">
+      <Filter>Header Files\mini\win32</Filter>
+    </ClInclude>
+    <ClInclude Include="mini\win32\pe\tls_directory_enumerator.h">
+      <Filter>Header Files\mini\win32\pe</Filter>
+    </ClInclude>
+    <ClInclude Include="mini\win32\pe\relocation_directory_enumerator.h">
+      <Filter>Header Files\mini\win32\pe</Filter>
+    </ClInclude>
+    <ClInclude Include="mini\win32\pe\relocation_fixup_enumerator.h">
+      <Filter>Header Files\mini\win32\pe</Filter>
+    </ClInclude>
+    <ClInclude Include="mini\win32\api_set\api_set_enumerator.h">
+      <Filter>Header Files\mini\win32\api_set</Filter>
+    </ClInclude>
+    <ClInclude Include="mini\win32\api_set\common.h">
+      <Filter>Header Files\mini\win32\api_set</Filter>
+    </ClInclude>
+    <ClInclude Include="mini\win32\api_set.h">
+      <Filter>Header Files\mini\win32</Filter>
+    </ClInclude>
+    <ClInclude Include="mini\win32\api_set\api_set_value_enumerator.h">
+      <Filter>Header Files\mini\win32\api_set</Filter>
+    </ClInclude>
+    <ClInclude Include="mini\win32\pe\common.h">
+      <Filter>Header Files\mini\win32\pe</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

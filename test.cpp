@@ -13,12 +13,10 @@
 #include <mini/string.h>
 #include <mini/console.h>
 
-#include <vector>
-#include <string>
-#include <unordered_set>
-#include <unordered_map>
+#include <mini/win32/pe.h>
+#include <mini/win32/api_set.h>
 
-#include <cassert>
+#include <winternl.h>
 
 int __cdecl
 main(
@@ -26,136 +24,140 @@ main(
   char* argv[]
   )
 {
-  /*
-    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer
-    pellentesque metus et sem condimentum, ut malesuada dolor hendrerit.
-    Nam ultrices tempus mi ac congue. Vivamus auctor sit amet lorem non
-    finibus. Praesent congue bibendum dui eget maximus. Sed vel ex vel nisl
-    viverra tristique at finibus est. Vivamus in magna in mauris interdum
-    luctus. Curabitur vel elit imperdiet, egestas neque at, rutrum massa.
-    Nulla tincidunt at turpis vel consequat. Nulla metus nisl, mollis eget
-    iaculis quis, consectetur ac nibh.
-  */
-
   MINI_UNREFERENCED(argc);
   MINI_UNREFERENCED(argv);
 
-  _CrtSetReportMode(_CRT_ERROR, _CRTDBG_MODE_WNDW);
-  _CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
+  auto apiset_namespace = reinterpret_cast<mini::win32::api_set_namespace_t*>(NtCurrentTeb()->ProcessEnvironmentBlock->Reserved9[0]);
 
+  mini::win32::api_set_t apiset(apiset_namespace);
+
+//   mini::string_ref dll_name = "api-ms-win-core-interlocked-l1-1-0.dll";
+//   mini::string_ref api_set_name = apiset.dll_to_api_set_name(dll_name);
+//
+//   auto values =  apiset.find(api_set_name);
+//
+//   for (auto e2 : values)
+//   {
+//     mini::console::write("'%.*S' -> '%.*S' (0x%08x)\n", e2.name().size, e2.name().buffer, e2.value().size, e2.value().buffer, e2.flags());
+//   }
+
+  mini::console::write("=-=-=-=-= api_set =-=-=-=-=\n");
+
+  for (auto e : apiset.enumerator())
   {
-    mini::collections::list<int> list_int;
-    list_int.add(1);
-    list_int.add(2);
-    list_int.add(3);
-    list_int.add(4);
-    list_int.add(5);
+    mini::console::write("  name: '%.*S' (%i)\n", e.name().size, e.name().buffer, e.values().count());
 
-    assert(list_int.get_size() == 5);
-    assert(list_int.get_capacity() == 20);
-    assert(list_int.index_of(4) == 3);
-
-  }
-
-  _CrtDumpMemoryLeaks();
-
-  {
-    mini::collections::hashmap<int, mini::string> hashmap_int_string;
-    hashmap_int_string[0x1234] = "Lorem ipsum";
-    hashmap_int_string[0x5678] = "dolor sit";
-    hashmap_int_string[0x4231] = "amet, consectetur";
-    hashmap_int_string[0x1423] = "adipiscing elit";
-    hashmap_int_string[0x3142] = "pellentesque metus";
-
-    assert(hashmap_int_string.get_size() == 5);
-    assert(hashmap_int_string.get_bucket_count() == 8);
-
-    assert(hashmap_int_string[0x1234] == "Lorem ipsum");
-    assert(hashmap_int_string[0x5678] == "dolor sit");
-    assert(hashmap_int_string[0x4231] == "amet, consectetur");
-    assert(hashmap_int_string[0x1423] == "adipiscing elit");
-    assert(hashmap_int_string[0x3142] == "pellentesque metus");
-
-    assert(hashmap_int_string[0x1234] != "!Lorem ipsum");
-    assert(hashmap_int_string[0x5678] != "!dolor sit");
-    assert(hashmap_int_string[0x4231] != "!amet, consectetur");
-    assert(hashmap_int_string[0x1423] != "!adipiscing elit");
-    assert(hashmap_int_string[0x3142] != "!pellentesque metus");
-
-    assert(hashmap_int_string.find(0x1423) != hashmap_int_string.end());
-    assert(hashmap_int_string.find(0x4444) == hashmap_int_string.end());
-
-    hashmap_int_string.remove(hashmap_int_string.find(0x4231));
-
-    assert(hashmap_int_string.get_size() == 4);
-    assert(hashmap_int_string.find(0x4231) == hashmap_int_string.end());
-
+    for (auto e2 : e.values())
     {
-      auto copy_of_hashmap_int_string = hashmap_int_string;
-      assert(copy_of_hashmap_int_string.get_size() == 4);
-      assert(copy_of_hashmap_int_string.get_bucket_count() == 8);
-
-      assert(copy_of_hashmap_int_string[0x1234] == "Lorem ipsum");
-      assert(copy_of_hashmap_int_string[0x5678] == "dolor sit");
-      assert(copy_of_hashmap_int_string[0x1423] == "adipiscing elit");
-      assert(copy_of_hashmap_int_string[0x3142] == "pellentesque metus");
-
-      assert(copy_of_hashmap_int_string[0x1234] != "!Lorem ipsum");
-      assert(copy_of_hashmap_int_string[0x5678] != "!dolor sit");
-      assert(copy_of_hashmap_int_string[0x1423] != "!adipiscing elit");
-      assert(copy_of_hashmap_int_string[0x3142] != "!pellentesque metus");
-
-      assert(copy_of_hashmap_int_string.find(0x5678) != copy_of_hashmap_int_string.end());
-      assert(copy_of_hashmap_int_string.find(0x4444) == copy_of_hashmap_int_string.end());
-
-      copy_of_hashmap_int_string.remove(copy_of_hashmap_int_string.find(0x5678));
-
-      assert(copy_of_hashmap_int_string.get_size() == 3);
-      assert(copy_of_hashmap_int_string.find(0x5678) == copy_of_hashmap_int_string.end());
-    }
-
-    {
-      auto move_of_hashmap_int_string = std::move(hashmap_int_string);
-      assert(move_of_hashmap_int_string.get_size() == 4);
-      assert(move_of_hashmap_int_string.get_bucket_count() == 8);
-
-      assert(move_of_hashmap_int_string[0x1234] == "Lorem ipsum");
-      assert(move_of_hashmap_int_string[0x5678] == "dolor sit");
-      assert(move_of_hashmap_int_string[0x1423] == "adipiscing elit");
-      assert(move_of_hashmap_int_string[0x3142] == "pellentesque metus");
-
-      assert(move_of_hashmap_int_string[0x1234] != "!Lorem ipsum");
-      assert(move_of_hashmap_int_string[0x5678] != "!dolor sit");
-      assert(move_of_hashmap_int_string[0x1423] != "!adipiscing elit");
-      assert(move_of_hashmap_int_string[0x3142] != "!pellentesque metus");
-
-      assert(move_of_hashmap_int_string.find(0x5678) != move_of_hashmap_int_string.end());
-      assert(move_of_hashmap_int_string.find(0x4444) == move_of_hashmap_int_string.end());
-
-      move_of_hashmap_int_string.remove(move_of_hashmap_int_string.find(0x5678));
-
-      assert(move_of_hashmap_int_string.get_size() == 3);
-      assert(move_of_hashmap_int_string.find(0x5678) == move_of_hashmap_int_string.end());
+      mini::console::write("    flags: 0x%08x, value: '%.*S', name: '%.*S'\n", e2.flags(), e2.value().size, e2.value().buffer, e2.name().size, e2.name().buffer);
     }
   }
 
-  {
-    mini::collections::hashmap<mini::string, mini::string> hashmap_string_string;
-    hashmap_string_string.insert_many({
-      { "Lorem ipsum", "dolor sit" },
-      { "amet, consectetur", "adipiscing elit." },
-      { "pellentesque metus", " et sem condimentum" },
-      { "ut malesuada ", "dolor hendrerit." },
-      { "Nam ultrices", "tempus mi" }
-      });
+  LoadLibrary(TEXT("kernel32.dll"));
+  auto pe = mini::win32::pe_file(GetModuleHandle(TEXT("kernel32.dll")));
 
-    for (auto&& kv : hashmap_string_string)
+  mini::console::write("=-=-=-=-= sections (%i) =-=-=-=-=\n", pe.sections().count());
+  for (auto e : pe.sections())
+  {
+    mini::console::write("  name: '%.*s'\n", mini::win32::image_sizeof_short_name, e.name());
+  }
+
+  mini::console::write("=-=-=-=-= export_directory (%i) =-=-=-=-=\n", pe.export_directory().count());
+  for (auto e : pe.export_directory())
+  {
+    mini::console::write("  name: '%s', ordinal: 0x%04x, is_forwarder: %i\n", e.name(), e.ordinal(), e.is_forwarder());
+    if (e.is_forwarder())
     {
-      mini::console::write("'%s':'%s'\n", kv.first.get_buffer(), kv.second.get_buffer());
+      mini::console::write("  >> '%s'\n", e.forwarder());
+    }
+    else
+    {
+      mini::console::write("  >> 0x%p\n", e.function());
     }
   }
 
-  _CrtDumpMemoryLeaks();
+  mini::console::write("=-=-=-=-= import_directory (%i) =-=-=-=-=\n", pe.import_directory().count());
+  for (auto e : pe.import_directory())
+  {
+    mini::console::write("  name: '%s' (%i)\n", e.name(), e.import_thunks().count());
+
+    if (apiset.is_api_set_name(e.name()))
+    {
+      mini::console::write("    | APISET\n");
+      auto apiset_values = apiset.find(apiset.dll_to_api_set_name(e.name()));
+      for (auto v : apiset_values)
+      {
+        mini::console::write("    | flags: 0x%08x, value: '%.*S', name: '%.*S'\n", v.flags(), v.value().size, v.value().buffer, v.name().size, v.name().buffer);
+      }
+    }
+
+    for (auto t : e.import_thunks())
+    {
+      if (t.is_ordinal())
+      {
+        mini::console::write("    ordinal: 0x%04x\n", t.ordinal());
+      }
+      else
+      {
+        mini::console::write("    name: '%s', hint: %i\n", t.name(), t.hint());
+      }
+    }
+  }
+
+  mini::console::write("=-=-=-=-= resource_directory (%i) =-=-=-=-=\n", pe.resource_directory().count());
+  for (auto e : pe.resource_directory())
+  {
+    if (e.name_is_string())  mini::console::write("  name: '%.*S'\n", e.name().size / 2, e.name().buffer);
+    else                     mini::console::write("  id: %i\n", e.id());
+
+    if (!e.data_is_directory())
+    {
+      mini::console::write("      code_page: %i, buffer: 0x%p, size: %i\n", e.data().code_page, e.data().buffer.get_buffer(), e.data().buffer.get_size());
+    }
+    else
+    {
+      for (auto e2 : e.resource_directory())
+      {
+        if (e2.name_is_string()) mini::console::write("    name: '%.*S'\n", e2.name().size / 2, e2.name().buffer);
+        else                     mini::console::write("    id: %i\n", e2.id());
+
+        if (!e2.data_is_directory())
+        {
+          mini::console::write("      code_page: %i, buffer: 0x%p, size: %i\n", e2.data().code_page, e2.data().buffer.get_buffer(), e2.data().buffer.get_size());
+        }
+        else
+        {
+          for (auto e3 : e2.resource_directory())
+          {
+            if (e3.name_is_string()) mini::console::write("      name: '%.*S'\n", e3.name().size / 2, e3.name().buffer);
+            else                     mini::console::write("      id: %i\n", e3.id());
+
+            if (!e3.data_is_directory())
+            {
+              mini::console::write("      code_page: %i, buffer: 0x%p, size: %i\n", e3.data().code_page, e3.data().buffer.get_buffer(), e3.data().buffer.get_size());
+            }
+          }
+        }
+      }
+    }
+  }
+
+  mini::console::write("=-=-=-=-= relocation_directory =-=-=-=-=\n");
+  for (auto e : pe.relocation_directory())
+  {
+    mini::console::write("  rva: 0x%p, va: 0x%p (%i)\n", e.relative_virtual_address(), e.virtual_address(), e.fixups().count());
+
+    for (auto e2 : e.fixups())
+    {
+      mini::console::write("    rva: 0x%p, va: 0x%p, type: %i\n", e2.relative_virtual_address(), e2.virtual_address(), e2.type());
+    }
+  }
+
+  mini::console::write("=-=-=-=-= tls_directory (%i) =-=-=-=-=\n", pe.tls_directory().count());
+  for (auto e : pe.tls_directory())
+  {
+    mini::console::write("  tls_callback: 0x%p\n", e.tls_callback());
+  }
 
   return 0;
 }

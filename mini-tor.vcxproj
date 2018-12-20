@@ -1097,6 +1097,16 @@
     <ClCompile Include="mini\tor\relay_cell.cpp" />
     <ClCompile Include="mini\tor\tor_socket.cpp" />
     <ClCompile Include="mini\tor\tor_stream.cpp" />
+    <ClCompile Include="mini\win32\api_set\api_set_enumerator.cpp" />
+    <ClCompile Include="mini\win32\api_set\api_set_value_enumerator.cpp" />
+    <ClCompile Include="mini\win32\pe\export_directory_enumerator.cpp" />
+    <ClCompile Include="mini\win32\pe\import_directory_enumerator.cpp" />
+    <ClCompile Include="mini\win32\pe\import_thunk_enumerator.cpp" />
+    <ClCompile Include="mini\win32\pe\relocation_directory_enumerator.cpp" />
+    <ClCompile Include="mini\win32\pe\relocation_fixup_enumerator.cpp" />
+    <ClCompile Include="mini\win32\pe\resource_directory_enumerator.cpp" />
+    <ClCompile Include="mini\win32\pe\section_enumerator.cpp" />
+    <ClCompile Include="mini\win32\pe\tls_directory_enumerator.cpp" />
     <ClCompile Include="test.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -1208,6 +1218,20 @@
     <ClInclude Include="mini\tor\tor_socket.h" />
     <ClInclude Include="mini\tor\tor_stream.h" />
     <ClInclude Include="mini\tor\common.h" />
+    <ClInclude Include="mini\win32\api_set.h" />
+    <ClInclude Include="mini\win32\api_set\api_set_enumerator.h" />
+    <ClInclude Include="mini\win32\api_set\api_set_value_enumerator.h" />
+    <ClInclude Include="mini\win32\api_set\common.h" />
+    <ClInclude Include="mini\win32\pe.h" />
+    <ClInclude Include="mini\win32\pe\export_directory_enumerator.h" />
+    <ClInclude Include="mini\win32\pe\common.h" />
+    <ClInclude Include="mini\win32\pe\import_directory_enumerator.h" />
+    <ClInclude Include="mini\win32\pe\import_thunk_enumerator.h" />
+    <ClInclude Include="mini\win32\pe\relocation_directory_enumerator.h" />
+    <ClInclude Include="mini\win32\pe\relocation_fixup_enumerator.h" />
+    <ClInclude Include="mini\win32\pe\resource_directory_enumerator.h" />
+    <ClInclude Include="mini\win32\pe\section_enumerator.h" />
+    <ClInclude Include="mini\win32\pe\tls_directory_enumerator.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="mini\buffer_ref.inl" />

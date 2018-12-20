@@ -213,7 +213,7 @@ class hashset
     bool
     contains(
       const T& item
-      );
+      ) const;
 
     iterator
     find(
@@ -247,6 +247,12 @@ class hashset
     iterator
     remove(
       iterator it
+      );
+
+
+    void
+    remove(
+      const value_type& item
       );
 
     void

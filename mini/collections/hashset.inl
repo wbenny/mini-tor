@@ -303,7 +303,7 @@ template <
 bool
 hashset<T, IndexType, Hash, KeyEqual, Allocator>::contains(
   const T& item
-  )
+  ) const
 {
   return find(item) != end();
 }
@@ -464,6 +464,26 @@ hashset<T, IndexType, Hash, KeyEqual, Allocator>::remove(
   node.next = _bucket_list[bucket];
   _bucket_list[bucket] = index;
   return it;
+}
+
+template <
+  typename T,
+  typename IndexType,
+  typename Hash,
+  typename KeyEqual,
+  typename Allocator
+>
+void
+hashset<T, IndexType, Hash, KeyEqual, Allocator>::remove(
+  const value_type& item
+  )
+{
+  auto it = find(item);
+
+  if (it != end())
+  {
+    remove(it);
+  }
 }
 
 template <
