@@ -1,6 +1,4 @@
 #pragma once
-#include <mini/crt/crt0.h>
-
 #include <cstdint>
 #include <cstddef>
 #include <cstdarg>
@@ -43,6 +41,10 @@ struct MINI_UNREFERENCED_PARAMETER_PACK_impl
 # define MINI_CONFIG_DEBUG
 #endif
 
+#if defined(_VC_NODEFAULTLIB)
+# define MINI_CONFIG_NO_DEFAULT_LIBS
+#endif
+
 #if defined(_M_IX86)
 # define MINI_ARCH_X86
 # define MINI_ARCH_BITS 32
@@ -62,6 +64,7 @@ struct MINI_UNREFERENCED_PARAMETER_PACK_impl
 #if defined(_KERNEL_MODE)
 # define MINI_MODE_KERNEL
 #endif
+
 
 #define MINI_MAKE_NONCONSTRUCTIBLE(type)  \
   type(                                   \
@@ -195,3 +198,6 @@ assert(
   );
 
 }
+
+#include <mini/crt/crt0.h>
+

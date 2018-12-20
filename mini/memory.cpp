@@ -4,6 +4,10 @@
 #include <cstdlib>
 #include <cstring>
 
+#if defined(MINI_MODE_KERNEL)
+#include <ntddk.h>
+#endif
+
 namespace mini::memory {
 
 namespace detail {
@@ -64,8 +68,8 @@ free(
 struct pool_header
 {
   size_t size;
-  byte_type data[];
-}
+  /* byte_type data[] */;
+};
 
 void*
 allocate(
@@ -73,11 +77,11 @@ allocate(
   )
 {
   pool_header* result = reinterpret_cast<pool_header*>(
-    ExAllocatePoolWithTag(size + sizeof(pool_header), MINI_MEMORY_TAG)
+    ExAllocatePoolWithTag(NonPagedPool, size + sizeof(pool_header), MINI_MEMORY_TAG)
     );
 
   result->size = size;
-  return result->data;
+  return &result[1];
 }
 
 void*
@@ -86,7 +90,7 @@ reallocate(
   size_t new_size
   )
 {
-  pool_header* ptr_header = reinterpret_cast<pool_header*>(ptr)[-1];
+  pool_header* ptr_header = &reinterpret_cast<pool_header*>(ptr)[-1];
 
   if (ptr_header->size >= new_size)
   {
@@ -105,7 +109,7 @@ free(
   void* ptr
   )
 {
-  pool_header* result = reinterpret_cast<pool_header*>(ptr)[-1];
+  pool_header* result = &reinterpret_cast<pool_header*>(ptr)[-1];
   ExFreePoolWithTag(result, MINI_MEMORY_TAG);
 }
 
@@ -188,9 +192,9 @@ equal(
 
 void*
 find(
-  const void *haystack,
+  const void* haystack,
   size_t haystack_size,
-  const void *needle,
+  const void* needle,
   size_t needle_size
   )
 {
@@ -229,9 +233,9 @@ find(
 
 void*
 reverse_find(
-  const void *haystack,
+  const void* haystack,
   size_t haystack_size,
-  const void *needle,
+  const void* needle,
   size_t needle_size
   )
 {

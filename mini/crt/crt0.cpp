@@ -1,5 +1,5 @@
-#ifndef _DEBUG
 #include "crt0.h"
+#if defined(MINI_CONFIG_NO_DEFAULT_LIBS)
 
 #include <cstdlib>
 
@@ -127,6 +127,53 @@ _initterm(
 
 int _fltused = 0;
 
+void __cdecl
+crt0_initialize(
+  void
+  )
+{
+  //
+  // Call C initializers.
+  //
+  _initterm_e(__xi_a, __xi_z);
+
+  //
+  // Call C++ initializers.
+  //
+  _initterm(__xc_a, __xc_z);
+}
+
+#ifndef MINI_MSVCRT_LIB
+
+static const size_t g_atexit_fn_max_count = 32;
+static atexit_fn_t  g_atexit_fn_table[g_atexit_fn_max_count];
+static size_t       g_atexit_fn_count = 0;
+
+void __cdecl
+crt0_destroy(
+  void
+  )
+{
+  while (g_atexit_fn_count-- > 0)
+  {
+    g_atexit_fn_table[g_atexit_fn_count]();
+  }
+}
+
+#else
+
+void __cdecl
+crt0_destroy(
+  void
+  )
+{
+
+}
+
+#endif
+
+#if !defined(MINI_MODE_KERNEL)
+
 int __argc;
 char** __argv;
 
@@ -167,15 +214,7 @@ mainCRTStartup(
   void
   )
 {
-  //
-  // Call C initializers.
-  //
-  _initterm_e(__xi_a, __xi_z);
-
-  //
-  // Call C++ initializers.
-  //
-  _initterm(__xc_a, __xc_z);
+  crt0_initialize();
 
   //
   // Exit with whatever main will return.
@@ -187,9 +226,13 @@ mainCRTStartup(
   exit(exit_code);
 }
 
+#endif
+
 #pragma endregion
 
 #pragma region CRT internal functions
+
+#if !defined(MINI_MODE_KERNEL)
 
 int __cdecl
 _purecall(
@@ -198,6 +241,8 @@ _purecall(
 {
   return 0;
 }
+
+#endif
 
 #pragma endregion
 
@@ -263,10 +308,6 @@ free(
 
 #pragma region Program
 
-static const size_t g_atexit_fn_max_count = 32;
-static atexit_fn_t  g_atexit_fn_table[g_atexit_fn_max_count];
-static size_t       g_atexit_fn_count = 0;
-
 [[noreturn]]
 void __cdecl
 abort(
@@ -282,10 +323,7 @@ exit(
   int exit_code
   )
 {
-  while (g_atexit_fn_count-- > 0)
-  {
-    g_atexit_fn_table[g_atexit_fn_count]();
-  }
+  crt0_destroy();
 
   ExitProcess(exit_code);
 }

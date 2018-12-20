@@ -105,10 +105,14 @@ class string_ref
       size_type count = size_type_max
       ) const;
 
+#if !defined(MINI_MODE_KERNEL)
+
     int
     to_int(
       void
       ) const;
+
+#endif
 
     bool
     is_zero_terminated(

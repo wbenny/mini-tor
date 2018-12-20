@@ -340,6 +340,8 @@ string::from_int(
   *this = tmp;
 }
 
+#if !defined(MINI_MODE_KERNEL)
+
 int
 string::to_int(
   void
@@ -347,6 +349,8 @@ string::to_int(
 {
   return string_ref(*this).to_int();
 }
+
+#endif
 
 //
 // modifiers.
