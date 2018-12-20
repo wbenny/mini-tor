@@ -8,7 +8,8 @@ EXPORTS
   sprintf
   snprintf
   vprintf
-  vsnprintf
+  vsprintf_s
+  _vscprintf
 
   scanf
   sscanf

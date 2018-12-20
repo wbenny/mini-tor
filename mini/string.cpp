@@ -449,11 +449,11 @@ string::format(
   va_list args;
   va_start(args, format);
 
-  int chars = vsnprintf(nullptr, 0, format.get_buffer(), args);
+  int chars = _vscprintf(format.get_buffer(), args);
 
   string result;
   result.resize(chars);
-  vsnprintf(result.get_buffer(), result.get_size() + 1, format.get_buffer(), args);
+  vsprintf_s(result.get_buffer(), result.get_size() + 1, format.get_buffer(), args);
 
   va_end(args);
 

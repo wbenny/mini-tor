@@ -1,7 +1,8 @@
 #pragma once
 #include <cstdint>
-#include <cstddef>
 #include <cstdarg>
+#include <cstddef>
+#include <cstring>
 #include <utility>
 
 #define MINI_UNREFERENCED(p)        \
