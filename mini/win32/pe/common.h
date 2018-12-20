@@ -168,7 +168,7 @@ struct image_data_directory_t
   uint32_t        size;
 };
 
-constexpr auto image_numberof_directory_entries = 16;
+constexpr auto image_number_of_directory_entries = 16;
 
 //
 // Optional header format.
@@ -215,7 +215,7 @@ struct image_optional_header_32_t
   uint32_t        size_of_heap_commit;
   uint32_t        loader_flags;
   uint32_t        number_of_rva_and_sizes;
-  image_data_directory_t data_directory[image_numberof_directory_entries];
+  image_data_directory_t data_directory[image_number_of_directory_entries];
 };
 
 struct image_optional_header_64_t
@@ -249,7 +249,7 @@ struct image_optional_header_64_t
   uint64_t        size_of_heap_commit;
   uint32_t        loader_flags;
   uint32_t        number_of_rva_and_sizes;
-  image_data_directory_t data_directory[image_numberof_directory_entries];
+  image_data_directory_t data_directory[image_number_of_directory_entries];
 };
 
 using image_optional_header_t = std::conditional_t<

@@ -260,10 +260,14 @@ class string
       int value
       );
 
+#if !defined(MINI_MODE_KERNEL)
+
     int
     to_int(
       void
       ) const;
+
+#endif
 
     //
     // modifiers.

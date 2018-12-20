@@ -11,6 +11,18 @@ extern "C" {
 
 #pragma region CRT startup
 
+void __cdecl
+crt0_initialize(
+  void
+  );
+
+void __cdecl
+crt0_destroy(
+  void
+  );
+
+#if !defined(MINI_MODE_KERNEL)
+
 extern int __argc;
 extern char** __argv;
 
@@ -24,6 +36,8 @@ void __cdecl
 mainCRTStartup(
     void
   );
+
+#endif
 
 #pragma endregion
 

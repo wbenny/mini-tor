@@ -210,6 +210,8 @@ string_ref::split(
   return tokens;
 }
 
+#if !defined(MINI_MODE_KERNEL)
+
 int
 string_ref::to_int(
   void
@@ -220,6 +222,8 @@ string_ref::to_int(
 
   return result;
 }
+
+#endif
 
 bool
 string_ref::is_zero_terminated(
