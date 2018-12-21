@@ -102,5 +102,4 @@ class pe_tls_directory_enumerator
     size_t _count;
 };
 
-
 }

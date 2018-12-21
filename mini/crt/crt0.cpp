@@ -1,6 +1,5 @@
 #include "crt0.h"
 #if defined(MINI_CONFIG_NO_DEFAULT_LIBS)
-
 #include <cstdlib>
 
 #include <windows.h>

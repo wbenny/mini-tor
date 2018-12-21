@@ -1,4 +1,3 @@
-#pragma once
 #include "import_directory_enumerator.h"
 #include "../pe.h"
 
@@ -30,6 +29,17 @@ pe_import_directory_enumerator<TImageTraits>::pe_import_directory_enumerator(
       _count += 1;
     }
   }
+}
+
+template<
+  typename TImageTraits
+>
+pe_import_thunk_enumerator<TImageTraits>
+pe_import_directory_enumerator<TImageTraits>::proxy::import_thunks(
+  void
+  ) const
+{
+  return pe_import_thunk_enumerator<TImageTraits>(_image_base, _import_descriptor_entry);
 }
 
 template <

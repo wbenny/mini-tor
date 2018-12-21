@@ -138,5 +138,4 @@ class pe_export_directory_enumerator
     size_t _count;
 };
 
-
 }

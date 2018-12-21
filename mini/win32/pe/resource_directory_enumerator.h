@@ -190,5 +190,4 @@ class pe_resource_directory_enumerator
     pe_directory<typename TImageTraits::image_resource_directory_t> _top_resource_directory;
 };
 
-
 }

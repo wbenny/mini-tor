@@ -1,4 +1,3 @@
-#pragma once
 #include "section_enumerator.h"
 #include "../pe.h"
 
