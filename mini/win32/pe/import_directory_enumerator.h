@@ -33,10 +33,7 @@ class pe_import_directory_enumerator
       pe_import_thunk_enumerator<TImageTraits>
       import_thunks(
         void
-        ) const
-      {
-        return pe_import_thunk_enumerator<TImageTraits>(_image_base, _import_descriptor_entry);
-      }
+        ) const;
 
     private:
       uint8_t* _image_base;
@@ -107,6 +104,5 @@ class pe_import_directory_enumerator
     pe_directory<typename TImageTraits::image_import_descriptor_t> _import_descriptor;
     size_t _count;
 };
-
 
 }

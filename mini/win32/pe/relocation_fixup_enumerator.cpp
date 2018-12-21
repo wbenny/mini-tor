@@ -1,4 +1,3 @@
-#pragma once
 #include "relocation_fixup_enumerator.h"
 #include "../pe.h"
 

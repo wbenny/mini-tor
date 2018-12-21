@@ -41,10 +41,7 @@ class pe_relocation_directory_enumerator
       pe_relocation_fixup_enumerator<TImageTraits>
       fixups(
         void
-        ) const
-      {
-        return pe_relocation_fixup_enumerator<TImageTraits>(_image_base, _relocation);
-      }
+        ) const;
 
     private:
       uint8_t* _image_base;
@@ -111,6 +108,5 @@ class pe_relocation_directory_enumerator
     pe_directory<typename TImageTraits::image_base_relocation_t> _base_relocation;
     typename TImageTraits::image_base_relocation_t* _base_relocation_end;
 };
-
 
 }

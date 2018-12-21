@@ -1,4 +1,3 @@
-#pragma once
 #include "resource_directory_enumerator.h"
 #include "../pe.h"
 

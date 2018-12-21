@@ -116,6 +116,10 @@ enum class image_directory_t
   entry_com_descriptor = 14,   // COM Runtime descriptor
 };
 
+#if defined(MINI_COMPILER_CLANG)
+# pragma GCC diagnostic push
+# pragma GCC diagnostic ignored "-Wpragma-pack"
+#endif
 #include <pshpack2.h>                         // 16 bit headers are 2 byte packed
 
 struct image_dos_header_t
@@ -142,6 +146,9 @@ struct image_dos_header_t
 };
 
 #include <poppack.h>
+#if defined(MINI_COMPILER_CLANG)
+# pragma GCC diagnostic pop
+#endif
 
 //
 // File header format.
@@ -348,6 +355,10 @@ struct image_thunk_data_32_t
   };
 };
 
+#if defined(MINI_COMPILER_CLANG)
+# pragma GCC diagnostic push
+# pragma GCC diagnostic ignored "-Wpragma-pack"
+#endif
 #include <pshpack8.h>                     // Use align 8 for the 64-bit IAT.
 
 struct image_thunk_data_64_t
@@ -362,6 +373,9 @@ struct image_thunk_data_64_t
 };
 
 #include <poppack.h>                      // Back to 4 byte packing
+#if defined(MINI_COMPILER_CLANG)
+# pragma GCC diagnostic pop
+#endif
 
 using image_thunk_data_t = std::conditional_t<
   MINI_ARCH_BITS == 32,

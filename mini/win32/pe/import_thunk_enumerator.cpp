@@ -1,4 +1,3 @@
-#pragma once
 #include "import_thunk_enumerator.h"
 #include "../pe.h"
 

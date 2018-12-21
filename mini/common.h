@@ -27,12 +27,17 @@ struct MINI_UNREFERENCED_PARAMETER_PACK_impl
   }
 };
 
-//
-// this macro marks unreachable code
-//
 #if defined(__clang__)
-# define MINI_UNREACHABLE   __builtin_unreachable()
+# define MINI_COMPILER_CLANG
 #elif defined(_MSC_VER)
+# define MINI_COMPILER_MSVC
+#else
+# error "Unknown compiler!"
+#endif
+
+#if defined(MINI_COMPILER_CLANG)
+# define MINI_UNREACHABLE   __builtin_unreachable()
+#elif defined(MINI_COMPILER_MSVC)
 # define MINI_UNREACHABLE   __assume(0)
 #else
 # define MINI_UNREACHABLE

@@ -127,7 +127,6 @@ class pe_import_thunk_enumerator
     size_t _count;
 };
 
-
 }
 
 

@@ -115,5 +115,4 @@ class pe_relocation_fixup_enumerator
     size_t _count;
 };
 
-
 }

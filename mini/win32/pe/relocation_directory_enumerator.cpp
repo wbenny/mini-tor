@@ -1,4 +1,3 @@
-#pragma once
 #include "relocation_directory_enumerator.h"
 #include "../pe.h"
 
@@ -17,6 +16,18 @@ pe_relocation_directory_enumerator<TImageTraits>::pe_relocation_directory_enumer
 {
   _base_relocation = _pe->directory_entry<typename TImageTraits::image_base_relocation_t>();
   _base_relocation_end = reinterpret_cast<typename TImageTraits::image_base_relocation_t*>(uintptr_t(_base_relocation.entry) + _base_relocation.size);
+}
+
+
+template<
+  typename TImageTraits
+>
+pe_relocation_fixup_enumerator<TImageTraits>
+pe_relocation_directory_enumerator<TImageTraits>::proxy::fixups(
+  void
+  ) const
+{
+  return pe_relocation_fixup_enumerator<TImageTraits>(_image_base, _relocation);
 }
 
 template <
@@ -41,7 +52,7 @@ pe_relocation_directory_enumerator<TImageTraits>::iterator::advance(
   void
   )
 {
-  _relocation_current = reinterpret_cast<image_base_relocation_t*>(
+  _relocation_current = reinterpret_cast<typename TImageTraits::image_base_relocation_t*>(
     uintptr_t(_relocation_current) + _relocation_current->size_of_block
     );
 
