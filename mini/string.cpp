@@ -449,7 +449,11 @@ string::format(
   va_list args;
   va_start(args, format);
 
+#if defined(MINI_MODE_KERNEL)
+  int chars = _vsnprintf(nullptr, 0, format.get_buffer(), args);
+#else
   int chars = _vscprintf(format.get_buffer(), args);
+#endif
 
   string result;
   result.resize(chars);

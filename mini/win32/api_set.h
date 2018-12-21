@@ -63,20 +63,22 @@ class api_set_t
       while (hash_counter <= apiset_entry_count)
       {
         hash_index  = (apiset_entry_count + hash_counter) / 2;
-        hash_offset =  _api_set_namespace->hash_offset + sizeof(void*) * hash_index;
+        hash_offset = _api_set_namespace->hash_offset
+                    + hash_index * sizeof(uint64_t); // 64-bit ptr
 
-        entry = reinterpret_cast<api_set_hash_entry_t*>(_api_set_namespace_base + hash_offset);
+        auto current_entry = reinterpret_cast<api_set_hash_entry_t*>(_api_set_namespace_base + hash_offset);
 
-        if (hashkey < entry->hash)
+        if (hashkey < current_entry->hash)
         {
           apiset_entry_count = hash_index - 1;
         }
-        else if (hashkey > entry->hash)
+        else if (hashkey > current_entry->hash)
         {
           hash_counter = hash_index + 1;
         }
-        else // if (hashkey == entry->hash)
+        else // if (hashkey == current_entry->hash)
         {
+          entry = current_entry;
           break;
         }
       }

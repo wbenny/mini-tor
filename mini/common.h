@@ -1,9 +1,4 @@
 #pragma once
-#include <cstdint>
-#include <cstdarg>
-#include <cstddef>
-#include <cstring>
-#include <utility>
 
 #define MINI_UNREFERENCED(p)        \
   (void)(p)
@@ -69,6 +64,7 @@ struct MINI_UNREFERENCED_PARAMETER_PACK_impl
 
 #if defined(_KERNEL_MODE)
 # define MINI_MODE_KERNEL
+# define _NO_CRT_STDIO_INLINE
 #endif
 
 
@@ -106,6 +102,12 @@ struct MINI_UNREFERENCED_PARAMETER_PACK_impl
 #define mini_break_if(expression) if (!(expression)); else break
 
 #define mini_sizeof_struct_member(struct, member) sizeof(((struct*)nullptr)->member)
+
+#include <cstdint>
+#include <cstdarg>
+#include <cstddef>
+#include <cstring>
+#include <utility>
 
 namespace mini {
 
@@ -206,4 +208,3 @@ assert(
 }
 
 #include <mini/crt/crt0.h>
-
