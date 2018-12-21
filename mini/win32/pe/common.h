@@ -4,9 +4,8 @@
 #include <cstdint>
 #include <type_traits>
 
+#pragma warning(push)
 #pragma warning(disable: 4201)
-
-#include <windows.h>
 
 namespace mini::win32 {
 
@@ -602,6 +601,6 @@ using image_t = std::conditional_t<
   image_64_t
 >;
 
-
-
 }
+
+#pragma warning(pop)

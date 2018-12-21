@@ -39,7 +39,7 @@ class api_set_t
       // Sanity checks.
       //
 
-      if ((apiset_entry_count) < 0 ||
+      if ((apiset_entry_count > _api_set_namespace->count) ||
           !api_set_name.get_size())
       {
         return api_set_value_enumerator(nullptr, nullptr, 0);

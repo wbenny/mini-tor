@@ -59,9 +59,9 @@ pe_export_directory_enumerator<TImageTraits>::iterator::value(
 
   result._image_base        = _enumerator->_pe->_image_base;
   result._export_directory  = _enumerator->_export_directory;
-  result._function          = _function_table[_index];
   result._name              = _name_table[_index];
   result._ordinal           = _ordinal_table[_index];
+  result._function          = _function_table[result._ordinal];
 
   return result;
 }

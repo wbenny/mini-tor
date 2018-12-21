@@ -5,7 +5,7 @@
 #include <cstring>
 
 #if defined(MINI_MODE_KERNEL)
-#include <ntddk.h>
+# include <ntddk.h>
 #endif
 
 namespace mini::memory {
@@ -158,7 +158,6 @@ reverse_copy(
 
   return destination;
 }
-
 
 void*
 move(
