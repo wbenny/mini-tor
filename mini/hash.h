@@ -7,6 +7,10 @@ namespace mini {
 
 namespace detail {
 
+  //
+  // Kindly borrowed from the MSVC CRT.
+  //
+
 #if defined(MINI_ARCH_X86) || defined(MINI_ARCH_ARM32)
   inline constexpr size_type FNV_offset_basis = 0x811C9DC5u;
   inline constexpr size_type FNV_prime        = 0x1000193u;
@@ -96,70 +100,10 @@ namespace detail {
 template <
   typename T
 >
-struct hash;
-
-template <
-  typename T,
-  bool Enabled
->
-struct hash_numeric
-{
-  size_type operator()(const T& value) const noexcept
-  {
-    return detail::hash_representation(value);
-  }
-};
-
-template <
-  typename T
->
-struct hash_numeric<T, false>
-{
-  hash_numeric() = delete;
-  hash_numeric(const hash_numeric&) = delete;
-  hash_numeric(hash_numeric&&) = delete;
-  hash_numeric& operator=(const hash_numeric&) = delete;
-  hash_numeric& operator=(hash_numeric&&) = delete;
-};
-
-template <
-  typename T
->
 struct hash
-  : hash_numeric<
-      T,
-      !std::is_const_v<T> && !std::is_volatile_v<T> &&
-      (std::is_enum_v<T> || std::is_integral_v<T> || std::is_pointer_v<T>)
-    >
+  : std::hash<T>
 {
 
-};
-
-template <>
-struct hash<float>
-{
-  size_type operator()(const float value) const noexcept
-  {
-    return detail::hash_representation(value == 0.0f ? 0.0f : value); // map -0 to 0
-  }
-};
-
-template <>
-struct hash<double>
-{
-  size_type operator()(const double value) const noexcept
-  {
-    return detail::hash_representation(value == 0.0f ? 0.0f : value); // map -0 to 0
-  }
-};
-
-template <>
-struct hash<long double>
-{
-  size_type operator()(const long double value) const noexcept
-  {
-    return detail::hash_representation(value == 0.0f ? 0.0f : value); // map -0 to 0
-  }
 };
 
 }
