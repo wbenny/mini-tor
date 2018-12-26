@@ -46,6 +46,44 @@ string_ref::string_ref(
 }
 
 //
+// assign operators.
+//
+
+string_ref&
+string_ref::operator=(
+  const string_ref& other
+  )
+{
+  _begin = other._begin;
+  _end = other._end;
+
+  return *this;
+}
+
+string_ref&
+string_ref::operator=(
+  string_ref&& other
+  )
+{
+  swap(other);
+
+  return *this;
+}
+
+//
+// swap.
+//
+
+void
+string_ref::swap(
+  string_ref& other
+  )
+{
+  buffer_ref<char>::swap(other);
+  mini::swap(_internal_char_buffer, other._internal_char_buffer);
+}
+
+//
 // capacity.
 //
 

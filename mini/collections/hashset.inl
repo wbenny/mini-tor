@@ -406,6 +406,54 @@ hashset<T, IndexType, Hash, KeyEqual, Allocator>::insert(
   return iterator(&_node_list[index]);
 }
 
+template <
+  typename T,
+  typename IndexType,
+  typename Hash,
+  typename KeyEqual,
+  typename Allocator
+>
+typename hashset<T, IndexType, Hash, KeyEqual, Allocator>::iterator
+hashset<T, IndexType, Hash, KeyEqual, Allocator>::insert(
+  T&& item
+  )
+{
+  if (!_bucket_list.get_size())
+  {
+    _node_list.add({ std::move(item), invalid_index });
+
+    _bucket_list.reserve(8);
+    _bucket_list.add(0);
+    return begin();
+  }
+
+  auto bucket = get_bucket(item);
+
+  auto index = _bucket_list[bucket];
+  while (index >= 0)
+  {
+    auto& node = _node_list[index];
+    if (_equal(node.item, item))
+    {
+      node.item = std::move(item);
+      return iterator(&_node_list[index]);
+    }
+
+    index = node.next;
+  }
+
+  index = static_cast<index_type>(_node_list.get_size());
+  _node_list.add({ std::move(item), _bucket_list[bucket] });
+  _bucket_list[bucket] = index;
+
+  if (_node_list.get_size() > _bucket_list.get_size())
+  {
+    _bucket_list.resize(_bucket_list.get_size() * 2);
+    rehash();
+  }
+
+  return iterator(&_node_list[index]);
+}
 
 template <
   typename T,

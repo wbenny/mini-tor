@@ -20,6 +20,10 @@ class string_ref
     //
 
     string_ref(
+      void
+      );
+
+    string_ref(
       char value
       );
 
@@ -32,6 +36,38 @@ class string_ref
 
     string_ref(
       const char* value
+      );
+
+    string_ref(
+      const string_ref& other
+      ) = default;
+
+    string_ref(
+      string_ref&& other
+      ) = default;
+
+
+    //
+    // assign operators.
+    //
+
+    string_ref&
+    operator=(
+      const string_ref& other
+      );
+
+    string_ref&
+    operator=(
+      string_ref&& other
+      );
+
+    //
+    // swap.
+    //
+
+    void
+    swap(
+      string_ref& other
       );
 
     //
@@ -166,16 +202,6 @@ class string_ref
         );
 
   private:
-
-    //
-    // private constructor for empty string_refs.
-    // use string_ref::empty instead.
-    //
-
-    string_ref(
-      void
-      );
-
     char _internal_char_buffer[2];
 };
 
@@ -189,6 +215,24 @@ class mutable_string_ref
     {
       return string(this->begin(), this->get_size());
     }
+};
+
+template <>
+struct hash<string_ref>
+{
+  size_type operator()(const string_ref value) const noexcept
+  {
+    return detail::hash_array_representation(value.get_buffer(), value.get_size());
+  }
+};
+
+template <>
+struct hash<mutable_string_ref>
+{
+  size_type operator()(const string_ref value) const noexcept
+  {
+    return detail::hash_array_representation(value.get_buffer(), value.get_size());
+  }
 };
 
 }

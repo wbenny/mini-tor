@@ -221,6 +221,12 @@ class hashmap
       const mapped_type& value
       );
 
+    iterator
+    insert(
+      const key_type& key,
+      mapped_type&& value
+      );
+
     using base_type::insert;
     using base_type::insert_many;
     using base_type::remove;

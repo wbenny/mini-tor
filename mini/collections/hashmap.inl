@@ -244,6 +244,23 @@ hashmap<TKey, TValue, IndexType, Hash, KeyEqual, Allocator>::insert(
   return base_type::insert(pair(key, value));
 }
 
+template <
+  typename TKey,
+  typename TValue,
+  typename IndexType = int,
+  typename Hash = hash_hashmap<pair<TKey, TValue>>,
+  typename KeyEqual = equal_to_hashmap<pair<TKey, TValue>>,
+  typename Allocator = allocator<pair<TKey, TValue>>
+>
+typename hashmap<TKey, TValue, IndexType, Hash, KeyEqual, Allocator>::iterator
+hashmap<TKey, TValue, IndexType, Hash, KeyEqual, Allocator>::insert(
+  const key_type& key,
+  mapped_type&& value
+  )
+{
+  return base_type::insert(pair(key, std::move(value)));
+}
+
 //
 // private methods.
 //

@@ -240,6 +240,11 @@ class hashset
       );
 
     iterator
+    insert(
+      T&& item
+      );
+
+    iterator
     insert_many(
       std::initializer_list<T> values
       );
@@ -248,7 +253,6 @@ class hashset
     remove(
       iterator it
       );
-
 
     void
     remove(
