@@ -1323,7 +1323,6 @@
     <ClCompile Include="mini\net\ssl_stream.cpp" />
     <ClCompile Include="mini\net\tcp_socket.cpp" />
     <ClCompile Include="mini\string.cpp" />
-    <ClCompile Include="mini\string_ref.cpp" />
     <ClCompile Include="mini\threading\event.cpp" />
     <ClCompile Include="mini\threading\mutex.cpp" />
     <ClCompile Include="mini\threading\thread.cpp" />
@@ -1500,6 +1499,7 @@
     <None Include="mini\crypto\cng\rsa.inl" />
     <None Include="mini\ptr.inl" />
     <None Include="mini\stack_buffer.inl" />
+    <None Include="mini\string_ref.inl" />
     <None Include="mini\threading\locked_value.inl" />
   </ItemGroup>
   <ItemGroup>

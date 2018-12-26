@@ -3,91 +3,50 @@
 
 namespace mini {
 
-const string_ref string_ref::empty;
-
 //
 // constructors.
 //
 
-string_ref::string_ref(
+constexpr string_ref::string_ref(
   void
   )
-  : buffer_ref<char>(_internal_char_buffer, _internal_char_buffer)
+  : buffer_ref<char>()
 {
-  _internal_char_buffer[0] = '\0';
+
 }
 
-string_ref::string_ref(
-  char value
-  )
-  : buffer_ref<char>(_internal_char_buffer, _internal_char_buffer + 1)
-{
-  _internal_char_buffer[0] = value;
-  _internal_char_buffer[1] = '\0';
-}
-
-template <
-  size_type N
->
 constexpr string_ref::string_ref(
-  const char (&value)[N]
-  )
-  : buffer_ref<char>(value, value + N - 1)
-{
-
-}
-
-string_ref::string_ref(
   const char* value
   )
-  : buffer_ref<char>(value, value + strlen(value))
+  : buffer_ref<char>(value, value + traits_type::length(value))
 {
 
 }
 
-//
-// assign operators.
-//
-
-string_ref&
-string_ref::operator=(
-  const string_ref& other
-  )
+constexpr string_ref::string_ref(
+  const char* value, size_type count
+  ) : buffer_ref<char>(value, value + count)
 {
-  _begin = other._begin;
-  _end = other._end;
 
-  return *this;
-}
-
-string_ref&
-string_ref::operator=(
-  string_ref&& other
-  )
-{
-  swap(other);
-
-  return *this;
 }
 
 //
 // swap.
 //
 
-void
+constexpr void
 string_ref::swap(
   string_ref& other
   )
 {
   buffer_ref<char>::swap(other);
-  mini::swap(_internal_char_buffer, other._internal_char_buffer);
 }
 
 //
 // capacity.
 //
 
-bool
+constexpr bool
 string_ref::is_empty(
   void
   ) const
@@ -269,7 +228,7 @@ string_ref::is_zero_terminated(
   ) const
 {
   //
-  // warning: this may actually trigger an memory access violation!
+  // warning: this may actually trigger memory access violation!
   //
   return get_buffer()[get_size() + 1] == '\0';
 }

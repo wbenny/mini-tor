@@ -2,16 +2,18 @@
 #include <mini/string.h>
 #include <mini/byte_buffer_ref.h>
 
+#include <iosfwd> // std::char_traits
+
 namespace mini {
 
 class string_ref
   : public buffer_ref<char>
 {
   public:
-    static const size_type not_found       = string::not_found;
-    static const size_type zero_terminated = string::zero_terminated;
+    using traits_type = std::char_traits<char>;
 
-    static const string_ref empty;
+    static constexpr auto not_found       = string::not_found;
+    static constexpr auto zero_terminated = string::zero_terminated;
 
     using buffer_ref<char>::buffer_ref;
 
@@ -19,53 +21,36 @@ class string_ref
     // constructors.
     //
 
-    string_ref(
+    constexpr string_ref(
       void
       );
 
-    string_ref(
-      char value
-      );
-
-    template <
-      size_type N
-    >
     constexpr string_ref(
-      const char (&value)[N]
-      );
-
-    string_ref(
-      const char* value
-      );
-
-    string_ref(
       const string_ref& other
       ) = default;
 
-    string_ref(
-      string_ref&& other
-      ) = default;
+    constexpr string_ref(
+      const char* value
+      );
 
+    constexpr string_ref(
+      const char* value, size_type count
+      );
 
     //
     // assign operators.
     //
 
-    string_ref&
+    constexpr string_ref&
     operator=(
       const string_ref& other
-      );
-
-    string_ref&
-    operator=(
-      string_ref&& other
-      );
+      ) = default;
 
     //
     // swap.
     //
 
-    void
+    constexpr void
     swap(
       string_ref& other
       );
@@ -74,7 +59,7 @@ class string_ref
     // capacity.
     //
 
-    bool
+    constexpr bool
     is_empty(
       void
       ) const;
@@ -83,29 +68,29 @@ class string_ref
     // lookup.
     //
 
-    size_type
+    inline size_type
     index_of(
       const string_ref item,
       size_type from_offset = 0
       ) const;
 
-    size_type
+    inline size_type
     last_index_of(
       const string_ref item,
       size_type from_offset = 0
       ) const;
 
-    bool
+    inline bool
     contains(
       const string_ref item
       ) const;
 
-    bool
+    inline bool
     starts_with(
       const string_ref item
       ) const;
 
-    bool
+    inline bool
     ends_with(
       const string_ref item
       ) const;
@@ -114,28 +99,28 @@ class string_ref
     // operations.
     //
 
-    bool
+    inline bool
     equals(
       const string_ref other
       ) const;
 
-    int
+    inline int
     compare(
       const string_ref other
       ) const;
 
-    string_ref
+    inline string_ref
     substring(
       size_type offset
       ) const;
 
-    string_ref
+    inline string_ref
     substring(
       size_type offset,
       size_type length
       ) const;
 
-    string_collection
+    inline string_collection
     split(
       const string_ref delimiter,
       size_type count = size_type_max
@@ -143,14 +128,14 @@ class string_ref
 
 #if !defined(MINI_MODE_KERNEL)
 
-    int
+    inline int
     to_int(
       void
       ) const;
 
 #endif
 
-    bool
+    inline bool
     is_zero_terminated(
       void
       ) const;
@@ -159,11 +144,11 @@ class string_ref
     // conversion operators.
     //
 
-    operator string(
+    inline operator string(
       void
       ) const;
 
-    operator byte_buffer_ref(
+    inline operator byte_buffer_ref(
       void
       ) const;
 
@@ -171,38 +156,35 @@ class string_ref
     // non-member operations.
     //
 
-    friend bool
+    inline friend bool
     operator==(
       const string_ref& lhs,
       const string& rhs
       );
 
-    friend bool
+    inline friend bool
     operator!=(
       const string_ref& lhs,
       const string& rhs
       );
 
-    friend bool
+    inline friend bool
     operator==(
       const string_ref& lhs,
       const string_ref& rhs
       );
 
-    friend bool
+    inline friend bool
     operator!=(
       const string_ref& lhs,
       const string_ref& rhs
       );
 
-    friend string
+    inline friend string
     operator+(
         const string_ref& lhs,
         const string_ref& rhs
         );
-
-  private:
-    char _internal_char_buffer[2];
 };
 
 class mutable_string_ref
@@ -236,3 +218,5 @@ struct hash<mutable_string_ref>
 };
 
 }
+
+#include "string_ref.inl"

@@ -11,7 +11,7 @@ class ssl_socket
 {
   public:
     ssl_socket(
-      const string_ref host = string_ref::empty
+      const string_ref host = string_ref()
       );
 
     ssl_socket(

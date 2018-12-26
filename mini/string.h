@@ -31,8 +31,8 @@ class string
     using iterator                = pointer;
     using const_iterator          = const_pointer;
 
-    static const size_type not_found       = (size_type)-1;
-    static const size_type zero_terminated = (size_type)-1;
+    static constexpr size_type not_found       = (size_type)-1;
+    static constexpr size_type zero_terminated = (size_type)-1;
 
     //
     // constructors.

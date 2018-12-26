@@ -213,9 +213,6 @@
     <ClCompile Include="mini\memory.cpp">
       <Filter>Source Files\mini</Filter>
     </ClCompile>
-    <ClCompile Include="mini\string_ref.cpp">
-      <Filter>Source Files\mini</Filter>
-    </ClCompile>
     <ClCompile Include="mini\tor\parsers\onion_router_descriptor_parser.cpp">
       <Filter>Source Files\mini\tor\parsers</Filter>
     </ClCompile>
@@ -738,6 +735,9 @@
     </None>
     <None Include="mini\collections\hashmap.inl">
       <Filter>Source Files\mini\collections</Filter>
+    </None>
+    <None Include="mini\string_ref.inl">
+      <Filter>Source Files\mini</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>

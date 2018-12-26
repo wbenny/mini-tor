@@ -48,14 +48,10 @@ class buffer_ref
       ) = default;
 
     constexpr buffer_ref(
-      buffer_ref&& other
-      ) = default;
-
-    constexpr buffer_ref(
       std::nullptr_t
       );
 
-    buffer_ref(
+    constexpr buffer_ref(
       std::initializer_list<T> values
       );
 
@@ -87,21 +83,16 @@ class buffer_ref
     // assign operators.
     //
 
-    buffer_ref&
+    constexpr buffer_ref&
     operator=(
       const buffer_ref& other
-      );
-
-    buffer_ref&
-    operator=(
-      buffer_ref&& other
       );
 
     //
     // swap.
     //
 
-    void
+    constexpr void
     swap(
       buffer_ref& other
       );
@@ -120,7 +111,7 @@ class buffer_ref
       size_type index
       ) const;
 
-    const value_type*
+    constexpr const value_type*
     get_buffer(
       void
       ) const;
@@ -129,12 +120,12 @@ class buffer_ref
     // iterators.
     //
 
-    const_iterator
+    constexpr const_iterator
     begin(
       void
       ) const;
 
-    const_iterator
+    constexpr const_iterator
     end(
       void
       ) const;
@@ -143,12 +134,12 @@ class buffer_ref
     // capacity.
     //
 
-    bool
+    constexpr bool
     is_empty(
       void
       ) const;
 
-    size_type
+    constexpr size_type
     get_size(
       void
       ) const;

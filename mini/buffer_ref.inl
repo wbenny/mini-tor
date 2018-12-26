@@ -34,7 +34,7 @@ constexpr buffer_ref<T>::buffer_ref(
 template <
   typename T
 >
-buffer_ref<T>::buffer_ref(
+constexpr buffer_ref<T>::buffer_ref(
   std::initializer_list<T> values
   )
   : _begin((value_type*)values.begin())
@@ -82,26 +82,13 @@ constexpr buffer_ref<T>::buffer_ref(
 template <
   typename T
 >
-buffer_ref<T>&
+constexpr buffer_ref<T>&
 buffer_ref<T>::operator=(
   const buffer_ref& other
   )
 {
   _begin = other._begin;
   _end = other._end;
-
-  return *this;
-}
-
-template <
-  typename T
->
-buffer_ref<T>&
-buffer_ref<T>::operator=(
-  buffer_ref&& other
-  )
-{
-  swap(other);
 
   return *this;
 }
@@ -113,7 +100,7 @@ buffer_ref<T>::operator=(
 template <
   typename T
 >
-void
+constexpr void
 buffer_ref<T>::swap(
   buffer_ref& other
   )
@@ -151,7 +138,7 @@ buffer_ref<T>::at(
 template <
   typename T
 >
-const typename buffer_ref<T>::value_type*
+constexpr const typename buffer_ref<T>::value_type*
 buffer_ref<T>::get_buffer(
   void
   ) const
@@ -167,7 +154,7 @@ template <
   typename T
 >
 typename buffer_ref<T>::const_iterator
-buffer_ref<T>::begin(
+constexpr buffer_ref<T>::begin(
   void
   ) const
 {
@@ -178,7 +165,7 @@ template <
   typename T
 >
 typename buffer_ref<T>::const_iterator
-buffer_ref<T>::end(
+constexpr buffer_ref<T>::end(
   void
   ) const
 {
@@ -192,7 +179,7 @@ buffer_ref<T>::end(
 template <
   typename T
 >
-bool
+constexpr bool
 buffer_ref<T>::is_empty(
   void
   ) const
@@ -203,7 +190,7 @@ buffer_ref<T>::is_empty(
 template <
   typename T
 >
-typename buffer_ref<T>::size_type
+constexpr typename buffer_ref<T>::size_type
 buffer_ref<T>::get_size(
   void
   ) const

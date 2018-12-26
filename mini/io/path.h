@@ -6,9 +6,9 @@ namespace mini::io {
 class path
 {
   public:
-    static const char directory_separator             = '\\';
-    static const char alternative_directory_separator = '/';
-    static const char extension_separator             = '.';
+    static constexpr auto directory_separator             = string_ref("\\");
+    static constexpr auto alternative_directory_separator = string_ref("/");
+    static constexpr auto extension_separator             = string_ref(".");
 
     static string
     combine(

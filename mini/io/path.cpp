@@ -61,7 +61,7 @@ path::get_file_name(
 
   if (name_offset == string_ref::not_found || (name_offset + 1) >= p.get_size())
   {
-    return string_ref::empty;
+    return string_ref();
   }
 
   return p.substring(name_offset + 1);
@@ -96,7 +96,7 @@ path::get_filename_without_extension(
 
   if (name_offset == string_ref::not_found || (name_offset + 1) >= p.get_size())
   {
-    return string_ref::empty;
+    return string_ref();
   }
 
   string_ref result = p.substring(name_offset + 1);
@@ -118,7 +118,7 @@ path::get_extension(
     return file_name.substring(extension_offset);
   }
 
-  return string_ref::empty;
+  return string_ref();
 }
 
 }

@@ -103,7 +103,7 @@ class ssl_context
     SECURITY_STATUS
     initialize(
       io::stream& sock,
-      const string_ref target_name = string_ref::empty
+      const string_ref target_name = string_ref()
       );
 
     void

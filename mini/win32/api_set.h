@@ -124,9 +124,9 @@ class api_set_t
 
       if (!is_api_set_name(dll_name) ||
           !dll_name.ends_with(".dll") ||
-          (last_index_of_hyphen = dll_name.last_index_of('-')) == string_ref::not_found)
+          (last_index_of_hyphen = dll_name.last_index_of("-")) == string_ref::not_found)
       {
-        return string_ref::empty;
+        return string_ref();
       }
 
       //
