@@ -1,0 +1,153 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LocalDebuggerWorkingDirectory>$(SolutionDir)bin\$(PlatformShortName)\$(Configuration)\</LocalDebuggerWorkingDirectory>
+    <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
+    <LocalDebuggerCommandArguments>"http://duskgytldkxiuqc6.onion/fedpapers/federndx.htm"</LocalDebuggerCommandArguments>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug_Test|Win32'">
+    <LocalDebuggerWorkingDirectory>$(SolutionDir)bin\$(PlatformShortName)\$(Configuration)\</LocalDebuggerWorkingDirectory>
+    <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
+    <LocalDebuggerCommandArguments>"http://duskgytldkxiuqc6.onion/fedpapers/federndx.htm"</LocalDebuggerCommandArguments>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug_Clang|Win32'">
+    <LocalDebuggerWorkingDirectory>$(SolutionDir)bin\$(PlatformShortName)\$(Configuration)\</LocalDebuggerWorkingDirectory>
+    <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
+    <LocalDebuggerCommandArguments>"http://duskgytldkxiuqc6.onion/fedpapers/federndx.htm"</LocalDebuggerCommandArguments>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release_STL|Win32'">
+    <LocalDebuggerWorkingDirectory>$(SolutionDir)bin\$(PlatformShortName)\$(Configuration)\</LocalDebuggerWorkingDirectory>
+    <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
+    <LocalDebuggerCommandArguments>"http://duskgytldkxiuqc6.onion/fedpapers/federndx.htm"</LocalDebuggerCommandArguments>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release_STL_Clang|Win32'">
+    <LocalDebuggerWorkingDirectory>$(SolutionDir)bin\$(PlatformShortName)\$(Configuration)\</LocalDebuggerWorkingDirectory>
+    <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
+    <LocalDebuggerCommandArguments>"http://duskgytldkxiuqc6.onion/fedpapers/federndx.htm"</LocalDebuggerCommandArguments>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LocalDebuggerWorkingDirectory>$(SolutionDir)bin\$(PlatformShortName)\$(Configuration)\</LocalDebuggerWorkingDirectory>
+    <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
+    <LocalDebuggerCommandArguments>"http://duskgytldkxiuqc6.onion/fedpapers/federndx.htm"</LocalDebuggerCommandArguments>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release_Test|Win32'">
+    <LocalDebuggerWorkingDirectory>$(SolutionDir)bin\$(PlatformShortName)\$(Configuration)\</LocalDebuggerWorkingDirectory>
+    <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
+    <LocalDebuggerCommandArguments>"http://duskgytldkxiuqc6.onion/fedpapers/federndx.htm"</LocalDebuggerCommandArguments>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release_Clang|Win32'">
+    <LocalDebuggerWorkingDirectory>$(SolutionDir)bin\$(PlatformShortName)\$(Configuration)\</LocalDebuggerWorkingDirectory>
+    <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
+    <LocalDebuggerCommandArguments>"http://duskgytldkxiuqc6.onion/fedpapers/federndx.htm"</LocalDebuggerCommandArguments>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release_Small_Clang|Win32'">
+    <LocalDebuggerWorkingDirectory>$(SolutionDir)bin\$(PlatformShortName)\$(Configuration)\</LocalDebuggerWorkingDirectory>
+    <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
+    <LocalDebuggerCommandArguments>"http://duskgytldkxiuqc6.onion/fedpapers/federndx.htm"</LocalDebuggerCommandArguments>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release_Small|Win32'">
+    <LocalDebuggerWorkingDirectory>$(SolutionDir)bin\$(PlatformShortName)\$(Configuration)\</LocalDebuggerWorkingDirectory>
+    <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
+    <LocalDebuggerCommandArguments>-vvv "http://duskgytldkxiuqc6.onion/fedpapers/federndx.htm"</LocalDebuggerCommandArguments>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <LocalDebuggerWorkingDirectory>$(SolutionDir)bin\$(PlatformShortName)\$(Configuration)\</LocalDebuggerWorkingDirectory>
+    <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
+    <LocalDebuggerCommandArguments>"http://duskgytldkxiuqc6.onion/fedpapers/federndx.htm"</LocalDebuggerCommandArguments>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM64'">
+    <LocalDebuggerWorkingDirectory>$(SolutionDir)bin\$(PlatformShortName)\$(Configuration)\</LocalDebuggerWorkingDirectory>
+    <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
+    <LocalDebuggerCommandArguments>"http://duskgytldkxiuqc6.onion/fedpapers/federndx.htm"</LocalDebuggerCommandArguments>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug_Test|x64'">
+    <LocalDebuggerWorkingDirectory>$(SolutionDir)bin\$(PlatformShortName)\$(Configuration)\</LocalDebuggerWorkingDirectory>
+    <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
+    <LocalDebuggerCommandArguments>"http://duskgytldkxiuqc6.onion/fedpapers/federndx.htm"</LocalDebuggerCommandArguments>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug_Test|ARM64'">
+    <LocalDebuggerWorkingDirectory>$(SolutionDir)bin\$(PlatformShortName)\$(Configuration)\</LocalDebuggerWorkingDirectory>
+    <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
+    <LocalDebuggerCommandArguments>"http://duskgytldkxiuqc6.onion/fedpapers/federndx.htm"</LocalDebuggerCommandArguments>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug_Clang|x64'">
+    <LocalDebuggerWorkingDirectory>$(SolutionDir)bin\$(PlatformShortName)\$(Configuration)\</LocalDebuggerWorkingDirectory>
+    <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
+    <LocalDebuggerCommandArguments>"http://duskgytldkxiuqc6.onion/fedpapers/federndx.htm"</LocalDebuggerCommandArguments>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug_Clang|ARM64'">
+    <LocalDebuggerWorkingDirectory>$(SolutionDir)bin\$(PlatformShortName)\$(Configuration)\</LocalDebuggerWorkingDirectory>
+    <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
+    <LocalDebuggerCommandArguments>"http://duskgytldkxiuqc6.onion/fedpapers/federndx.htm"</LocalDebuggerCommandArguments>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release_STL|x64'">
+    <LocalDebuggerWorkingDirectory>$(SolutionDir)bin\$(PlatformShortName)\$(Configuration)\</LocalDebuggerWorkingDirectory>
+    <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
+    <LocalDebuggerCommandArguments>"http://duskgytldkxiuqc6.onion/fedpapers/federndx.htm"</LocalDebuggerCommandArguments>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release_STL|ARM64'">
+    <LocalDebuggerWorkingDirectory>$(SolutionDir)bin\$(PlatformShortName)\$(Configuration)\</LocalDebuggerWorkingDirectory>
+    <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
+    <LocalDebuggerCommandArguments>"http://duskgytldkxiuqc6.onion/fedpapers/federndx.htm"</LocalDebuggerCommandArguments>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release_STL_Clang|x64'">
+    <LocalDebuggerWorkingDirectory>$(SolutionDir)bin\$(PlatformShortName)\$(Configuration)\</LocalDebuggerWorkingDirectory>
+    <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
+    <LocalDebuggerCommandArguments>"http://duskgytldkxiuqc6.onion/fedpapers/federndx.htm"</LocalDebuggerCommandArguments>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release_STL_Clang|ARM64'">
+    <LocalDebuggerWorkingDirectory>$(SolutionDir)bin\$(PlatformShortName)\$(Configuration)\</LocalDebuggerWorkingDirectory>
+    <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
+    <LocalDebuggerCommandArguments>"http://duskgytldkxiuqc6.onion/fedpapers/federndx.htm"</LocalDebuggerCommandArguments>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <LocalDebuggerWorkingDirectory>$(SolutionDir)bin\$(PlatformShortName)\$(Configuration)\</LocalDebuggerWorkingDirectory>
+    <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
+    <LocalDebuggerCommandArguments>"http://duskgytldkxiuqc6.onion/fedpapers/federndx.htm"</LocalDebuggerCommandArguments>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'">
+    <LocalDebuggerWorkingDirectory>$(SolutionDir)bin\$(PlatformShortName)\$(Configuration)\</LocalDebuggerWorkingDirectory>
+    <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
+    <LocalDebuggerCommandArguments>"http://duskgytldkxiuqc6.onion/fedpapers/federndx.htm"</LocalDebuggerCommandArguments>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release_Test|x64'">
+    <LocalDebuggerWorkingDirectory>$(SolutionDir)bin\$(PlatformShortName)\$(Configuration)\</LocalDebuggerWorkingDirectory>
+    <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
+    <LocalDebuggerCommandArguments>"http://duskgytldkxiuqc6.onion/fedpapers/federndx.htm"</LocalDebuggerCommandArguments>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release_Test|ARM64'">
+    <LocalDebuggerWorkingDirectory>$(SolutionDir)bin\$(PlatformShortName)\$(Configuration)\</LocalDebuggerWorkingDirectory>
+    <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
+    <LocalDebuggerCommandArguments>"http://duskgytldkxiuqc6.onion/fedpapers/federndx.htm"</LocalDebuggerCommandArguments>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release_Clang|x64'">
+    <LocalDebuggerWorkingDirectory>$(SolutionDir)bin\$(PlatformShortName)\$(Configuration)\</LocalDebuggerWorkingDirectory>
+    <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
+    <LocalDebuggerCommandArguments>"http://duskgytldkxiuqc6.onion/fedpapers/federndx.htm"</LocalDebuggerCommandArguments>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release_Clang|ARM64'">
+    <LocalDebuggerWorkingDirectory>$(SolutionDir)bin\$(PlatformShortName)\$(Configuration)\</LocalDebuggerWorkingDirectory>
+    <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
+    <LocalDebuggerCommandArguments>"http://duskgytldkxiuqc6.onion/fedpapers/federndx.htm"</LocalDebuggerCommandArguments>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release_Small_Clang|x64'">
+    <LocalDebuggerWorkingDirectory>$(SolutionDir)bin\$(PlatformShortName)\$(Configuration)\</LocalDebuggerWorkingDirectory>
+    <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
+    <LocalDebuggerCommandArguments>"http://duskgytldkxiuqc6.onion/fedpapers/federndx.htm"</LocalDebuggerCommandArguments>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release_Small_Clang|ARM64'">
+    <LocalDebuggerWorkingDirectory>$(SolutionDir)bin\$(PlatformShortName)\$(Configuration)\</LocalDebuggerWorkingDirectory>
+    <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
+    <LocalDebuggerCommandArguments>"http://duskgytldkxiuqc6.onion/fedpapers/federndx.htm"</LocalDebuggerCommandArguments>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release_Small|x64'">
+    <LocalDebuggerWorkingDirectory>$(SolutionDir)bin\$(PlatformShortName)\$(Configuration)\</LocalDebuggerWorkingDirectory>
+    <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
+    <LocalDebuggerCommandArguments>-vvv "http://duskgytldkxiuqc6.onion/fedpapers/federndx.htm"</LocalDebuggerCommandArguments>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release_Small|ARM64'">
+    <LocalDebuggerWorkingDirectory>$(SolutionDir)bin\$(PlatformShortName)\$(Configuration)\</LocalDebuggerWorkingDirectory>
+    <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
+    <LocalDebuggerCommandArguments>-vvv "http://duskgytldkxiuqc6.onion/fedpapers/federndx.htm"</LocalDebuggerCommandArguments>
+  </PropertyGroup>
+</Project>

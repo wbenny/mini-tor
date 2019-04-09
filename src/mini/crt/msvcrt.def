@@ -31,6 +31,7 @@ EXPORTS
 ; cstring
 ;
 
+  strncmp
   strstr
   strlen
 

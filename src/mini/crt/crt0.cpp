@@ -1,9 +1,21 @@
 #include "crt0.h"
-#if defined(MINI_CONFIG_NO_DEFAULT_LIBS)
-#include <cstdlib>
 
-#include <windows.h>
-#include <shellapi.h>
+//
+// Provide alternative CRT only for
+// compilations with /NODEFAULTLIB.
+//
+
+#if defined(MINI_CONFIG_NO_DEFAULT_LIBS)
+# include <cstdlib>
+
+#if !defined(MINI_MODE_KERNEL)
+#   include <windows.h>
+#   include <shellapi.h>
+#else // !defined(MINI_MODE_KERNEL)
+#   include <ntddk.h>
+#endif
+
+typedef void(__cdecl *atexit_fn_t)(void);
 
 extern "C" {
 
@@ -39,7 +51,9 @@ __declspec(allocate(".CRT$XIZ")) _PIFV __xi_z[] = { 0 };
 extern __declspec(allocate(".CRT$XIA")) _PIFV __xi_a[];
 extern __declspec(allocate(".CRT$XIZ")) _PIFV __xi_z[];
 
-static int __cdecl
+static
+int
+__cdecl
 _initterm_e(
   _PIFV* const first,
   _PIFV* const last
@@ -64,7 +78,9 @@ __declspec(allocate(".CRT$XCZ")) _PVFV __xc_z[] = { 0 };
 extern __declspec(allocate(".CRT$XCA")) _PVFV __xc_a[];
 extern __declspec(allocate(".CRT$XCZ")) _PVFV __xc_z[];
 
-static void __cdecl
+static
+void
+__cdecl
 _initterm(
   _PVFV* const first,
   _PVFV* const last
@@ -76,7 +92,8 @@ _initterm(
 //
 // -------------------------------------------
 
-int __cdecl
+int
+__cdecl
 _initterm_e(
   _PIFV* const first,
   _PIFV* const last
@@ -102,7 +119,8 @@ _initterm_e(
   return 0;
 }
 
-void __cdecl
+void
+__cdecl
 _initterm(
   _PVFV* const first,
   _PVFV* const last
@@ -120,13 +138,14 @@ _initterm(
   }
 }
 
-#pragma endregion
+#pragma endregion CRT initialization
 
 #pragma region CRT startup
 
 int _fltused = 0;
 
-void __cdecl
+void
+__cdecl
 crt0_initialize(
   void
   )
@@ -142,13 +161,12 @@ crt0_initialize(
   _initterm(__xc_a, __xc_z);
 }
 
-#ifndef MINI_MSVCRT_LIB
-
 static const size_t g_atexit_fn_max_count = 32;
 static atexit_fn_t  g_atexit_fn_table[g_atexit_fn_max_count];
 static size_t       g_atexit_fn_count = 0;
 
-void __cdecl
+void
+__cdecl
 crt0_destroy(
   void
   )
@@ -158,18 +176,6 @@ crt0_destroy(
     g_atexit_fn_table[g_atexit_fn_count]();
   }
 }
-
-#else
-
-void __cdecl
-crt0_destroy(
-  void
-  )
-{
-
-}
-
-#endif
 
 #if !defined(MINI_MODE_KERNEL)
 
@@ -208,7 +214,8 @@ destroy_argc_and_argv(
   free(__argv);
 }
 
-void __cdecl
+void
+__cdecl
 mainCRTStartup(
   void
   )
@@ -225,15 +232,15 @@ mainCRTStartup(
   exit(exit_code);
 }
 
-#endif
+#endif // !defined(MINI_MODE_KERNEL)
 
-#pragma endregion
+#pragma endregion CRT startup
 
 #pragma region CRT internal functions
-
 #if !defined(MINI_MODE_KERNEL)
 
-int __cdecl
+int
+__cdecl
 _purecall(
   void
   )
@@ -241,23 +248,22 @@ _purecall(
   return 0;
 }
 
-#endif
-
-#pragma endregion
+#endif // !defined(MINI_MODE_KERNEL)
+#pragma endregion CRT internal functions
 
 #pragma region CRT standard functions
-
-#ifndef MINI_MSVCRT_LIB
-
-#pragma region stdio.h
-
-#pragma endregion
 
 #pragma region stdlib.h
 
 #pragma region Memory
+#if !(MINI_CRT0_IGNORED & MINI_CRT0_STDLIB_MEMORY)
+#if !defined(MINI_MODE_KERNEL)
 
-void* __cdecl
+#error UNIMPLEMENTED
+
+__declspec(restrict)
+void*
+__cdecl
 malloc(
   size_t size
   )
@@ -265,10 +271,13 @@ malloc(
   //
   // UNIMPLEMENTED
   //
+  (void)(size);
   return nullptr;
 }
 
-void* __cdecl
+__declspec(restrict)
+void*
+__cdecl
 calloc(
   size_t count,
   size_t size
@@ -277,10 +286,14 @@ calloc(
   //
   // UNIMPLEMENTED
   //
+  (void)(count);
+  (void)(size);
   return nullptr;
 }
 
-void* __cdecl
+__declspec(restrict)
+void*
+__cdecl
 realloc(
   void* ptr,
   size_t new_size
@@ -289,10 +302,13 @@ realloc(
   //
   // UNIMPLEMENTED
   //
+  (void)(ptr);
+  (void)(new_size);
   return nullptr;
 }
 
-void __cdecl
+void
+__cdecl
 free(
   void* ptr
   )
@@ -300,15 +316,103 @@ free(
   //
   // UNIMPLEMENTED
   //
+  (void)(ptr);
   return;
 }
 
-#pragma endregion
+#else // !defined(MINI_MODE_KERNEL)
+
+#define MINI_MEMORY_TAG     'inim'
+
+struct pool_header
+{
+  size_t size;
+  /* byte_type data[] */;
+};
+
+__declspec(restrict)
+void*
+malloc(
+  size_t size
+  )
+{
+  pool_header* result = reinterpret_cast<pool_header*>(
+    ExAllocatePoolWithTag(NonPagedPool, size + sizeof(pool_header), MINI_MEMORY_TAG)
+    );
+
+  result->size = size;
+  return &result[1];
+}
+
+__declspec(restrict)
+void*
+__cdecl
+calloc(
+  size_t count,
+  size_t size
+  )
+{
+  void* ptr = malloc(count * size);
+
+  if (ptr == nullptr)
+  {
+    return nullptr;
+  }
+
+  memset(ptr, 0, count * size);
+  return ptr;
+}
+
+__declspec(restrict)
+void*
+realloc(
+  void* ptr,
+  size_t new_size
+  )
+{
+  if (ptr == nullptr)
+  {
+    return malloc(new_size);
+  }
+
+  pool_header* ptr_header = &reinterpret_cast<pool_header*>(ptr)[-1];
+
+  if (ptr_header->size >= new_size)
+  {
+    return ptr;
+  }
+
+  void* new_ptr = malloc(new_size);
+  RtlCopyMemory(new_ptr, ptr, ptr_header->size);
+  free(ptr);
+
+  return new_ptr;
+}
+
+void
+free(
+  void* ptr
+  )
+{
+  if (ptr == nullptr)
+  {
+    return;
+  }
+
+  pool_header* result = &reinterpret_cast<pool_header*>(ptr)[-1];
+  ExFreePoolWithTag(result, MINI_MEMORY_TAG);
+}
+
+#endif // !defined(MINI_MODE_KERNEL)
+#endif // !(MINI_CRT0_IGNORED & MINI_CRT0_STDLIB_MEMORY)
+#pragma endregion Memory
 
 #pragma region Program
+#if !(MINI_CRT0_IGNORED & MINI_CRT0_STDLIB_PROGRAM)
 
 [[noreturn]]
-void __cdecl
+void
+__cdecl
 abort(
   void
   )
@@ -317,17 +421,23 @@ abort(
 }
 
 [[noreturn]]
-void __cdecl
+void
+__cdecl
 exit(
   int exit_code
   )
 {
   crt0_destroy();
 
+#if !defined(MINI_MODE_KERNEL)
   ExitProcess(exit_code);
+#else // !defined(MINI_MODE_KERNEL)
+  (void)(exit_code);
+#endif
 }
 
-int __cdecl
+int
+__cdecl
 atexit(
   atexit_fn_t func
   )
@@ -341,16 +451,19 @@ atexit(
   return 0;
 }
 
-#pragma endregion
+#endif // !(MINI_CRT0_IGNORED & MINI_CRT0_STDLIB_PROGRAM)
+#pragma endregion Program
 
 #pragma endregion
 
 #pragma region string.h
 
 #pragma region Byte
+#if !(MINI_CRT0_IGNORED & MINI_CRT0_STRING_BYTE)
 
 #pragma function(memcmp)
-int __cdecl
+int
+__cdecl
 memcmp(
   const void* lhs,
   const void* rhs,
@@ -376,7 +489,8 @@ memcmp(
 }
 
 #pragma function(memset)
-void* __cdecl
+void*
+__cdecl
 memset(
   void* dest,
   int ch,
@@ -389,7 +503,7 @@ memset(
 
     do
     {
-      *d++ = ch;
+      *d++ = (char)ch;
     } while (--count);
   }
 
@@ -397,7 +511,8 @@ memset(
 }
 
 #pragma function(memcpy)
-void* __cdecl
+void*
+__cdecl
 memcpy(
   void* dest,
   const void* src,
@@ -415,7 +530,8 @@ memcpy(
   return dest;
 }
 
-void* __cdecl
+void*
+__cdecl
 memmove(
   void *dest,
   const void *src,
@@ -446,11 +562,14 @@ memmove(
   return dest;
 }
 
-#pragma endregion
+#endif // !(MINI_CRT0_IGNORED & MINI_CRT0_STRING_BYTE)
+#pragma endregion Byte
 
 #pragma region String
+#if !(MINI_CRT0_IGNORED & MINI_CRT0_STRING_STRING)
 
-int __cdecl
+int
+__cdecl
 strncmp(
   const char* lhs,
   const char* rhs,
@@ -472,7 +591,8 @@ strncmp(
   return 0;
 }
 
-const char* __cdecl
+const char*
+__cdecl
 strstr(
   const char *str,
   const char *substr
@@ -507,21 +627,23 @@ strstr(
   return (char*)(str - 1);
 }
 
-#pragma endregion
+#endif // !(MINI_CRT0_IGNORED & MINI_CRT0_STRING_STRING)
+#pragma endregion String
 
-#pragma endregion
+#pragma endregion string.h
 
-#endif
 
-#pragma endregion
+#pragma endregion CRT standard functions
 
 }
 
 extern "C++" {
 
 #pragma region new/delete
+#if !(MINI_CRT0_IGNORED & MINI_CRT0_NEW_DELETE)
 
-void* __cdecl
+void*
+__cdecl
 operator new(
   size_t size
   )
@@ -529,7 +651,8 @@ operator new(
   return malloc(size);
 }
 
-void* __cdecl
+void*
+__cdecl
 operator new[](
   size_t size
   )
@@ -537,7 +660,8 @@ operator new[](
   return malloc(size);
 }
 
-void __cdecl
+void
+__cdecl
 operator delete(
   void* pointer
   ) noexcept
@@ -545,7 +669,8 @@ operator delete(
   free(pointer);
 }
 
-void __cdecl
+void
+__cdecl
 operator delete(
   void* pointer,
   size_t
@@ -554,7 +679,8 @@ operator delete(
   free(pointer);
 }
 
-void __cdecl
+void
+__cdecl
 operator delete[](
   void* pointer
   ) noexcept
@@ -562,17 +688,19 @@ operator delete[](
   free(pointer);
 }
 
-void __cdecl
+void
+__cdecl
 operator delete[](
   void* pointer,
   size_t
   ) noexcept
 {
   free(pointer);
-}
-
-#pragma endregion
-
 }
 
 #endif
+#pragma endregion new/delete
+
+}
+
+#endif // defined(MINI_CONFIG_NO_DEFAULT_LIBS)

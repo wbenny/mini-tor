@@ -1,0 +1,741 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Header Files\net">
+      <UniqueIdentifier>{be9c4a33-3f0f-423a-8a4a-a2927292adf9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\net">
+      <UniqueIdentifier>{2d198af4-32f1-4c55-8c84-88fe3ac4e38c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\crypto">
+      <UniqueIdentifier>{8f5b4f02-0a25-4725-ac4f-282c37bca0ed}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\crypto">
+      <UniqueIdentifier>{d09dd70a-52f9-4832-b7aa-1a76251b4c39}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\io">
+      <UniqueIdentifier>{6ee5f187-2203-4bd3-ae99-4129cb4f6b8b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\collections">
+      <UniqueIdentifier>{244f3f93-2822-4ee4-a8d6-441e3a033ef2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\collections">
+      <UniqueIdentifier>{6d4e87a0-4d0c-4924-a3d7-09fbe8883dfe}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\crt">
+      <UniqueIdentifier>{b1a4e3ff-ebf9-4323-b2fc-cdfb03e987aa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\crt">
+      <UniqueIdentifier>{c1c9d70b-a16e-4cd2-8360-d7b30d5c51cf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\threading">
+      <UniqueIdentifier>{c9410db9-1606-490f-9a20-94d468c516fb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\threading">
+      <UniqueIdentifier>{91929682-d2e3-45df-8f6e-f84502a52442}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\io">
+      <UniqueIdentifier>{ffadad2f-39e1-4d3f-b801-30860f144a24}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\tor">
+      <UniqueIdentifier>{05188d53-d1d6-48ca-8db2-a7c7fa1a0f71}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\tor">
+      <UniqueIdentifier>{6d53a253-9943-4de2-8b39-8770e34ecc2a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\tor\crypto">
+      <UniqueIdentifier>{5de2c189-df9d-4603-8d0a-2892418989df}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\tor\crypto">
+      <UniqueIdentifier>{89cb999f-7b94-4513-a24f-57a7b5d6ea0c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\tor\parsers">
+      <UniqueIdentifier>{92d3e4ec-5970-4108-a779-3228ca2ec400}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\tor\parsers">
+      <UniqueIdentifier>{cd47b506-5842-4bd6-918e-146fd28194fe}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\net\detail">
+      <UniqueIdentifier>{fd5f7949-940b-42fa-8aa7-b032460b4def}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\net\detail">
+      <UniqueIdentifier>{786419f3-0b97-40f1-9c58-3f8711ef7bdc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\ctl">
+      <UniqueIdentifier>{3b508145-044e-4fc0-bf97-b96f11f256e7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\crypto\capi">
+      <UniqueIdentifier>{c0ce7826-a186-4cff-bae2-5783f714ba8f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\crypto\cng">
+      <UniqueIdentifier>{6c5e537e-b97d-4966-b1ae-1f03549ed466}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\crypto\ext">
+      <UniqueIdentifier>{e22400c3-943a-4708-bad5-e45e9e7d8058}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\crypto\capi\detail">
+      <UniqueIdentifier>{395de0dc-4806-4be0-b526-bb8b964cdfcf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\crypto\capi">
+      <UniqueIdentifier>{f22fe060-e7ab-4655-beb3-2a03f45e5ddb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\crypto\cng">
+      <UniqueIdentifier>{aec6115c-6858-4db1-b52c-4642eb8ef790}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\crypto\ext">
+      <UniqueIdentifier>{cb5932ba-83fe-4f07-9ee0-34378a1f13ba}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\crypto\capi\detail">
+      <UniqueIdentifier>{d813828b-ad3b-4598-9a45-d6459a18fa3d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\crypto\base">
+      <UniqueIdentifier>{507e3c98-de87-44ae-a516-8e35bfebbb7e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\crypto\ext\detail">
+      <UniqueIdentifier>{2de0b64b-e293-4e72-b4c7-d36a6d4c62c9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\crypto\ext\detail">
+      <UniqueIdentifier>{1c117575-9924-4c40-9b56-7ade8e8585ec}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\win32">
+      <UniqueIdentifier>{cde4036c-90f9-4c92-90ee-736b7e20cb09}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\win32">
+      <UniqueIdentifier>{5b8b7eae-590e-4abd-883e-39a4a0c133e3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\win32\pe">
+      <UniqueIdentifier>{40e3d3f7-f8ea-4ce1-b8fd-b905fd978faa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\win32\pe">
+      <UniqueIdentifier>{ad665a7b-0128-49ad-ab82-d9783023d3bb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\win32\api_set">
+      <UniqueIdentifier>{7c3f669a-5134-43a7-8606-94dd758724f6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\win32\api_set">
+      <UniqueIdentifier>{5668adbc-6bea-4752-9a62-0d845fe62262}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="time.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="net\http.cpp">
+      <Filter>Source Files\net</Filter>
+    </ClCompile>
+    <ClCompile Include="net\tcp_socket.cpp">
+      <Filter>Source Files\net</Filter>
+    </ClCompile>
+    <ClCompile Include="string.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="common.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="crt\crt0.cpp">
+      <Filter>Source Files\crt</Filter>
+    </ClCompile>
+    <ClCompile Include="threading\mutex.cpp">
+      <Filter>Source Files\threading</Filter>
+    </ClCompile>
+    <ClCompile Include="tor\cell.cpp">
+      <Filter>Source Files\tor</Filter>
+    </ClCompile>
+    <ClCompile Include="tor\circuit.cpp">
+      <Filter>Source Files\tor</Filter>
+    </ClCompile>
+    <ClCompile Include="tor\consensus.cpp">
+      <Filter>Source Files\tor</Filter>
+    </ClCompile>
+    <ClCompile Include="tor\onion_router.cpp">
+      <Filter>Source Files\tor</Filter>
+    </ClCompile>
+    <ClCompile Include="tor\tor_stream.cpp">
+      <Filter>Source Files\tor</Filter>
+    </ClCompile>
+    <ClCompile Include="threading\thread.cpp">
+      <Filter>Source Files\threading</Filter>
+    </ClCompile>
+    <ClCompile Include="tor\circuit_node.cpp">
+      <Filter>Source Files\tor</Filter>
+    </ClCompile>
+    <ClCompile Include="tor\circuit_node_crypto_state.cpp">
+      <Filter>Source Files\tor</Filter>
+    </ClCompile>
+    <ClCompile Include="tor\relay_cell.cpp">
+      <Filter>Source Files\tor</Filter>
+    </ClCompile>
+    <ClCompile Include="tor\tor_socket.cpp">
+      <Filter>Source Files\tor</Filter>
+    </ClCompile>
+    <ClCompile Include="logger.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="console.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="tor\hidden_service.cpp">
+      <Filter>Source Files\tor</Filter>
+    </ClCompile>
+    <ClCompile Include="threading\event.cpp">
+      <Filter>Source Files\threading</Filter>
+    </ClCompile>
+    <ClCompile Include="tor\crypto\hybrid_encryption.cpp">
+      <Filter>Source Files\tor\crypto</Filter>
+    </ClCompile>
+    <ClCompile Include="tor\parsers\consensus_parser.cpp">
+      <Filter>Source Files\tor\parsers</Filter>
+    </ClCompile>
+    <ClCompile Include="tor\parsers\hidden_service_descriptor_parser.cpp">
+      <Filter>Source Files\tor\parsers</Filter>
+    </ClCompile>
+    <ClCompile Include="tor\parsers\introduction_point_parser.cpp">
+      <Filter>Source Files\tor\parsers</Filter>
+    </ClCompile>
+    <ClCompile Include="memory.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="tor\parsers\onion_router_descriptor_parser.cpp">
+      <Filter>Source Files\tor\parsers</Filter>
+    </ClCompile>
+    <ClCompile Include="io\file.cpp">
+      <Filter>Source Files\io</Filter>
+    </ClCompile>
+    <ClCompile Include="net\ssl_socket.cpp">
+      <Filter>Source Files\net</Filter>
+    </ClCompile>
+    <ClCompile Include="net\detail\ssl_context.cpp">
+      <Filter>Source Files\net\detail</Filter>
+    </ClCompile>
+    <ClCompile Include="io\path.cpp">
+      <Filter>Source Files\io</Filter>
+    </ClCompile>
+    <ClCompile Include="io\file_enumerator.cpp">
+      <Filter>Source Files\io</Filter>
+    </ClCompile>
+    <ClCompile Include="io\file_attributes.cpp">
+      <Filter>Source Files\io</Filter>
+    </ClCompile>
+    <ClCompile Include="tor\crypto\key_agreement_ntor.cpp">
+      <Filter>Source Files\tor\crypto</Filter>
+    </ClCompile>
+    <ClCompile Include="tor\crypto\key_agreement_tap.cpp">
+      <Filter>Source Files\tor\crypto</Filter>
+    </ClCompile>
+    <ClCompile Include="crypto\capi\base16.cpp">
+      <Filter>Source Files\crypto\capi</Filter>
+    </ClCompile>
+    <ClCompile Include="crypto\capi\base64.cpp">
+      <Filter>Source Files\crypto\capi</Filter>
+    </ClCompile>
+    <ClCompile Include="crypto\capi\provider.cpp">
+      <Filter>Source Files\crypto\capi</Filter>
+    </ClCompile>
+    <ClCompile Include="crypto\capi\random.cpp">
+      <Filter>Source Files\crypto\capi</Filter>
+    </ClCompile>
+    <ClCompile Include="crypto\capi\detail\base_encode.cpp">
+      <Filter>Source Files\crypto\capi\detail</Filter>
+    </ClCompile>
+    <ClCompile Include="crypto\cng\curve25519.cpp">
+      <Filter>Source Files\crypto\cng</Filter>
+    </ClCompile>
+    <ClCompile Include="crypto\ext\base32.cpp">
+      <Filter>Source Files\crypto\ext</Filter>
+    </ClCompile>
+    <ClCompile Include="crypto\cng\provider.cpp">
+      <Filter>Source Files\crypto\cng</Filter>
+    </ClCompile>
+    <ClCompile Include="crypto\cng\random.cpp">
+      <Filter>Source Files\crypto\cng</Filter>
+    </ClCompile>
+    <ClCompile Include="crypto\ext\detail\curve25519-donna.cpp">
+      <Filter>Source Files\crypto\ext\detail</Filter>
+    </ClCompile>
+    <ClCompile Include="crypto\ext\curve25519.cpp">
+      <Filter>Source Files\crypto\ext</Filter>
+    </ClCompile>
+    <ClCompile Include="net\ssl_stream.cpp">
+      <Filter>Source Files\net</Filter>
+    </ClCompile>
+    <ClCompile Include="win32\pe\export_directory_enumerator.cpp">
+      <Filter>Source Files\win32\pe</Filter>
+    </ClCompile>
+    <ClCompile Include="win32\pe\import_directory_enumerator.cpp">
+      <Filter>Source Files\win32\pe</Filter>
+    </ClCompile>
+    <ClCompile Include="win32\pe\import_thunk_enumerator.cpp">
+      <Filter>Source Files\win32\pe</Filter>
+    </ClCompile>
+    <ClCompile Include="win32\pe\resource_directory_enumerator.cpp">
+      <Filter>Source Files\win32\pe</Filter>
+    </ClCompile>
+    <ClCompile Include="win32\pe\section_enumerator.cpp">
+      <Filter>Source Files\win32\pe</Filter>
+    </ClCompile>
+    <ClCompile Include="win32\pe\tls_directory_enumerator.cpp">
+      <Filter>Source Files\win32\pe</Filter>
+    </ClCompile>
+    <ClCompile Include="win32\pe\relocation_directory_enumerator.cpp">
+      <Filter>Source Files\win32\pe</Filter>
+    </ClCompile>
+    <ClCompile Include="win32\pe\relocation_fixup_enumerator.cpp">
+      <Filter>Source Files\win32\pe</Filter>
+    </ClCompile>
+    <ClCompile Include="win32\api_set\api_set_enumerator.cpp">
+      <Filter>Source Files\win32\api_set</Filter>
+    </ClCompile>
+    <ClCompile Include="win32\api_set\api_set_value_enumerator.cpp">
+      <Filter>Source Files\win32\api_set</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="flags.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="time.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="net\http.h">
+      <Filter>Header Files\net</Filter>
+    </ClInclude>
+    <ClInclude Include="net\tcp_socket.h">
+      <Filter>Header Files\net</Filter>
+    </ClInclude>
+    <ClInclude Include="memory.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="string.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="allocator.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="common.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="io\stream.h">
+      <Filter>Header Files\io</Filter>
+    </ClInclude>
+    <ClInclude Include="io\memory_stream.h">
+      <Filter>Header Files\io</Filter>
+    </ClInclude>
+    <ClInclude Include="io\stream_wrapper.h">
+      <Filter>Header Files\io</Filter>
+    </ClInclude>
+    <ClInclude Include="pair.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="io\file_stream.h">
+      <Filter>Header Files\io</Filter>
+    </ClInclude>
+    <ClInclude Include="io\file.h">
+      <Filter>Header Files\io</Filter>
+    </ClInclude>
+    <ClInclude Include="crt\crt0.h">
+      <Filter>Header Files\crt</Filter>
+    </ClInclude>
+    <ClInclude Include="ptr.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="string_ref.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="byte_buffer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="buffer_ref.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="byte_buffer_ref.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="stack_buffer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="threading\thread.h">
+      <Filter>Header Files\threading</Filter>
+    </ClInclude>
+    <ClInclude Include="threading\mutex.h">
+      <Filter>Header Files\threading</Filter>
+    </ClInclude>
+    <ClInclude Include="threading\thread_function.h">
+      <Filter>Header Files\threading</Filter>
+    </ClInclude>
+    <ClInclude Include="function.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="console.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="tor\cell.h">
+      <Filter>Header Files\tor</Filter>
+    </ClInclude>
+    <ClInclude Include="tor\circuit.h">
+      <Filter>Header Files\tor</Filter>
+    </ClInclude>
+    <ClInclude Include="tor\consensus.h">
+      <Filter>Header Files\tor</Filter>
+    </ClInclude>
+    <ClInclude Include="tor\hidden_service.h">
+      <Filter>Header Files\tor</Filter>
+    </ClInclude>
+    <ClInclude Include="tor\onion_router.h">
+      <Filter>Header Files\tor</Filter>
+    </ClInclude>
+    <ClInclude Include="tor\tor_stream.h">
+      <Filter>Header Files\tor</Filter>
+    </ClInclude>
+    <ClInclude Include="net\ip_address.h">
+      <Filter>Header Files\net</Filter>
+    </ClInclude>
+    <ClInclude Include="tor\crypto\hybrid_encryption.h">
+      <Filter>Header Files\tor\crypto</Filter>
+    </ClInclude>
+    <ClInclude Include="tor\circuit_node.h">
+      <Filter>Header Files\tor</Filter>
+    </ClInclude>
+    <ClInclude Include="tor\circuit_node_crypto_state.h">
+      <Filter>Header Files\tor</Filter>
+    </ClInclude>
+    <ClInclude Include="tor\relay_cell.h">
+      <Filter>Header Files\tor</Filter>
+    </ClInclude>
+    <ClInclude Include="tor\tor_socket.h">
+      <Filter>Header Files\tor</Filter>
+    </ClInclude>
+    <ClInclude Include="logger.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="algorithm.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="threading\event.h">
+      <Filter>Header Files\threading</Filter>
+    </ClInclude>
+    <ClInclude Include="threading\locked_value.h">
+      <Filter>Header Files\threading</Filter>
+    </ClInclude>
+    <ClInclude Include="io\stream_reader.h">
+      <Filter>Header Files\io</Filter>
+    </ClInclude>
+    <ClInclude Include="string_hash.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="tor\parsers\consensus_parser.h">
+      <Filter>Header Files\tor\parsers</Filter>
+    </ClInclude>
+    <ClInclude Include="tor\parsers\introduction_point_parser.h">
+      <Filter>Header Files\tor\parsers</Filter>
+    </ClInclude>
+    <ClInclude Include="tor\parsers\hidden_service_descriptor_parser.h">
+      <Filter>Header Files\tor\parsers</Filter>
+    </ClInclude>
+    <ClInclude Include="tor\parsers\onion_router_descriptor_parser.h">
+      <Filter>Header Files\tor\parsers</Filter>
+    </ClInclude>
+    <ClInclude Include="threading\common.h">
+      <Filter>Header Files\threading</Filter>
+    </ClInclude>
+    <ClInclude Include="net\ssl_socket.h">
+      <Filter>Header Files\net</Filter>
+    </ClInclude>
+    <ClInclude Include="net\detail\ssl_context.h">
+      <Filter>Header Files\net\detail</Filter>
+    </ClInclude>
+    <ClInclude Include="ctl\cstdlib.h">
+      <Filter>Header Files\ctl</Filter>
+    </ClInclude>
+    <ClInclude Include="ctl\cstring.h">
+      <Filter>Header Files\ctl</Filter>
+    </ClInclude>
+    <ClInclude Include="ctl\cctype.h">
+      <Filter>Header Files\ctl</Filter>
+    </ClInclude>
+    <ClInclude Include="ctl.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="io\file_attributes.h">
+      <Filter>Header Files\io</Filter>
+    </ClInclude>
+    <ClInclude Include="io\path.h">
+      <Filter>Header Files\io</Filter>
+    </ClInclude>
+    <ClInclude Include="io\file_enumerator.h">
+      <Filter>Header Files\io</Filter>
+    </ClInclude>
+    <ClInclude Include="tor\crypto\key_agreement_ntor.h">
+      <Filter>Header Files\tor\crypto</Filter>
+    </ClInclude>
+    <ClInclude Include="tor\crypto\key_agreement_tap.h">
+      <Filter>Header Files\tor\crypto</Filter>
+    </ClInclude>
+    <ClInclude Include="tor\crypto\key_agreement.h">
+      <Filter>Header Files\tor\crypto</Filter>
+    </ClInclude>
+    <ClInclude Include="crypto\hmac_sha256.h">
+      <Filter>Header Files\crypto</Filter>
+    </ClInclude>
+    <ClInclude Include="crypto\rfc5869.h">
+      <Filter>Header Files\crypto</Filter>
+    </ClInclude>
+    <ClInclude Include="crypto\sha1.h">
+      <Filter>Header Files\crypto</Filter>
+    </ClInclude>
+    <ClInclude Include="crypto\capi\aes.h">
+      <Filter>Header Files\crypto\capi</Filter>
+    </ClInclude>
+    <ClInclude Include="crypto\capi\base16.h">
+      <Filter>Header Files\crypto\capi</Filter>
+    </ClInclude>
+    <ClInclude Include="crypto\capi\base64.h">
+      <Filter>Header Files\crypto\capi</Filter>
+    </ClInclude>
+    <ClInclude Include="crypto\capi\dh.h">
+      <Filter>Header Files\crypto\capi</Filter>
+    </ClInclude>
+    <ClInclude Include="crypto\capi\provider.h">
+      <Filter>Header Files\crypto\capi</Filter>
+    </ClInclude>
+    <ClInclude Include="crypto\capi\random.h">
+      <Filter>Header Files\crypto\capi</Filter>
+    </ClInclude>
+    <ClInclude Include="crypto\capi\rsa.h">
+      <Filter>Header Files\crypto\capi</Filter>
+    </ClInclude>
+    <ClInclude Include="crypto\capi\detail\base_encode.h">
+      <Filter>Header Files\crypto\capi\detail</Filter>
+    </ClInclude>
+    <ClInclude Include="crypto\cng\curve25519.h">
+      <Filter>Header Files\crypto\cng</Filter>
+    </ClInclude>
+    <ClInclude Include="crypto\ext\base32.h">
+      <Filter>Header Files\crypto\ext</Filter>
+    </ClInclude>
+    <ClInclude Include="crypto\base16.h">
+      <Filter>Header Files\crypto</Filter>
+    </ClInclude>
+    <ClInclude Include="crypto\curve25519.h">
+      <Filter>Header Files\crypto</Filter>
+    </ClInclude>
+    <ClInclude Include="crypto\aes.h">
+      <Filter>Header Files\crypto</Filter>
+    </ClInclude>
+    <ClInclude Include="crypto\dh.h">
+      <Filter>Header Files\crypto</Filter>
+    </ClInclude>
+    <ClInclude Include="crypto\random.h">
+      <Filter>Header Files\crypto</Filter>
+    </ClInclude>
+    <ClInclude Include="crypto\capi\key.h">
+      <Filter>Header Files\crypto\capi</Filter>
+    </ClInclude>
+    <ClInclude Include="crypto\cng\key.h">
+      <Filter>Header Files\crypto\cng</Filter>
+    </ClInclude>
+    <ClInclude Include="crypto\cng\provider.h">
+      <Filter>Header Files\crypto\cng</Filter>
+    </ClInclude>
+    <ClInclude Include="crypto\rsa.h">
+      <Filter>Header Files\crypto</Filter>
+    </ClInclude>
+    <ClInclude Include="crypto\base32.h">
+      <Filter>Header Files\crypto</Filter>
+    </ClInclude>
+    <ClInclude Include="crypto\base64.h">
+      <Filter>Header Files\crypto</Filter>
+    </ClInclude>
+    <ClInclude Include="crypto\base\key.h">
+      <Filter>Header Files\crypto\base</Filter>
+    </ClInclude>
+    <ClInclude Include="crypto\cng\aes.h">
+      <Filter>Header Files\crypto\cng</Filter>
+    </ClInclude>
+    <ClInclude Include="crypto\common.h">
+      <Filter>Header Files\crypto</Filter>
+    </ClInclude>
+    <ClInclude Include="crypto\cng\rsa.h">
+      <Filter>Header Files\crypto\cng</Filter>
+    </ClInclude>
+    <ClInclude Include="crypto\cng\dh.h">
+      <Filter>Header Files\crypto\cng</Filter>
+    </ClInclude>
+    <ClInclude Include="crypto\cng\random.h">
+      <Filter>Header Files\crypto\cng</Filter>
+    </ClInclude>
+    <ClInclude Include="crypto\cng\hash.h">
+      <Filter>Header Files\crypto\cng</Filter>
+    </ClInclude>
+    <ClInclude Include="crypto\cng\hmac.h">
+      <Filter>Header Files\crypto\cng</Filter>
+    </ClInclude>
+    <ClInclude Include="crypto\capi\hash.h">
+      <Filter>Header Files\crypto\capi</Filter>
+    </ClInclude>
+    <ClInclude Include="crypto\capi\hmac.h">
+      <Filter>Header Files\crypto\capi</Filter>
+    </ClInclude>
+    <ClInclude Include="crypto\ext\detail\curve25519-donna.h">
+      <Filter>Header Files\crypto\ext\detail</Filter>
+    </ClInclude>
+    <ClInclude Include="crypto\ext\curve25519.h">
+      <Filter>Header Files\crypto\ext</Filter>
+    </ClInclude>
+    <ClInclude Include="crypto\ext\key.h">
+      <Filter>Header Files\crypto\ext</Filter>
+    </ClInclude>
+    <ClInclude Include="tor\common.h">
+      <Filter>Header Files\tor</Filter>
+    </ClInclude>
+    <ClInclude Include="net\ssl_stream.h">
+      <Filter>Header Files\net</Filter>
+    </ClInclude>
+    <ClInclude Include="net\uri.h">
+      <Filter>Header Files\net</Filter>
+    </ClInclude>
+    <ClInclude Include="collections\hashmap.h">
+      <Filter>Header Files\collections</Filter>
+    </ClInclude>
+    <ClInclude Include="collections\hashset.h">
+      <Filter>Header Files\collections</Filter>
+    </ClInclude>
+    <ClInclude Include="collections\linked_list.h">
+      <Filter>Header Files\collections</Filter>
+    </ClInclude>
+    <ClInclude Include="collections\list.h">
+      <Filter>Header Files\collections</Filter>
+    </ClInclude>
+    <ClInclude Include="collections\pair_list.h">
+      <Filter>Header Files\collections</Filter>
+    </ClInclude>
+    <ClInclude Include="hash.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="compare.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="win32\pe\export_directory_enumerator.h">
+      <Filter>Header Files\win32\pe</Filter>
+    </ClInclude>
+    <ClInclude Include="win32\pe\import_directory_enumerator.h">
+      <Filter>Header Files\win32\pe</Filter>
+    </ClInclude>
+    <ClInclude Include="win32\pe\import_thunk_enumerator.h">
+      <Filter>Header Files\win32\pe</Filter>
+    </ClInclude>
+    <ClInclude Include="win32\pe\resource_directory_enumerator.h">
+      <Filter>Header Files\win32\pe</Filter>
+    </ClInclude>
+    <ClInclude Include="win32\pe\section_enumerator.h">
+      <Filter>Header Files\win32\pe</Filter>
+    </ClInclude>
+    <ClInclude Include="win32\pe.h">
+      <Filter>Header Files\win32</Filter>
+    </ClInclude>
+    <ClInclude Include="win32\pe\tls_directory_enumerator.h">
+      <Filter>Header Files\win32\pe</Filter>
+    </ClInclude>
+    <ClInclude Include="win32\pe\relocation_directory_enumerator.h">
+      <Filter>Header Files\win32\pe</Filter>
+    </ClInclude>
+    <ClInclude Include="win32\pe\relocation_fixup_enumerator.h">
+      <Filter>Header Files\win32\pe</Filter>
+    </ClInclude>
+    <ClInclude Include="win32\api_set\api_set_enumerator.h">
+      <Filter>Header Files\win32\api_set</Filter>
+    </ClInclude>
+    <ClInclude Include="win32\api_set\common.h">
+      <Filter>Header Files\win32\api_set</Filter>
+    </ClInclude>
+    <ClInclude Include="win32\api_set.h">
+      <Filter>Header Files\win32</Filter>
+    </ClInclude>
+    <ClInclude Include="win32\api_set\api_set_value_enumerator.h">
+      <Filter>Header Files\win32\api_set</Filter>
+    </ClInclude>
+    <ClInclude Include="win32\pe\common.h">
+      <Filter>Header Files\win32\pe</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ptr.inl">
+      <Filter>Source Files</Filter>
+    </None>
+    <None Include="buffer_ref.inl">
+      <Filter>Source Files</Filter>
+    </None>
+    <None Include="stack_buffer.inl">
+      <Filter>Source Files</Filter>
+    </None>
+    <None Include="threading\locked_value.inl">
+      <Filter>Source Files\threading</Filter>
+    </None>
+    <None Include="crypto\capi\aes.inl">
+      <Filter>Source Files\crypto\capi</Filter>
+    </None>
+    <None Include="crypto\capi\dh.inl">
+      <Filter>Source Files\crypto\capi</Filter>
+    </None>
+    <None Include="crypto\capi\rsa.inl">
+      <Filter>Source Files\crypto\capi</Filter>
+    </None>
+    <None Include="crypto\cng\aes.inl">
+      <Filter>Source Files\crypto\cng</Filter>
+    </None>
+    <None Include="crypto\cng\rsa.inl">
+      <Filter>Source Files\crypto\cng</Filter>
+    </None>
+    <None Include="crypto\cng\dh.inl">
+      <Filter>Source Files\crypto\cng</Filter>
+    </None>
+    <None Include="crypto\cng\hash.inl">
+      <Filter>Source Files\crypto\cng</Filter>
+    </None>
+    <None Include="crypto\cng\hmac.inl">
+      <Filter>Source Files\crypto\cng</Filter>
+    </None>
+    <None Include="crypto\capi\hash.inl">
+      <Filter>Source Files\crypto\capi</Filter>
+    </None>
+    <None Include="crypto\capi\hmac.inl">
+      <Filter>Source Files\crypto\capi</Filter>
+    </None>
+    <None Include="collections\hashset.inl">
+      <Filter>Source Files\collections</Filter>
+    </None>
+    <None Include="collections\list.inl">
+      <Filter>Source Files\collections</Filter>
+    </None>
+    <None Include="collections\pair_list.inl">
+      <Filter>Source Files\collections</Filter>
+    </None>
+    <None Include="collections\hashmap.inl">
+      <Filter>Source Files\collections</Filter>
+    </None>
+    <None Include="string_ref.inl">
+      <Filter>Source Files</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Natvis Include="mini.natvis">
+      <Filter>Header Files</Filter>
+    </Natvis>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="crt\msvcrt.def">
+      <Filter>Source Files\crt</Filter>
+    </CustomBuild>
+  </ItemGroup>
+</Project>
